@@ -8,7 +8,7 @@ const VideoProviderContainer = ({ children, ...props }) => {
   return (!streams.length ? null : <VideoProvider {...props}>{children}</VideoProvider>);
 };
 
-export default withTracker(props => {
+export default withTracker((props) => {
   // getVideoStreams returns a dictionary consisting of:
   // {
   //  streams: array of mapped streams
@@ -16,7 +16,7 @@ export default withTracker(props => {
   // }
   const {
     streams,
-    totalNumberOfStreams
+    totalNumberOfStreams,
   } = VideoService.getVideoStreams();
 
   return {
