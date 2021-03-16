@@ -15,7 +15,7 @@ import Button from '/imports/ui/components/button/component';
 const propTypes = {
   streams: PropTypes.arrayOf(PropTypes.object).isRequired,
   onMount: PropTypes.func.isRequired,
-  webcamDraggableDispatch: PropTypes.func.isRequired,
+  // webcamDraggableDispatch: PropTypes.func.isRequired,
   intl: PropTypes.objectOf(Object).isRequired,
   swapLayout: PropTypes.bool.isRequired,
   numberOfPages: PropTypes.number.isRequired,
@@ -111,13 +111,13 @@ class VideoList extends Component {
   }
 
   componentDidMount() {
-    const { webcamDraggableDispatch } = this.props;
-    webcamDraggableDispatch(
-      {
-        type: 'setVideoListRef',
-        value: this.grid,
-      },
-    );
+    // const { webcamDraggableDispatch } = this.props;
+    // webcamDraggableDispatch(
+    //   {
+    //     type: 'setVideoListRef',
+    //     value: this.grid,
+    //   },
+    // );
 
     this.handleCanvasResize();
     window.addEventListener('resize', this.handleCanvasResize, false);
