@@ -8,7 +8,6 @@ import _ from 'lodash';
 import { findDOMNode } from 'react-dom';
 import UserListItemContainer from './user-list-item/container';
 import UserOptionsContainer from './user-options/container';
-import VideoProviderContainer from '/imports/ui/components/video-provider/container';
 
 const propTypes = {
   compact: PropTypes.bool,
@@ -113,6 +112,7 @@ class UserParticipants extends Component {
       disableVideo,
       audioModalIsOpen,
       swapLayout,
+      showVideo,
     } = this.props;
 
     let index = -1;
@@ -136,20 +136,14 @@ class UserParticipants extends Component {
               requestUserInformation,
               currentUser,
               meetingIsBreakout,
+              disableVideo,
+              audioModalIsOpen,
+              swapLayout,
+              showVideo,
             }}
             user={u}
             getScrollContainerRef={this.getScrollContainerRef}
           />
-          {
-              !disableVideo
-                && !audioModalIsOpen
-                ? (
-                  <VideoProviderContainer
-                    swapLayout={swapLayout}
-                  />
-                )
-                : null
-            }
         </div>
       </CSSTransition>
     ));

@@ -24,6 +24,7 @@ export default withTracker((props) => {
     streams,
     totalNumberOfStreams,
     isUserLocked: VideoService.isUserLocked(),
-    currentVideoPageIndex: VideoService.getCurrentVideoPageIndex(),
+    findStream: props.findStream,
+    userId: props.userId,
   };
 })(VideoProviderContainer);

@@ -45,6 +45,10 @@ class UserListItem extends PureComponent {
       isMeteorConnected,
       isMe,
       voiceUser,
+      showVideo,
+      audioModalIsOpen,
+      swapLayout,
+      disableVideo,
     } = this.props;
 
     const contents = (
@@ -76,6 +80,10 @@ class UserListItem extends PureComponent {
           isMeteorConnected,
           isMe,
           voiceUser,
+          showVideo,
+          audioModalIsOpen,
+          swapLayout,
+          disableVideo,
         }}
       />
     );

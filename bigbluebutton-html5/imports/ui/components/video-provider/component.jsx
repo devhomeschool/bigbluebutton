@@ -20,7 +20,8 @@ const {
   baseTimeout: CAMERA_SHARE_FAILED_WAIT_TIME = 15000,
   maxTimeout: MAX_CAMERA_SHARE_FAILED_WAIT_TIME = 60000,
 } = Meteor.settings.public.kurento.cameraTimeouts || {};
-const CAMERA_QUALITY_THRESHOLDS_ENABLED = Meteor.settings.public.kurento.cameraQualityThresholds.enabled;
+const CAMERA_QUALITY_THRESHOLDS_ENABLED = Meteor
+  .settings.public.kurento.cameraQualityThresholds.enabled;
 const PING_INTERVAL = 15000;
 
 const intlClientErrors = defineMessages({
@@ -84,6 +85,8 @@ const propTypes = {
   swapLayout: PropTypes.bool.isRequired,
   currentVideoPageIndex: PropTypes.number.isRequired,
   totalNumberOfStreams: PropTypes.number.isRequired,
+  findStream: PropTypes.shape({}).isRequired,
+  userId: PropTypes.string.isRequired,
 };
 
 class VideoProvider extends Component {
@@ -879,14 +882,20 @@ class VideoProvider extends Component {
   }
 
   render() {
-    const { swapLayout, currentVideoPageIndex, streams } = this.props;
+    const {
+      swapLayout,
+      streams,
+      findStream,
+      userId,
+    } = this.props;
 
     return (
       <VideoListContainer
         streams={streams}
         onMount={this.createVideoTag}
         swapLayout={swapLayout}
-        currentVideoPageIndex={currentVideoPageIndex}
+        findStream={findStream}
+        userId={userId}
       />
     );
   }

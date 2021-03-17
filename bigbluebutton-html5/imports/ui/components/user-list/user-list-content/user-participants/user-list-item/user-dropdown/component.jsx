@@ -18,6 +18,7 @@ import { Session } from 'meteor/session';
 import { styles } from './styles';
 import UserName from '../user-name/component';
 import UserIcons from '../user-icons/component';
+import VideoProviderContainer from '/imports/ui/components/video-provider/container';
 
 const messages = defineMessages({
   presenter: {
@@ -516,7 +517,13 @@ class UserDropdown extends PureComponent {
       breakoutSequence,
       meetingIsBreakout,
       voiceUser,
+      streams,
+      showVideo,
+      disableVideo,
+      audioModalIsOpen,
+      swapLayout,
     } = this.props;
+    const findStream = streams.find(stream => stream.userId === user.userId);
 
     const { clientType } = user;
     const isVoiceOnly = clientType === 'dial-in-user';
@@ -527,6 +534,7 @@ class UserDropdown extends PureComponent {
 
     const iconVoiceOnlyUser = (<Icon iconName="audio_on" />);
     const userIcon = isVoiceOnly ? iconVoiceOnlyUser : iconUser;
+    const noVideo = userInBreakout && !meetingIsBreakout ? breakoutSequence : userIcon;
 
     return (
       <UserAvatar
@@ -539,10 +547,16 @@ class UserDropdown extends PureComponent {
         noVoice={!voiceUser.isVoiceUser}
         color={user.color}
       >
-        {
-        userInBreakout
-        && !meetingIsBreakout
-          ? breakoutSequence : userIcon}
+        {!disableVideo
+        && !audioModalIsOpen && findStream && showVideo
+          ? (
+            <VideoProviderContainer
+              swapLayout={swapLayout}
+              userId={user.userId}
+              findStream={findStream}
+            />
+          )
+          : noVideo}
       </UserAvatar>
     );
   }
