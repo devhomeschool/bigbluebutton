@@ -112,10 +112,12 @@ class UserParticipants extends Component {
       disableVideo,
       audioModalIsOpen,
       swapLayout,
-      showVideo,
+      usersVideo,
+      viewParticipantsWebcams,
     } = this.props;
 
     let index = -1;
+    const showVideo = usersVideo.length > 0 && viewParticipantsWebcams;
 
     return users.map(u => (
       <CSSTransition
