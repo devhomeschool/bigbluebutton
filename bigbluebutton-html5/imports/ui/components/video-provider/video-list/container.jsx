@@ -13,5 +13,6 @@ export default withTracker(props => ({
   onMount: props.onMount,
   swapLayout: props.swapLayout,
   numberOfPages: VideoService.getNumberOfPages(),
-  currentVideoPageIndex: props.currentVideoPageIndex,
+  findStream: props.findStream,
+  userId: props.userId,
 }))(VideoListContainer);

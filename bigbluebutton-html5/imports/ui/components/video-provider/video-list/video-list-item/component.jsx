@@ -16,7 +16,6 @@ import Icon from '/imports/ui/components/icon/component';
 import FullscreenService from '/imports/ui/components/fullscreen-button/service';
 import FullscreenButtonContainer from '/imports/ui/components/fullscreen-button/container';
 import { styles } from '../styles';
-import { withDraggableConsumer } from '/imports/ui/components/media/webcam-draggable-overlay/context';
 import VideoService from '../../service';
 
 const ALLOW_FULLSCREEN = Meteor.settings.public.app.allowFullscreen;
@@ -217,7 +216,7 @@ class VideoListItem extends Component {
   }
 }
 
-export default withDraggableConsumer(VideoListItem);
+export default VideoListItem;
 
 VideoListItem.defaultProps = {
   numOfStreams: 0,

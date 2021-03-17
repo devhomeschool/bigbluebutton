@@ -9,8 +9,8 @@ import { withDraggableConsumer } from '../../media/webcam-draggable-overlay/cont
 import AutoplayOverlay from '../../media/autoplay-overlay/component';
 import logger from '/imports/startup/client/logger';
 import playAndRetry from '/imports/utils/mediaElementPlayRetry';
-import VideoService from '/imports/ui/components/video-provider/service';
-import Button from '/imports/ui/components/button/component';
+// import VideoService from '/imports/ui/components/video-provider/service';
+// import Button from '/imports/ui/components/button/component';
 
 const propTypes = {
   streams: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -18,8 +18,13 @@ const propTypes = {
   // webcamDraggableDispatch: PropTypes.func.isRequired,
   intl: PropTypes.objectOf(Object).isRequired,
   swapLayout: PropTypes.bool.isRequired,
-  numberOfPages: PropTypes.number.isRequired,
-  currentVideoPageIndex: PropTypes.number.isRequired,
+  // numberOfPages: PropTypes.number.isRequired,
+  // currentVideoPageIndex: PropTypes.number.isRequired,
+  userId: PropTypes.string.isRequired,
+  findStream: PropTypes.shape({
+    cameraId: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 const intlMessages = defineMessages({
@@ -238,113 +243,116 @@ class VideoList extends Component {
     this.ticking = true;
   }
 
-  renderNextPageButton() {
-    const { intl, numberOfPages, currentVideoPageIndex } = this.props;
+  // renderNextPageButton() {
+  //   const { intl, numberOfPages, currentVideoPageIndex } = this.props;
 
-    if (!VideoService.isPaginationEnabled() || numberOfPages <= 1) return null;
+  //   if (!VideoService.isPaginationEnabled() || numberOfPages <= 1) return null;
 
-    const currentPage = currentVideoPageIndex + 1;
-    const nextPageLabel = intl.formatMessage(intlMessages.nextPageLabel);
-    const nextPageDetailedLabel = `${nextPageLabel} (${currentPage}/${numberOfPages})`;
+  //   const currentPage = currentVideoPageIndex + 1;
+  //   const nextPageLabel = intl.formatMessage(intlMessages.nextPageLabel);
+  //   const nextPageDetailedLabel = `${nextPageLabel} (${currentPage}/${numberOfPages})`;
 
-    return (
-      <Button
-        role="button"
-        aria-label={nextPageLabel}
-        color="primary"
-        icon="right_arrow"
-        size="md"
-        onClick={VideoService.getNextVideoPage}
-        label={nextPageDetailedLabel}
-        hideLabel
-        className={cx(styles.nextPage)}
-      />
-    );
-  }
+  //   return (
+  //     <Button
+  //       role="button"
+  //       aria-label={nextPageLabel}
+  //       color="primary"
+  //       icon="right_arrow"
+  //       size="md"
+  //       onClick={VideoService.getNextVideoPage}
+  //       label={nextPageDetailedLabel}
+  //       hideLabel
+  //       className={cx(styles.nextPage)}
+  //     />
+  //   );
+  // }
 
-  renderPreviousPageButton() {
-    const { intl, currentVideoPageIndex, numberOfPages } = this.props;
+  // renderPreviousPageButton() {
+  //   const { intl, currentVideoPageIndex, numberOfPages } = this.props;
 
-    if (!VideoService.isPaginationEnabled() || numberOfPages <= 1) return null;
+  //   if (!VideoService.isPaginationEnabled() || numberOfPages <= 1) return null;
 
-    const currentPage = currentVideoPageIndex + 1;
-    const prevPageLabel = intl.formatMessage(intlMessages.prevPageLabel);
-    const prevPageDetailedLabel = `${prevPageLabel} (${currentPage}/${numberOfPages})`;
+  //   const currentPage = currentVideoPageIndex + 1;
+  //   const prevPageLabel = intl.formatMessage(intlMessages.prevPageLabel);
+  //   const prevPageDetailedLabel = `${prevPageLabel} (${currentPage}/${numberOfPages})`;
 
-    return (
-      <Button
-        role="button"
-        aria-label={prevPageLabel}
-        color="primary"
-        icon="left_arrow"
-        size="md"
-        onClick={VideoService.getPreviousVideoPage}
-        label={prevPageDetailedLabel}
-        hideLabel
-        className={cx(styles.previousPage)}
-      />
-    );
-  }
+  //   return (
+  //     <Button
+  //       role="button"
+  //       aria-label={prevPageLabel}
+  //       color="primary"
+  //       icon="left_arrow"
+  //       size="md"
+  //       onClick={VideoService.getPreviousVideoPage}
+  //       label={prevPageDetailedLabel}
+  //       hideLabel
+  //       className={cx(styles.previousPage)}
+  //     />
+  //   );
+  // }
 
-  renderVideoList() {
+  renderVideoList(findStream) {
     const {
       intl,
       streams,
       onMount,
       swapLayout,
+      userId,
     } = this.props;
     const { focusedId } = this.state;
 
     const numOfStreams = streams.length;
-    return streams.map((stream) => {
-      const { cameraId, userId, name } = stream;
-      const isFocused = focusedId === cameraId;
-      const isFocusedIntlKey = !isFocused ? 'focus' : 'unfocus';
-      const isMirrored = this.cameraIsMirrored(cameraId);
-      const actions = [{
-        actionName: ACTION_NAME_MIRROR,
-        label: intl.formatMessage(intlMessages.mirrorLabel),
-        description: intl.formatMessage(intlMessages.mirrorDesc),
-        onClick: () => this.mirrorCamera(cameraId),
-      }];
+    const { cameraId, name } = findStream;
+    const isFocused = focusedId === cameraId;
+    const isFocusedIntlKey = !isFocused ? 'focus' : 'unfocus';
+    const isMirrored = this.cameraIsMirrored(cameraId);
+    const actions = [{
+      actionName: ACTION_NAME_MIRROR,
+      label: intl.formatMessage(intlMessages.mirrorLabel),
+      description: intl.formatMessage(intlMessages.mirrorDesc),
+      onClick: () => this.mirrorCamera(cameraId),
+    }];
 
-      if (numOfStreams > 2) {
-        actions.push({
-          actionName: ACTION_NAME_FOCUS,
-          label: intl.formatMessage(intlMessages[`${isFocusedIntlKey}Label`]),
-          description: intl.formatMessage(intlMessages[`${isFocusedIntlKey}Desc`]),
-          onClick: () => this.handleVideoFocus(cameraId),
-        });
-      }
+    if (numOfStreams > 2) {
+      actions.push({
+        actionName: ACTION_NAME_FOCUS,
+        label: intl.formatMessage(intlMessages[`${isFocusedIntlKey}Label`]),
+        description: intl.formatMessage(intlMessages[`${isFocusedIntlKey}Desc`]),
+        onClick: () => this.handleVideoFocus(cameraId),
+      });
+    }
 
-      return (
-        <div
-          key={cameraId}
-          className={cx({
-            [styles.videoListItem]: true,
-            [styles.focused]: focusedId === cameraId && numOfStreams > 2,
-          })}
-        >
-          <VideoListItemContainer
-            numOfStreams={numOfStreams}
-            cameraId={cameraId}
-            userId={userId}
-            name={name}
-            mirrored={isMirrored}
-            actions={actions}
-            onMount={(videoRef) => {
-              this.handleCanvasResize();
-              onMount(cameraId, videoRef);
-            }}
-            swapLayout={swapLayout}
-          />
-        </div>
-      );
-    });
+    return (
+      <div
+        key={cameraId}
+        className={cx({
+          [styles.videoListItem]: true,
+          [styles.focused]: focusedId === cameraId && numOfStreams > 2,
+        })}
+      >
+        <VideoListItemContainer
+          numOfStreams={numOfStreams}
+          cameraId={cameraId}
+          userId={userId}
+          name={name}
+          mirrored={isMirrored}
+          actions={actions}
+          onMount={(videoRef) => {
+            this.handleCanvasResize();
+            onMount(cameraId, videoRef);
+          }}
+          swapLayout={swapLayout}
+        />
+      </div>
+    );
   }
 
   render() {
-    const { streams, intl } = this.props;
+    const {
+      streams,
+      intl,
+      findStream,
+    } = this.props;
     const { optimalGrid, autoplayBlocked } = this.state;
 
     const canvasClassName = cx({
@@ -362,9 +370,6 @@ class VideoList extends Component {
         }}
         className={canvasClassName}
       >
-
-        {this.renderPreviousPageButton()}
-
         {!streams.length ? null : (
           <div
             ref={(ref) => {
@@ -378,7 +383,7 @@ class VideoList extends Component {
               gridTemplateRows: `repeat(${optimalGrid.rows}, 1fr)`,
             }}
           >
-            {this.renderVideoList()}
+            {this.renderVideoList(findStream)}
           </div>
         )}
         { !autoplayBlocked ? null : (
@@ -388,9 +393,6 @@ class VideoList extends Component {
             handleAllowAutoplay={this.handleAllowAutoplay}
           />
         )}
-
-        {this.renderNextPageButton()}
-
       </div>
     );
   }
