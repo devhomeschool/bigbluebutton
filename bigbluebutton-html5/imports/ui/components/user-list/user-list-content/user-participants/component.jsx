@@ -19,10 +19,20 @@ const propTypes = {
   setEmojiStatus: PropTypes.func.isRequired,
   roving: PropTypes.func.isRequired,
   requestUserInformation: PropTypes.func.isRequired,
+  usersVideo: PropTypes.arrayOf(Array),
+  swapLayout: PropTypes.bool,
+  disableVideo: PropTypes.bool,
+  audioModalIsOpen: PropTypes.bool,
+  viewParticipantsWebcams: PropTypes.bool,
 };
 
 const defaultProps = {
   compact: false,
+  usersVideo: [],
+  swapLayout: false,
+  disableVideo: false,
+  audioModalIsOpen: false,
+  viewParticipantsWebcams: true,
 };
 
 const listTransition = {

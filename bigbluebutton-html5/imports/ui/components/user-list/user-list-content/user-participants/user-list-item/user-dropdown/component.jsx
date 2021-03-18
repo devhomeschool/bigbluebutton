@@ -129,6 +129,15 @@ const propTypes = {
   isThisMeetingLocked: PropTypes.bool.isRequired,
   getScrollContainerRef: PropTypes.func.isRequired,
   toggleUserLock: PropTypes.func.isRequired,
+  disableVideo: PropTypes.bool,
+  audioModalIsOpen: PropTypes.bool,
+  streams: PropTypes.arrayOf(PropTypes.object).isRequired,
+  showVideo: PropTypes.bool,
+};
+const defaultProps = {
+  disableVideo: false,
+  audioModalIsOpen: false,
+  showVideo: false,
 };
 const CHAT_ENABLED = Meteor.settings.public.chat.enabled;
 const ROLE_MODERATOR = Meteor.settings.public.user.role_moderator;
@@ -672,4 +681,5 @@ class UserDropdown extends PureComponent {
 }
 
 UserDropdown.propTypes = propTypes;
+UserDropdown.defaultProps = defaultProps;
 export default withModalMounter(lockContextContainer(UserDropdown));
