@@ -127,7 +127,8 @@ class UserParticipants extends Component {
     } = this.props;
 
     let index = -1;
-    const showVideo = usersVideo.length > 0 && viewParticipantsWebcams;
+    const { viewParticipantsWebcams: viewWebcams } = viewParticipantsWebcams;
+    const showVideo = usersVideo.length > 0 && viewWebcams;
 
     return users.map(u => (
       <CSSTransition
