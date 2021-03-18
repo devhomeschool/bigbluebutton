@@ -131,13 +131,14 @@ const propTypes = {
   toggleUserLock: PropTypes.func.isRequired,
   disableVideo: PropTypes.bool,
   audioModalIsOpen: PropTypes.bool,
-  streams: PropTypes.arrayOf(PropTypes.object).isRequired,
+  usersVideo: PropTypes.arrayOf(PropTypes.object),
   showVideo: PropTypes.bool,
 };
 const defaultProps = {
   disableVideo: false,
   audioModalIsOpen: false,
   showVideo: false,
+  usersVideo: [],
 };
 const CHAT_ENABLED = Meteor.settings.public.chat.enabled;
 const ROLE_MODERATOR = Meteor.settings.public.user.role_moderator;
@@ -526,13 +527,14 @@ class UserDropdown extends PureComponent {
       breakoutSequence,
       meetingIsBreakout,
       voiceUser,
-      streams,
+      usersVideo,
       showVideo,
       disableVideo,
       audioModalIsOpen,
       swapLayout,
     } = this.props;
-    const findStream = streams.find(stream => stream.userId === user.userId);
+    const findStream = !usersVideo.length ? null
+      : usersVideo.find(stream => stream.userId === user.userId);
 
     const { clientType } = user;
     const isVoiceOnly = clientType === 'dial-in-user';

@@ -152,6 +152,7 @@ class UserParticipants extends Component {
               audioModalIsOpen,
               swapLayout,
               showVideo,
+              usersVideo,
             }}
             user={u}
             getScrollContainerRef={this.getScrollContainerRef}
