@@ -49,6 +49,7 @@ class UserListItem extends PureComponent {
       audioModalIsOpen,
       swapLayout,
       disableVideo,
+      usersVideo,
     } = this.props;
 
     const contents = (
@@ -84,6 +85,7 @@ class UserListItem extends PureComponent {
           audioModalIsOpen,
           swapLayout,
           disableVideo,
+          usersVideo,
         }}
       />
     );
