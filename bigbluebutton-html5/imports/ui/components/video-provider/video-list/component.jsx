@@ -291,12 +291,13 @@ class VideoList extends Component {
   //   );
   // }
 
-  renderVideoList(findStream) {
+  renderVideoList() {
     const {
       intl,
       streams,
       onMount,
       swapLayout,
+      findStream,
       userId,
     } = this.props;
     const { focusedId } = this.state;
@@ -351,7 +352,6 @@ class VideoList extends Component {
     const {
       streams,
       intl,
-      findStream,
     } = this.props;
     const { optimalGrid, autoplayBlocked } = this.state;
 
@@ -383,7 +383,7 @@ class VideoList extends Component {
               gridTemplateRows: `repeat(${optimalGrid.rows}, 1fr)`,
             }}
           >
-            {this.renderVideoList(findStream)}
+            {this.renderVideoList()}
           </div>
         )}
         { !autoplayBlocked ? null : (
