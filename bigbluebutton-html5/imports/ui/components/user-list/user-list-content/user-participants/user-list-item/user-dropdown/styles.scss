@@ -114,9 +114,9 @@
 }
 
 .userItemContents {
-  flex-grow: 0;
+  flex-grow: 1;
   display: flex;
-  flex-flow: row;
+  flex-flow: column;
 
   padding: var(--lg-padding-y) 0 var(--lg-padding-y) var(--lg-padding-y);
 

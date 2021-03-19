@@ -16,7 +16,7 @@
 
 .avatar {
   position: relative;
-  padding-bottom: 2rem;
+  padding: 5rem;
   border-radius: 50%;
   text-align: center;
   font-size: .85rem;
@@ -170,7 +170,7 @@
 
 .content {
   color: var(--user-avatar-text);
-  top: 50%;
+  top: 10%;
   position: absolute;
   text-align: center;
   left: 0;
