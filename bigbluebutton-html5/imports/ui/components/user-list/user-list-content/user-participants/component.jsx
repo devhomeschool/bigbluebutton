@@ -119,7 +119,6 @@ class UserParticipants extends Component {
       requestUserInformation,
       currentUser,
       meetingIsBreakout,
-      disableVideo,
       audioModalIsOpen,
       swapLayout,
       usersVideo,
@@ -127,8 +126,10 @@ class UserParticipants extends Component {
     } = this.props;
 
     let index = -1;
+    const { streams } = usersVideo;
     const { viewParticipantsWebcams: viewWebcams } = viewParticipantsWebcams;
-    const showVideo = usersVideo.length > 0 && viewWebcams;
+    const showVideo = streams.length > 0 && viewWebcams;
+    const disableVideo = !viewWebcams;
 
     return users.map(u => (
       <CSSTransition
@@ -153,7 +154,7 @@ class UserParticipants extends Component {
               audioModalIsOpen,
               swapLayout,
               showVideo,
-              usersVideo,
+              streams,
             }}
             user={u}
             getScrollContainerRef={this.getScrollContainerRef}
