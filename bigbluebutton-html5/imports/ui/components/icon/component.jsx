@@ -2,6 +2,7 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import _ from 'lodash';
+import { styles } from './styles.scss';
 
 const propTypes = {
   iconName: PropTypes.string.isRequired,
@@ -19,7 +20,7 @@ const Icon = ({
   ...props
 }) => (
   <i
-    className={cx(className, [prependIconName, iconName].join(''))}
+    className={`${cx(className, [prependIconName, iconName].join(''))} ${styles.zindex}`}
     // ToastContainer from react-toastify passes a useless closeToast prop here
     {..._.omit(props, 'closeToast')}
   />

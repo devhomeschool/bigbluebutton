@@ -545,7 +545,7 @@ class UserDropdown extends PureComponent {
 
     const iconVoiceOnlyUser = (<Icon iconName="audio_on" />);
     const userIcon = isVoiceOnly ? iconVoiceOnlyUser : iconUser;
-    const noVideo = userInBreakout && !meetingIsBreakout ? breakoutSequence : userIcon;
+    const icons = userInBreakout && !meetingIsBreakout ? breakoutSequence : userIcon;
 
     return (
       <UserAvatar
@@ -567,7 +567,8 @@ class UserDropdown extends PureComponent {
               findStream={findStream}
             />
           )
-          : noVideo}
+          : null }
+        { icons }
       </UserAvatar>
     );
   }
