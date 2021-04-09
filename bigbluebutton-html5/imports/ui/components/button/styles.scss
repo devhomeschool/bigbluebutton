@@ -7,7 +7,7 @@
 
 :root {
   --btn-default-color: var(--color-gray);
-  --btn-default-bg: #000;
+  --btn-default-bg: var(--color-gray-light);
   --btn-default-border: var(--color-white);
 
   --btn-primary-color: var(--color-white);
