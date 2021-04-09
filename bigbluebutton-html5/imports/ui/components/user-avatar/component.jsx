@@ -6,7 +6,7 @@ import { styles } from './styles';
 
 const propTypes = {
   children: PropTypes.node.isRequired,
-  moderator: PropTypes.bool.isRequired,
+  moderator: PropTypes.bool,
   presenter: PropTypes.bool,
   talking: PropTypes.bool,
   muted: PropTypes.bool,
