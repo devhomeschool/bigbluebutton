@@ -5,14 +5,14 @@ import cx from 'classnames';
 import { withModalMounter } from '/imports/ui/components/modal/service';
 import withShortcutHelper from '/imports/ui/components/shortcut-help/service';
 import getFromUserSettings from '/imports/ui/services/users-settings';
-import { defineMessages, injectIntl } from 'react-intl';
+import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import Icon from '../icon/component';
 import { styles } from './styles.scss';
 import Button from '../button/component';
 import RecordingIndicator from './recording-indicator/container';
 import TalkingIndicatorContainer from '/imports/ui/components/nav-bar/talking-indicator/container';
 import SettingsDropdownContainer from './settings-dropdown/container';
-
+import UserOptionsContainer from '../user-list/user-list-content/user-participants/user-options/container';
 
 const intlMessages = defineMessages({
   toggleUserListLabel: {
@@ -30,12 +30,21 @@ const intlMessages = defineMessages({
 });
 
 const propTypes = {
+  amIModerator: PropTypes.bool,
+  meetingIsBreakout: PropTypes.bool,
+  isExpanded: PropTypes.bool,
+  intl: intlShape.isRequired,
+  setEmojiStatus: PropTypes.func.isRequired,
+  users: PropTypes.arrayOf(PropTypes.object).isRequired,
   presentationTitle: PropTypes.string,
   hasUnreadMessages: PropTypes.bool,
   shortcuts: PropTypes.string,
 };
 
 const defaultProps = {
+  amIModerator: true,
+  meetingIsBreakout: false,
+  isExpanded: false,
   presentationTitle: 'Default Room Title',
   hasUnreadMessages: false,
   shortcuts: '',
@@ -77,6 +86,9 @@ class NavBar extends PureComponent {
       shortcuts: TOGGLE_USERLIST_AK,
       mountModal,
       presentationTitle,
+      users,
+      setEmojiStatus,
+      meetingIsBreakout,
       amIModerator,
     } = this.props;
 
@@ -113,12 +125,22 @@ class NavBar extends PureComponent {
             }
           </div>
           <div className={styles.center}>
-            <h1 className={styles.presentationTitle}>BBB</h1>
-
+            <h1 className={styles.presentationTitle}>{ presentationTitle }</h1>
             <RecordingIndicator
               mountModal={mountModal}
               amIModerator={amIModerator}
             />
+            {!amIModerator ? null
+              : (
+                <UserOptionsContainer {...{
+                  users,
+                  setEmojiStatus,
+                  meetingIsBreakout,
+                  intl,
+                }}
+                />
+              )
+            }
           </div>
           <div className={styles.right}>
             <SettingsDropdownContainer amIModerator={amIModerator} />

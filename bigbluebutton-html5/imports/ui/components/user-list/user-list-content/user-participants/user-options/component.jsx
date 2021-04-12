@@ -4,16 +4,12 @@ import { defineMessages, injectIntl } from 'react-intl';
 import _ from 'lodash';
 import { withModalMounter } from '/imports/ui/components/modal/service';
 import Button from '/imports/ui/components/button/component';
-import Dropdown from '/imports/ui/components/dropdown/component';
-import DropdownTrigger from '/imports/ui/components/dropdown/trigger/component';
-import DropdownContent from '/imports/ui/components/dropdown/content/component';
-import DropdownList from '/imports/ui/components/dropdown/list/component';
-import DropdownListItem from '/imports/ui/components/dropdown/list/item/component';
+import cx from 'classnames';
+import NavBarStyles from '/imports/ui/components/nav-bar/styles';
 import LockViewersContainer from '/imports/ui/components/lock-viewers/container';
 import BreakoutRoom from '/imports/ui/components/actions-bar/create-breakout-room/container';
 import CaptionsService from '/imports/ui/components/captions/service';
 import CaptionsWriterMenu from '/imports/ui/components/captions/writer-menu/container';
-import DropdownListSeparator from '/imports/ui/components/dropdown/list/separator/component';
 import { styles } from './styles';
 import { getUserNamesLink } from '/imports/ui/components/user-list/service';
 
@@ -120,10 +116,6 @@ class UserOptions extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.state = {
-      isUserOptionsOpen: false,
-    };
-
     this.clearStatusId = _.uniqueId('list-item-');
     this.muteId = _.uniqueId('list-item-');
     this.muteAllId = _.uniqueId('list-item-');
@@ -132,8 +124,6 @@ class UserOptions extends PureComponent {
     this.saveUsersNameId = _.uniqueId('list-item-');
     this.captionsId = _.uniqueId('list-item-');
 
-    this.onActionsShow = this.onActionsShow.bind(this);
-    this.onActionsHide = this.onActionsHide.bind(this);
     this.handleCreateBreakoutRoomClick = this.handleCreateBreakoutRoomClick.bind(this);
     this.handleCaptionsClick = this.handleCaptionsClick.bind(this);
     this.onCreateBreakouts = this.onCreateBreakouts.bind(this);
@@ -159,18 +149,6 @@ class UserOptions extends PureComponent {
       intl.formatMessage(intlMessages.sortedLastNameHeading),
     ).dispatchEvent(new MouseEvent('click',
       { bubbles: true, cancelable: true, view: window }));
-  }
-
-  onActionsShow() {
-    this.setState({
-      isUserOptionsOpen: true,
-    });
-  }
-
-  onActionsHide() {
-    this.setState({
-      isUserOptionsOpen: false,
-    });
   }
 
   onCreateBreakouts() {
@@ -229,79 +207,113 @@ class UserOptions extends PureComponent {
       && hasBreakoutRoom
       && getUsersNotAssigned(users).length;
 
+    const toggleBtnClasses = {};
+    toggleBtnClasses[NavBarStyles.btn] = true;
+
     this.menuItems = _.compact([
       (isMeteorConnected ? (
-        <DropdownListItem
+        <Button
           key={this.clearStatusId}
           icon="clear_status"
           label={intl.formatMessage(intlMessages.clearAllLabel)}
           description={intl.formatMessage(intlMessages.clearAllDesc)}
           onClick={toggleStatus}
+          ghost
+          circle
+          hideLabel
+          className={cx(toggleBtnClasses)}
         />) : null
       ),
       (!meetingIsBreakout && isMeteorConnected ? (
-        <DropdownListItem
+        <Button
           key={this.muteAllId}
           icon={isMeetingMuted ? 'unmute' : 'mute'}
           label={intl.formatMessage(intlMessages[isMeetingMuted ? 'unmuteAllLabel' : 'muteAllLabel'])}
           description={intl.formatMessage(intlMessages[isMeetingMuted ? 'unmuteAllDesc' : 'muteAllDesc'])}
           onClick={toggleMuteAllUsers}
+          ghost
+          circle
+          hideLabel
+          className={cx(toggleBtnClasses)}
         />) : null
       ),
       (!meetingIsBreakout && !isMeetingMuted && isMeteorConnected ? (
-        <DropdownListItem
+        <Button
           key={this.muteId}
           icon="mute"
           label={intl.formatMessage(intlMessages.muteAllExceptPresenterLabel)}
           description={intl.formatMessage(intlMessages.muteAllExceptPresenterDesc)}
           onClick={toggleMuteAllUsersExceptPresenter}
+          ghost
+          circle
+          hideLabel
+          className={cx(toggleBtnClasses)}
         />) : null
       ),
       (amIModerator
         ? (
-          <DropdownListItem
+          <Button
             icon="download"
             label={intl.formatMessage(intlMessages.saveUserNames)}
             key={this.saveUsersNameId}
             onClick={this.onSaveUserNames}
+            ghost
+            circle
+            hideLabel
+            className={cx(toggleBtnClasses)}
           />)
         : null
       ),
       (!meetingIsBreakout && isMeteorConnected ? (
-        <DropdownListItem
+        <Button
           key={this.lockId}
           icon="lock"
           label={intl.formatMessage(intlMessages.lockViewersLabel)}
           description={intl.formatMessage(intlMessages.lockViewersDesc)}
           onClick={() => mountModal(<LockViewersContainer />)}
+          ghost
+          circle
+          hideLabel
+          className={cx(toggleBtnClasses)}
         />) : null
       ),
-      (isMeteorConnected ? <DropdownListSeparator key={_.uniqueId('list-separator-')} /> : null),
       (canCreateBreakout && isMeteorConnected ? (
-        <DropdownListItem
+        <Button
           key={this.createBreakoutId}
           icon="rooms"
           label={intl.formatMessage(intlMessages.createBreakoutRoom)}
           description={intl.formatMessage(intlMessages.createBreakoutRoomDesc)}
           onClick={this.onCreateBreakouts}
+          ghost
+          circle
+          hideLabel
+          className={cx(toggleBtnClasses)}
         />) : null
       ),
       (canInviteUsers && isMeteorConnected ? (
-        <DropdownListItem
+        <Button
           icon="rooms"
           label={intl.formatMessage(intlMessages.invitationItem)}
           key={this.createBreakoutId}
           onClick={this.onInvitationUsers}
+          ghost
+          circle
+          hideLabel
+          className={cx(toggleBtnClasses)}
         />) : null
       ),
       (amIModerator && CaptionsService.isCaptionsEnabled() && isMeteorConnected
         ? (
-          <DropdownListItem
+          <Button
             icon="closed_caption"
             label={intl.formatMessage(intlMessages.captionsLabel)}
             description={intl.formatMessage(intlMessages.captionsDesc)}
             key={this.captionsId}
             onClick={this.handleCaptionsClick}
+            ghost
+            circle
+            hideLabel
+            className={cx(toggleBtnClasses)}
           />
         )
         : null),
@@ -311,41 +323,12 @@ class UserOptions extends PureComponent {
   }
 
   render() {
-    const { isUserOptionsOpen } = this.state;
-    const { intl } = this.props;
-
     return (
-      <Dropdown
-        ref={(ref) => { this.dropdown = ref; }}
-        autoFocus={false}
-        isOpen={isUserOptionsOpen}
-        onShow={this.onActionsShow}
-        onHide={this.onActionsHide}
-        className={styles.dropdown}
-      >
-        <DropdownTrigger tabIndex={0}>
-          <Button
-            label={intl.formatMessage(intlMessages.optionsLabel)}
-            icon="settings"
-            ghost
-            color="primary"
-            hideLabel
-            className={styles.optionsButton}
-            size="sm"
-            onClick={() => null}
-          />
-        </DropdownTrigger>
-        <DropdownContent
-          className={styles.dropdownContent}
-          placement="right top"
-        >
-          <DropdownList>
-            {
-              this.renderMenuItems()
-            }
-          </DropdownList>
-        </DropdownContent>
-      </Dropdown>
+      <div className={styles.menuItems}>
+        {
+          this.renderMenuItems()
+        }
+      </div>
     );
   }
 }
