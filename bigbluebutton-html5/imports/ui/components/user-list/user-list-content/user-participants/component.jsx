@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
-import { defineMessages } from 'react-intl';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { styles } from '/imports/ui/components/user-list/user-list-content/styles';
 import _ from 'lodash';
 import { findDOMNode } from 'react-dom';
 import UserListItemContainer from './user-list-item/container';
-import UserOptionsContainer from './user-options/container';
 
 const propTypes = {
   compact: PropTypes.bool,
@@ -43,15 +41,6 @@ const listTransition = {
   leave: styles.leave,
   leaveActive: styles.leaveActive,
 };
-
-const intlMessages = defineMessages({
-  usersTitle: {
-    id: 'app.userList.usersTitle',
-    description: 'Title for the Header',
-  },
-});
-
-const ROLE_MODERATOR = Meteor.settings.public.user.role_moderator;
 
 class UserParticipants extends Component {
   constructor() {
@@ -184,42 +173,8 @@ class UserParticipants extends Component {
   }
 
   render() {
-    const {
-      intl,
-      users,
-      compact,
-      setEmojiStatus,
-      currentUser,
-      meetingIsBreakout,
-    } = this.props;
-
     return (
       <div className={styles.userListColumn}>
-        {
-          !compact
-            ? (
-              <div className={styles.container}>
-                <h2 className={styles.smallTitle}>
-                  {intl.formatMessage(intlMessages.usersTitle)}
-                  &nbsp;(
-                  {users.length}
-                  )
-                </h2>
-                {currentUser.role === ROLE_MODERATOR
-                  ? (
-                    <UserOptionsContainer {...{
-                      users,
-                      setEmojiStatus,
-                      meetingIsBreakout,
-                    }}
-                    />
-                  ) : null
-                }
-
-              </div>
-            )
-            : <hr className={styles.separator} />
-        }
         <div
           className={styles.scrollableList}
           tabIndex={0}
