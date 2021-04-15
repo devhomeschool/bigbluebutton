@@ -90,6 +90,8 @@ class PresentationArea extends PureComponent {
 
   componentDidMount() {
     // adding an event listener to scale the whiteboard on 'resize' events sent by chat/userlist etc
+    const { userIsPresenter } = this.props;
+    if (ALLOW_FULLSCREEN && userIsPresenter) this.onFullscreenChange();
     window.addEventListener('resize', this.onResize);
     this.getInitialPresentationSizes();
     this.refPresentationContainer.addEventListener('fullscreenchange', this.onFullscreenChange);
