@@ -461,8 +461,8 @@ class PresentationArea extends PureComponent {
       <div
         style={{
           position: 'absolute',
-          width: svgDimensions.width < 0 ? 0 : svgDimensions.width,
-          height: svgDimensions.height < 0 ? 0 : svgDimensions.height,
+          width: svgDimensions.width < 0 ? 0 : '100%',
+          height: svgDimensions.height < 0 ? 0 : '100%',
           textAlign: 'center',
         }}
       >

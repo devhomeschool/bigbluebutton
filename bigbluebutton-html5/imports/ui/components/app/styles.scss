@@ -219,8 +219,8 @@
 }
 
 .actionsbar {
-  flex: 1;
   padding: var(--bars-padding);
-  position: relative;
+  position: absolute;
+  bottom: 0;
   order: 3;
 }
