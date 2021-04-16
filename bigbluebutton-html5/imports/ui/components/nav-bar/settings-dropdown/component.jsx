@@ -130,6 +130,8 @@ class SettingsDropdown extends PureComponent {
   }
 
   componentDidMount() {
+    const { handleToggleFullscreen, amIModerator } = this.props;
+    if (amIModerator) handleToggleFullscreen();
     document.documentElement.addEventListener('fullscreenchange', this.onFullscreenChange);
   }
 
