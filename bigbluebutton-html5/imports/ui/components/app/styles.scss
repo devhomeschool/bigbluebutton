@@ -26,7 +26,7 @@
 
   font-size: 1.5rem;
   padding: 0 var(--bars-padding) 0 var(--bars-padding);
-  height: 2rem;
+  height: 2em;
 }
 
 .wrapper {
@@ -219,8 +219,29 @@
 }
 
 .actionsbar {
+  min-width: 380px;
   padding: var(--bars-padding);
   position: absolute;
-  bottom: 0;
-  order: 3;
+}
+
+.hideActions {
+  bottom: -60px;
+}
+
+.showActions {
+  bottom: 0px;
+}
+
+.button {
+  span:first-child {
+    box-shadow: 0 2px 5px 0 rgb(0, 0, 0);
+  }
+}
+
+.btn {
+  span {
+    box-shadow: none;
+    background-color: transparent !important;
+    border-color: var(--color-white) !important;
+  }
 }

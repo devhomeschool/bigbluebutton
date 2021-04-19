@@ -32,7 +32,11 @@
   flex-direction: row;
 }
 
-.center,
+.center {
+  flex: 1;
+  justify-content: flex-start;
+}
+
 .right {
   flex: 1;
   justify-content: center;
@@ -79,7 +83,7 @@
 
 .centerWithActions {
   @include mq($xsmall-only) {
-    justify-content: flex-end;
+    justify-content: flex-start;
   }
 }
 
