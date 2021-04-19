@@ -297,10 +297,11 @@ class App extends Component {
         <Button
           className={`${styles.button} ${!showActions || styles.btn}`}
           onClick={() => this.setState({ showActions: !showActions })}
+          style={{ margin: '20px' }}
           hideLabel
           color="primary"
           ghost={showActions}
-          icon={showActions ? 'substract' : 'up-arrow'}
+          icon={showActions ? 'substract' : 'up_arrow'}
           size="lg"
           circle
         />
