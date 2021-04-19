@@ -11,7 +11,6 @@ import DropdownList from '/imports/ui/components/dropdown/list/component';
 import DropdownListTitle from '/imports/ui/components/dropdown/list/title/component';
 import DropdownListSeparator from '/imports/ui/components/dropdown/list/separator/component';
 import DropdownListItem from '/imports/ui/components/dropdown/list/item/component';
-import Icon from '/imports/ui/components/icon/component';
 // import logger from '/imports/startup/client/logger';
 import FullscreenService from '/imports/ui/components/fullscreen-button/service';
 import FullscreenButtonContainer from '/imports/ui/components/fullscreen-button/container';
@@ -207,8 +206,6 @@ class VideoListItem extends Component {
               </div>
             )
           }
-          {voiceUser.muted && !voiceUser.listenOnly ? <Icon className={styles.muted} iconName="unmute_filled" /> : null}
-          {voiceUser.listenOnly ? <Icon className={styles.voice} iconName="listen" /> : null}
         </div>
         )}
       </div>
