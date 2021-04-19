@@ -10,7 +10,6 @@ import Icon from '../icon/component';
 import { styles } from './styles.scss';
 import Button from '../button/component';
 import RecordingIndicator from './recording-indicator/container';
-import TalkingIndicatorContainer from '/imports/ui/components/nav-bar/talking-indicator/container';
 import SettingsDropdownContainer from './settings-dropdown/container';
 import UserOptionsContainer from '../user-list/user-list-content/user-participants/user-options/container';
 
@@ -145,9 +144,6 @@ class NavBar extends PureComponent {
           <div className={styles.right}>
             <SettingsDropdownContainer amIModerator={amIModerator} />
           </div>
-        </div>
-        <div className={styles.bottom}>
-          <TalkingIndicatorContainer amIModerator={amIModerator} />
         </div>
       </div>
     );
