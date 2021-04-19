@@ -20,7 +20,6 @@ const Icon = ({
 }) => (
   <i
     className={`${cx(className, [prependIconName, iconName].join(''))}`}
-    style={{ zIndex: 3 }}
     // ToastContainer from react-toastify passes a useless closeToast prop here
     {..._.omit(props, 'closeToast')}
   />

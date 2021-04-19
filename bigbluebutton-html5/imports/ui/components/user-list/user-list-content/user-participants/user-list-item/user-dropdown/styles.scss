@@ -118,7 +118,7 @@
   display: flex;
   flex-flow: column;
 
-  padding: var(--lg-padding-y) 0 var(--lg-padding-y) var(--lg-padding-y);
+  padding: var(--lg-padding-y);
 
   [dir="rtl"] & {
     padding: var(--lg-padding-y) var(--lg-padding-y) var(--lg-padding-y) 0;
