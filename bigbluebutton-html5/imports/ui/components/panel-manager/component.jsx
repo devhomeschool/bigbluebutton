@@ -113,6 +113,7 @@ class PanelManager extends PureComponent {
     return (
       <div
         className={styles.userList}
+        style={openPanel !== '' ? null : { display: 'none' }}
         aria-label={intl.formatMessage(intlMessages.userListLabel)}
         key={enableResize ? null : this.userlistKey}
         aria-hidden={ariaHidden}
@@ -406,8 +407,10 @@ class PanelManager extends PureComponent {
 
   render() {
     const { enableResize, openPanel } = this.props;
-    if (openPanel === '') return null;
     const panels = [];
+    if (openPanel === '') {
+      panels.push(this.renderUserList());
+    }
     if (enableResize) {
       panels.push(
         this.renderUserListResizable(),
