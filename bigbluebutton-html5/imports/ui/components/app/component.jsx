@@ -72,11 +72,11 @@ const intlMessages = defineMessages({
     description: 'message displayed when a poll is published',
   },
   open: {
-    id: 'shortcut-help.openActions',
+    id: 'app.shortcut-help.openActions',
     description: 'open label',
   },
   close: {
-    id: 'audioNotification.closeLabel',
+    id: 'app.audioNotification.closeLabel',
     description: 'close Label',
   },
 });

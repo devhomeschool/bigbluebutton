@@ -15,6 +15,7 @@ const propTypes = {
   noVoice: PropTypes.bool,
   color: PropTypes.string,
   className: PropTypes.string,
+  isChat: PropTypes.bool,
 };
 
 const defaultProps = {
@@ -27,6 +28,7 @@ const defaultProps = {
   noVoice: false,
   color: '#000',
   className: null,
+  isChat: false,
 };
 
 const UserAvatar = ({
@@ -40,6 +42,7 @@ const UserAvatar = ({
   voice,
   noVoice,
   className,
+  isChat,
 }) => (
 
   <div
@@ -52,10 +55,9 @@ const UserAvatar = ({
       [styles.listenOnly]: listenOnly,
       [styles.voice]: voice,
       [styles.noVoice]: noVoice && !listenOnly,
+      [styles.isChat]: isChat,
     }, className)}
     style={{
-      padding: '1em',
-      height: '0',
       backgroundColor: color,
       color, // We need the same color on both for the border
     }}
