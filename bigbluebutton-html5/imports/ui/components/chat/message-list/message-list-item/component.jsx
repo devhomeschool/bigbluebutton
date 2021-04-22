@@ -116,6 +116,7 @@ class MessageListItem extends Component {
               className={styles.avatar}
               color={user.color}
               moderator={user.isModerator}
+              isChat
             >
               {user.name.toLowerCase().slice(0, 2)}
             </UserAvatar>
