@@ -113,7 +113,6 @@ class PanelManager extends PureComponent {
     return (
       <div
         className={styles.userList}
-        style={openPanel !== '' ? { display: 'flex' } : { display: 'none' }}
         aria-label={intl.formatMessage(intlMessages.userListLabel)}
         key={enableResize ? null : this.userlistKey}
         aria-hidden={ariaHidden}
@@ -140,7 +139,7 @@ class PanelManager extends PureComponent {
 
     return (
       <Resizable
-        style={openPanel !== '' ? { display: 'flex' } : { display: 'none' }}
+        style={openPanel !== '' ? { position: 'relative', left: '0' } : { position: 'absolute', left: '-240px' }}
         minWidth={USERLIST_MIN_WIDTH_PX}
         maxWidth={USERLIST_MAX_WIDTH_PX}
         ref={(node) => { this.resizableUserList = node; }}

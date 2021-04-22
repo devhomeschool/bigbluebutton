@@ -221,7 +221,7 @@
 
 .actionsbar {
   min-width: 380px;
-  padding: var(--bars-padding);
+  padding: 0 var(--bars-padding) var(--bars-padding);
   position: absolute;
 }
 

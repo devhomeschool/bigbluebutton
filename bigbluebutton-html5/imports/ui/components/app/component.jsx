@@ -71,6 +71,14 @@ const intlMessages = defineMessages({
     id: 'app.whiteboard.annotations.poll',
     description: 'message displayed when a poll is published',
   },
+  open: {
+    id: 'shortcut-help.openActions',
+    description: 'open label',
+  },
+  close: {
+    id: 'audioNotification.closeLabel',
+    description: 'close Label',
+  },
 });
 
 const propTypes = {
@@ -297,7 +305,11 @@ class App extends Component {
         <Button
           className={`${styles.button} ${!showActions || styles.btn}`}
           onClick={() => this.setState({ showActions: !showActions })}
-          style={{ margin: '20px' }}
+          style={{ margin: '0 20px 10px' }}
+          label={!showActions ? intl.formatMessage(intlMessages.open)
+            : intl.formatMessage(intlMessages.close)}
+          aria-label={!showActions ? intl.formatMessage(intlMessages.open)
+            : intl.formatMessage(intlMessages.close)}
           hideLabel
           color="primary"
           ghost={showActions}
