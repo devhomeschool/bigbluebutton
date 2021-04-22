@@ -113,7 +113,7 @@ class PanelManager extends PureComponent {
     return (
       <div
         className={styles.userList}
-        style={openPanel !== '' ? null : { display: 'none' }}
+        style={openPanel !== '' ? { display: 'flex' } : { display: 'none' }}
         aria-label={intl.formatMessage(intlMessages.userListLabel)}
         key={enableResize ? null : this.userlistKey}
         aria-hidden={ariaHidden}
@@ -125,7 +125,7 @@ class PanelManager extends PureComponent {
 
   renderUserListResizable() {
     const { userlistWidth } = this.state;
-    const { isRTL } = this.props;
+    const { isRTL, openPanel } = this.props;
 
     const resizableEnableOptions = {
       top: false,
@@ -140,6 +140,7 @@ class PanelManager extends PureComponent {
 
     return (
       <Resizable
+        style={openPanel !== '' ? { display: 'flex' } : { display: 'none' }}
         minWidth={USERLIST_MIN_WIDTH_PX}
         maxWidth={USERLIST_MAX_WIDTH_PX}
         ref={(node) => { this.resizableUserList = node; }}
@@ -414,7 +415,7 @@ class PanelManager extends PureComponent {
     if (enableResize) {
       panels.push(
         this.renderUserListResizable(),
-        <div className={styles.userlistPad} key={this.padKey} />,
+        <div style={openPanel !== '' ? { display: 'flex' } : { display: 'none' }} className={styles.userlistPad} key={this.padKey} />,
       );
     } else {
       panels.push(this.renderUserList());
