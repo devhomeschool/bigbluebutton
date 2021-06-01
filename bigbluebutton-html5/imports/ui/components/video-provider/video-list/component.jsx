@@ -311,7 +311,7 @@ class VideoList extends Component {
     } = this.props;
     const { focusedId } = this.state;
 
-    if (!amIModerator && !amIPresenter) {
+    if (amIModerator || amIPresenter) {
       return (
         <div
           key={findStream.cameraId}
