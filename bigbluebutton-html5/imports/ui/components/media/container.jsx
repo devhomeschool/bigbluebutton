@@ -15,6 +15,7 @@ import ScreenshareContainer from '../screenshare/container';
 import DefaultContent from '../presentation/default-content/component';
 import ExternalVideoContainer from '../external-video-player/container';
 import Storage from '../../services/storage/session';
+import Service from '../actions-bar/service';
 
 const LAYOUT_CONFIG = Meteor.settings.public.layout;
 const KURENTO_CONFIG = Meteor.settings.public.kurento;
@@ -150,6 +151,8 @@ export default withModalMounter(withTracker(() => {
   }
 
   data.webcamPlacement = Storage.getItem('webcamPlacement');
+  data.amIPresenter = Service.amIPresenter();
+  data.amIModerator = Service.amIModerator();
 
   MediaContainer.propTypes = propTypes;
   return data;

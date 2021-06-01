@@ -23,6 +23,7 @@
   font-size: .85rem;
   border: 2px solid transparent;
   width: inherit;
+  overflow: hidden;
 
   :global(.animationsEnabled) & {
     transition: .3s ease-in-out;

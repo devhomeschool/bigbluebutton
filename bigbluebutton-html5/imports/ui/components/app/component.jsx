@@ -237,7 +237,10 @@ class App extends Component {
     if (!navbar) return null;
 
     return (
-      <header className={styles.navbar}>
+      <header
+        className={styles.navbar}
+        style={{ height: document.documentElement.clientWidth >= 650 ? '2em' : '6em' }}
+      >
         {navbar}
       </header>
     );

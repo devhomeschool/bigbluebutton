@@ -2,6 +2,7 @@ import React from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import VideoList from '/imports/ui/components/video-provider/video-list/component';
 import VideoService from '/imports/ui/components/video-provider/service';
+import Service from '../actions-bar/service';
 
 const VideoListContainer = ({ children, ...props }) => {
   const { streams } = props;
@@ -15,4 +16,6 @@ export default withTracker(props => ({
   numberOfPages: VideoService.getNumberOfPages(),
   findStream: props.findStream,
   userId: props.userId,
+  amIModerator: Service.amIModerator(),
+  amIPresenter: Service.amIPresenter(),
 }))(VideoListContainer);

@@ -1,29 +1,33 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-// import Settings from '/imports/ui/services/settings';
-// import WebcamDraggable from './webcam-draggable-overlay/component';
+import Settings from '/imports/ui/services/settings';
+import WebcamDraggable from './webcam-draggable-overlay/component';
 
 import { styles } from './styles';
 
 const propTypes = {
   children: PropTypes.element.isRequired,
-  // usersVideo: PropTypes.arrayOf(Array),
-  // singleWebcam: PropTypes.bool.isRequired,
+  usersVideo: PropTypes.arrayOf(Array),
+  singleWebcam: PropTypes.bool.isRequired,
   hideOverlay: PropTypes.bool,
   swapLayout: PropTypes.bool,
-  // disableVideo: PropTypes.bool,
-  // audioModalIsOpen: PropTypes.bool,
+  disableVideo: PropTypes.bool,
+  audioModalIsOpen: PropTypes.bool,
   webcamPlacement: PropTypes.string,
+  amIPresenter: PropTypes.bool,
+  amIModerator: PropTypes.bool,
 };
 
 const defaultProps = {
-  // usersVideo: [],
+  usersVideo: [],
   hideOverlay: true,
   swapLayout: false,
-  // disableVideo: false,
-  // audioModalIsOpen: false,
+  disableVideo: false,
+  audioModalIsOpen: false,
   webcamPlacement: 'top',
+  amIPresenter: false,
+  amIModerator: false,
 };
 
 
@@ -40,13 +44,15 @@ export default class Media extends Component {
   render() {
     const {
       swapLayout,
-      // singleWebcam,
+      singleWebcam,
       hideOverlay,
-      // disableVideo,
+      disableVideo,
       children,
-      // audioModalIsOpen,
-      // usersVideo,
+      audioModalIsOpen,
+      usersVideo,
       webcamPlacement,
+      amIPresenter,
+      amIModerator,
     } = this.props;
 
     const contentClassName = cx({
@@ -59,8 +65,8 @@ export default class Media extends Component {
       [styles.floatingOverlay]: (webcamPlacement === 'floating'),
     });
 
-    // const { viewParticipantsWebcams } = Settings.dataSaving;
-    // const showVideo = usersVideo.length > 0 && viewParticipantsWebcams;
+    const { viewParticipantsWebcams } = Settings.dataSaving;
+    const showVideo = usersVideo.length > 0 && viewParticipantsWebcams;
     // const fullHeight = !showVideo || (webcamPlacement === 'floating');
 
     return (
@@ -72,13 +78,13 @@ export default class Media extends Component {
         <div
           className={!swapLayout ? contentClassName : overlayClassName}
           style={{
-            maxHeight: '100%',
+            maxHeight: amIModerator || amIPresenter ? '100%' : '80%',
             minHeight: '20%',
           }}
         >
           {children}
         </div>
-        {/* {showVideo ? (
+        { (!amIModerator && !amIPresenter) && showVideo ? (
           <WebcamDraggable
             refMediaContainer={this.refContainer}
             swapLayout={swapLayout}
@@ -89,7 +95,7 @@ export default class Media extends Component {
             audioModalIsOpen={audioModalIsOpen}
             usersVideo={usersVideo}
           />
-        ) : null} */}
+        ) : null }
       </div>
     );
   }

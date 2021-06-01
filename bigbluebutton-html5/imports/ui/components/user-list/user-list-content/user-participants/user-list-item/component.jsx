@@ -50,6 +50,8 @@ class UserListItem extends PureComponent {
       swapLayout,
       disableVideo,
       streams,
+      amIModerator,
+      amIPresenter,
     } = this.props;
 
     const contents = (
@@ -86,6 +88,8 @@ class UserListItem extends PureComponent {
           swapLayout,
           disableVideo,
           streams,
+          amIModerator,
+          amIPresenter,
         }}
       />
     );

@@ -532,6 +532,8 @@ class UserDropdown extends PureComponent {
       disableVideo,
       audioModalIsOpen,
       swapLayout,
+      amIModerator,
+      amIPresenter,
     } = this.props;
     const findStream = !streams.length ? null
       : streams.find(stream => stream.userId === user.userId);
@@ -570,7 +572,7 @@ class UserDropdown extends PureComponent {
         color={user.color}
       >
         {!disableVideo
-        && !audioModalIsOpen && findStream && showVideo
+        && !audioModalIsOpen && findStream && showVideo && (amIModerator || amIPresenter)
           ? (
             <VideoProviderContainer
               swapLayout={swapLayout}

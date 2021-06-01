@@ -11,6 +11,7 @@ import { styles } from './styles.scss';
 import Button from '../button/component';
 import RecordingIndicator from './recording-indicator/container';
 import SettingsDropdownContainer from './settings-dropdown/container';
+import TalkingIndicatorContainer from '/imports/ui/components/nav-bar/talking-indicator/container';
 import UserOptionsContainer from '../user-list/user-list-content/user-participants/user-options/container';
 
 const intlMessages = defineMessages({
@@ -145,6 +146,11 @@ class NavBar extends PureComponent {
             <SettingsDropdownContainer amIModerator={amIModerator} />
           </div>
         </div>
+        { !amIModerator ? null : (
+          <div className={styles.bottom}>
+            <TalkingIndicatorContainer amIModerator={amIModerator} />
+          </div>
+        )}
       </div>
     );
   }
