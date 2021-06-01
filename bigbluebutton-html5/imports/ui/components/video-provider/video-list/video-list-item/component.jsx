@@ -36,14 +36,14 @@ class VideoListItem extends Component {
   }
 
   componentDidMount() {
-    const { onMount, webcamDraggableDispatch } = this.props;
+    const { onMount } = this.props;
 
-    webcamDraggableDispatch(
-      {
-        type: 'setVideoRef',
-        value: this.videoTag,
-      },
-    );
+    // webcamDraggableDispatch(
+    //   {
+    //     type: 'setVideoRef',
+    //     value: this.videoTag,
+    //   },
+    // );
 
     onMount(this.videoTag);
 
@@ -78,18 +78,18 @@ class VideoListItem extends Component {
   }
 
   onFullscreenChange() {
-    const { webcamDraggableDispatch } = this.props;
+    // const { webcamDraggableDispatch } = this.props;
     const { isFullscreen } = this.state;
     const serviceIsFullscreen = FullscreenService.isFullScreen(this.videoContainer);
 
     if (isFullscreen !== serviceIsFullscreen) {
       this.setState({ isFullscreen: serviceIsFullscreen });
-      webcamDraggableDispatch(
-        {
-          type: 'setIsCameraFullscreen',
-          value: serviceIsFullscreen,
-        },
-      );
+      // webcamDraggableDispatch(
+      //   {
+      //     type: 'setIsCameraFullscreen',
+      //     value: serviceIsFullscreen,
+      //   },
+      // );
     }
   }
 
