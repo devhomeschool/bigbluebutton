@@ -394,6 +394,8 @@ class VideoList extends Component {
     const {
       streams,
       intl,
+      amIModerator,
+      amIPresenter,
     } = this.props;
     const { optimalGrid, autoplayBlocked } = this.state;
 
@@ -425,7 +427,9 @@ class VideoList extends Component {
               gridTemplateRows: `repeat(${optimalGrid.rows}, 1fr)`,
             }}
           >
+            { !amIModerator || !amIPresenter ? null : this.renderPreviousPageButton() }
             {this.renderVideoList()}
+            { !amIModerator || !amIPresenter ? null : this.renderNextPageButton() }
           </div>
         )}
         { !autoplayBlocked ? null : (
