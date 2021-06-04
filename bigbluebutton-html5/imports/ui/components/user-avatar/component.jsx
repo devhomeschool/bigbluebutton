@@ -56,19 +56,13 @@ const UserAvatar = ({
       [styles.voice]: voice,
       [styles.noVoice]: noVoice && !listenOnly,
       [styles.isChat]: isChat,
+      [styles.talking]: (talking && !muted),
     }, className)}
     style={{
       backgroundColor: color,
       color, // We need the same color on both for the border
     }}
   >
-
-    <div className={cx({
-      [styles.talking]: (talking && !muted),
-    })}
-    />
-
-
     <div className={styles.content}>
       {children}
     </div>

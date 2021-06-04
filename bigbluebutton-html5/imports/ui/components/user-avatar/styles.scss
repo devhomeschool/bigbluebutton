@@ -17,7 +17,7 @@
 .avatar {
   height: 140px;
   position: relative;
-  padding: 5rem 0;
+  padding-top: 100%;
   border-radius: 50%;
   text-align: center;
   font-size: .85rem;
@@ -77,37 +77,8 @@
   bottom: 0;
   left: 0;
   background-color: var(--user-color);
+  border: 5px solid green;
   border-radius: inherit;
-
-  :global(.animationsEnabled) & {
-    animation: pulse 1s infinite ease-in;
-  }
-
-  &::before {
-    :global(.animationsDisabled) & {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      background-color: var(--user-color);
-      border-radius: inherit;
-      box-shadow: 0 0 0 4px var(--user-color);
-      opacity: .5;
-    }
-  }
-}
-
-@keyframes pulse {
-  0% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(1.5);
-  }
 }
 
 .moderator {
@@ -117,6 +88,7 @@
 .presenter {
   &:before {
     content: "\00a0\e90b\00a0";
+    z-index: 2;
   }
   @include presenterIndicator();
 }
