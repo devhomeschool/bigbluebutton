@@ -13,7 +13,6 @@ const propTypes = {
   listenOnly: PropTypes.bool,
   voice: PropTypes.bool,
   noVoice: PropTypes.bool,
-  color: PropTypes.string,
   className: PropTypes.string,
   isChat: PropTypes.bool,
   height: PropTypes.number.isRequired,
@@ -27,7 +26,6 @@ const defaultProps = {
   listenOnly: false,
   voice: false,
   noVoice: false,
-  color: '#000',
   className: null,
   isChat: false,
 };
@@ -39,7 +37,6 @@ const UserAvatar = ({
   talking,
   muted,
   listenOnly,
-  color,
   voice,
   noVoice,
   className,
@@ -61,8 +58,6 @@ const UserAvatar = ({
       [styles.talking]: (talking && !muted),
     }, className)}
     style={{
-      backgroundColor: color,
-      color,
       height: `${height}px`,
     }}
   >

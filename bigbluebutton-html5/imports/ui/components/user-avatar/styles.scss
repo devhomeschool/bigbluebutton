@@ -17,7 +17,7 @@
 .avatar {
   position: relative;
   padding-top: 5rem;
-  border-radius: 50%;
+  border-radius: 5px;
   text-align: center;
   font-size: .85rem;
   border: 2px solid transparent;
@@ -38,7 +38,7 @@
     padding-right: 0;
     padding-left: 0;
     padding-bottom: 0;
-    color: inherit;
+    color: lightslategray;
     top: 0.1em;
     left: 0.1em;
     bottom: var(--user-indicators-offset);
@@ -77,6 +77,7 @@
 
 .moderator {
   border-radius: 5px;
+  color: darkslategray;
 }
 
 .presenter {
