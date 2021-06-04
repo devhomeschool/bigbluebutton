@@ -173,6 +173,7 @@ class UserDropdown extends PureComponent {
     this.renderUserAvatar = this.renderUserAvatar.bind(this);
     this.resetMenuState = this.resetMenuState.bind(this);
     this.makeDropdownItem = this.makeDropdownItem.bind(this);
+    this.checkWidthChange = this.checkWidthChange.bind(this);
   }
 
   componentWillMount() {
@@ -182,6 +183,7 @@ class UserDropdown extends PureComponent {
 
   componentDidUpdate() {
     this.checkDropdownDirection();
+    this.checkWidthChange();
   }
 
   onActionsShow() {
@@ -519,6 +521,12 @@ class UserDropdown extends PureComponent {
     return isActionsOpen && !dropdownVisible;
   }
 
+  checkWidthChange() {
+    if (!this.canvasWidth) {
+      this.width = this.canvasWidth.offsetWidth;
+    }
+  }
+
   renderUserAvatar() {
     const {
       user,
@@ -570,7 +578,7 @@ class UserDropdown extends PureComponent {
         voice={voiceUser.isVoiceUser}
         noVoice={!voiceUser.isVoiceUser}
         color={user.color}
-        height={!this.canvas ? 140 : this.canvas.getBoundingClientRect().width}
+        height={this.width}
       >
         {!disableVideo
         && !audioModalIsOpen && findStream && showVideo && (amIModerator || amIPresenter)
@@ -629,7 +637,8 @@ class UserDropdown extends PureComponent {
       },
     );
 
-    this.canvas = null;
+    this.width = 140;
+    this.canvasWidth = null;
 
     const contents = (
       <div
@@ -638,7 +647,7 @@ class UserDropdown extends PureComponent {
       >
         <div className={styles.userItemContents}>
           <div
-            ref={(ref) => { this.canvas = ref; }}
+            ref={(ref) => { this.canvasWidth = ref; }}
             className={styles.userAvatar}
           >
             {this.renderUserAvatar()}
