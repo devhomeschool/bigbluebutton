@@ -164,6 +164,7 @@ class UserDropdown extends PureComponent {
       dropdownDirection: 'top',
       dropdownVisible: false,
       showNestedOptions: false,
+      canvasState: this.canvas,
     };
 
     this.handleScroll = this.handleScroll.bind(this);
@@ -183,7 +184,6 @@ class UserDropdown extends PureComponent {
 
   componentDidUpdate() {
     this.checkDropdownDirection();
-    this.checkWidthChange();
   }
 
   onActionsShow() {
@@ -521,12 +521,6 @@ class UserDropdown extends PureComponent {
     return isActionsOpen && !dropdownVisible;
   }
 
-  checkWidthChange() {
-    if (!this.canvasWidth) {
-      this.width = this.canvasWidth.offsetWidth;
-    }
-  }
-
   renderUserAvatar() {
     const {
       user,
@@ -543,6 +537,10 @@ class UserDropdown extends PureComponent {
       breakoutSequence,
       meetingIsBreakout,
     } = this.props;
+
+    const {
+      canvasState,
+    } = this.state;
 
     const { clientType } = user;
     const isVoiceOnly = clientType === 'dial-in-user';
@@ -578,7 +576,7 @@ class UserDropdown extends PureComponent {
         voice={voiceUser.isVoiceUser}
         noVoice={!voiceUser.isVoiceUser}
         color={user.color}
-        height={this.width}
+        height={!canvasState ? 140 : canvasState.offsetWidth}
       >
         {!disableVideo
         && !audioModalIsOpen && findStream && showVideo && (amIModerator || amIPresenter)
@@ -637,9 +635,6 @@ class UserDropdown extends PureComponent {
       },
     );
 
-    this.width = 140;
-    this.canvasWidth = null;
-
     const contents = (
       <div
         data-test={isMe(user.userId) ? 'userListItemCurrent' : null}
@@ -647,7 +642,7 @@ class UserDropdown extends PureComponent {
       >
         <div className={styles.userItemContents}>
           <div
-            ref={(ref) => { this.canvasWidth = ref; }}
+            ref={(ref) => { this.canvas = ref; }}
             className={styles.userAvatar}
           >
             {this.renderUserAvatar()}
@@ -696,7 +691,7 @@ class UserDropdown extends PureComponent {
             [dropdownDirection]: `${dropdownOffset}px`,
           }}
           className={styles.dropdownContent}
-          placement={`right ${dropdownDirection}`}
+          placement={`left ${dropdownDirection}`}
         >
           <DropdownList
             ref={(ref) => { this.list = ref; }}
