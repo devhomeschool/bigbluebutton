@@ -535,7 +535,7 @@ class UserDropdown extends PureComponent {
     const findStream = !streams.length ? null
       : streams.find(stream => stream.userId === user.userId);
 
-    const { width } = this.canvas.getBoundingClientRect();
+    const width = !this.canvas ? 140 : this.canvas.getBoundingClientRect().width;
 
     return (
       <UserAvatar
