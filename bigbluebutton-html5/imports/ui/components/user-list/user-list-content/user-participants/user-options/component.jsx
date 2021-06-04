@@ -440,7 +440,7 @@ class UserOptions extends PureComponent {
               >
                 <DropdownList>
                   {
-                    this.renderMenuItems()
+                    this.renderMenuItems(contentWidth)
                   }
                 </DropdownList>
               </DropdownContent>
