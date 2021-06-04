@@ -146,7 +146,7 @@ class NavBar extends PureComponent {
             <SettingsDropdownContainer amIModerator={amIModerator} />
           </div>
         </div>
-        { !amIModerator ? null : (
+        { amIModerator ? null : (
           <div className={styles.bottom}>
             <TalkingIndicatorContainer amIModerator={amIModerator} />
           </div>

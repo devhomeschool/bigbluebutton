@@ -16,6 +16,7 @@ const propTypes = {
   color: PropTypes.string,
   className: PropTypes.string,
   isChat: PropTypes.bool,
+  height: PropTypes.number.isRequired,
 };
 
 const defaultProps = {
@@ -43,6 +44,7 @@ const UserAvatar = ({
   noVoice,
   className,
   isChat,
+  height,
 }) => (
 
   <div
@@ -56,19 +58,14 @@ const UserAvatar = ({
       [styles.voice]: voice,
       [styles.noVoice]: noVoice && !listenOnly,
       [styles.isChat]: isChat,
+      [styles.talking]: (talking && !muted),
     }, className)}
     style={{
       backgroundColor: color,
-      color, // We need the same color on both for the border
+      color,
+      height: `${height}px`,
     }}
   >
-
-    <div className={cx({
-      [styles.talking]: (talking && !muted),
-    })}
-    />
-
-
     <div className={styles.content}>
       {children}
     </div>

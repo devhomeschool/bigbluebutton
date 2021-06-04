@@ -521,11 +521,7 @@ class UserDropdown extends PureComponent {
 
   renderUserAvatar() {
     const {
-      normalizeEmojiName,
       user,
-      userInBreakout,
-      breakoutSequence,
-      meetingIsBreakout,
       voiceUser,
       streams,
       showVideo,
@@ -535,30 +531,11 @@ class UserDropdown extends PureComponent {
       amIModerator,
       amIPresenter,
     } = this.props;
+
     const findStream = !streams.length ? null
       : streams.find(stream => stream.userId === user.userId);
 
-    const { clientType } = user;
-    const isVoiceOnly = clientType === 'dial-in-user';
-
-    const iconUser = user.emoji !== 'none'
-      ? (
-        <Icon
-          style={
-          {
-            zIndex: '3',
-            fontSize: '300%',
-            position: 'absolute',
-            bottom: '20px',
-            left: '10px',
-          }}
-          iconName={normalizeEmojiName(user.emoji)}
-        />)
-      : user.name.toLowerCase().slice(0, 2);
-
-    const iconVoiceOnlyUser = (<Icon iconName="audio_on" />);
-    const userIcon = isVoiceOnly ? iconVoiceOnlyUser : iconUser;
-    const icons = userInBreakout && !meetingIsBreakout ? breakoutSequence : userIcon;
+    const { width } = this.canvas.getBoundingClientRect();
 
     return (
       <UserAvatar
@@ -570,6 +547,7 @@ class UserDropdown extends PureComponent {
         voice={voiceUser.isVoiceUser}
         noVoice={!voiceUser.isVoiceUser}
         color={user.color}
+        height={width}
       >
         {!disableVideo
         && !audioModalIsOpen && findStream && showVideo && (amIModerator || amIPresenter)
@@ -580,8 +558,7 @@ class UserDropdown extends PureComponent {
               findStream={findStream}
             />
           )
-          : null }
-        { icons }
+          : user.name.toLowerCase().slice(0, 2) }
       </UserAvatar>
     );
   }
@@ -594,6 +571,10 @@ class UserDropdown extends PureComponent {
       intl,
       isThisMeetingLocked,
       isMe,
+      normalizeEmojiName,
+      userInBreakout,
+      breakoutSequence,
+      meetingIsBreakout,
     } = this.props;
 
     const {
@@ -628,13 +609,40 @@ class UserDropdown extends PureComponent {
       },
     );
 
+    const { clientType } = user;
+    const isVoiceOnly = clientType === 'dial-in-user';
+
+    const userEmoji = user.emoji !== 'none'
+      && (
+        <Icon
+          style={
+          {
+            zIndex: '3',
+            fontSize: '300%',
+            position: 'absolute',
+            bottom: '20px',
+            left: '10px',
+          }}
+          iconName={normalizeEmojiName(user.emoji)}
+        />);
+
+    const iconVoiceOnlyUser = (<Icon iconName="audio_on" />);
+    const userIcon = isVoiceOnly ? iconVoiceOnlyUser : userEmoji;
+    const icons = (userInBreakout && !meetingIsBreakout) ? breakoutSequence : userIcon;
+
+    this.canvas = null;
+
     const contents = (
       <div
         data-test={isMe(user.userId) ? 'userListItemCurrent' : null}
         className={!actions.length ? styles.userListItem : null}
       >
         <div className={styles.userItemContents}>
-          <div className={styles.userAvatar}>
+          <div
+            ref={(ref) => { this.canvas = ref; }}
+            className={styles.userAvatar}
+          >
+            { icons }
             {this.renderUserAvatar()}
           </div>
           {<UserName
