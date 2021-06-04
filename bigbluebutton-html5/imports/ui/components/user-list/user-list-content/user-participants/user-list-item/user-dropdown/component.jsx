@@ -531,8 +531,11 @@ class UserDropdown extends PureComponent {
       amIModerator,
       amIPresenter,
     } = this.props;
+
     const findStream = !streams.length ? null
       : streams.find(stream => stream.userId === user.userId);
+
+    const { width } = this.canvas.getBoundingClientRect();
 
     return (
       <UserAvatar
@@ -544,6 +547,7 @@ class UserDropdown extends PureComponent {
         voice={voiceUser.isVoiceUser}
         noVoice={!voiceUser.isVoiceUser}
         color={user.color}
+        height={width}
       >
         {!disableVideo
         && !audioModalIsOpen && findStream && showVideo && (amIModerator || amIPresenter)
@@ -626,6 +630,7 @@ class UserDropdown extends PureComponent {
     const userIcon = isVoiceOnly ? iconVoiceOnlyUser : userEmoji;
     const icons = (userInBreakout && !meetingIsBreakout) ? breakoutSequence : userIcon;
 
+    this.canvas = null;
 
     const contents = (
       <div
@@ -633,7 +638,10 @@ class UserDropdown extends PureComponent {
         className={!actions.length ? styles.userListItem : null}
       >
         <div className={styles.userItemContents}>
-          <div className={styles.userAvatar}>
+          <div
+            ref={(ref) => { this.canvas = ref; }}
+            className={styles.userAvatar}
+          >
             { icons }
             {this.renderUserAvatar()}
           </div>

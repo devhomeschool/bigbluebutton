@@ -16,6 +16,7 @@ const propTypes = {
   color: PropTypes.string,
   className: PropTypes.string,
   isChat: PropTypes.bool,
+  height: PropTypes.number.isRequired,
 };
 
 const defaultProps = {
@@ -43,6 +44,7 @@ const UserAvatar = ({
   noVoice,
   className,
   isChat,
+  height,
 }) => (
 
   <div
@@ -60,7 +62,8 @@ const UserAvatar = ({
     }, className)}
     style={{
       backgroundColor: color,
-      color, // We need the same color on both for the border
+      color,
+      height: `${height}px`,
     }}
   >
     <div className={styles.content}>
