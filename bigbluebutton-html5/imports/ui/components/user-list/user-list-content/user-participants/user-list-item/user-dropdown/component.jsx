@@ -174,7 +174,6 @@ class UserDropdown extends PureComponent {
     this.renderUserAvatar = this.renderUserAvatar.bind(this);
     this.resetMenuState = this.resetMenuState.bind(this);
     this.makeDropdownItem = this.makeDropdownItem.bind(this);
-    this.checkWidthChange = this.checkWidthChange.bind(this);
   }
 
   componentWillMount() {
