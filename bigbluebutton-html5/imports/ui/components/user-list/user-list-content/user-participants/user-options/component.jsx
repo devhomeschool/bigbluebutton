@@ -117,8 +117,6 @@ const intlMessages = defineMessages({
   },
 });
 
-const contentWidth = document.querySelector('#content').offsetWidth;
-
 class UserOptions extends PureComponent {
   constructor(props) {
     super(props);
@@ -187,7 +185,7 @@ class UserOptions extends PureComponent {
     mountModal(<CaptionsWriterMenu />);
   }
 
-  renderMenuItems() {
+  renderMenuItems(contentWidth) {
     const {
       intl,
       isMeetingMuted,
@@ -408,11 +406,14 @@ class UserOptions extends PureComponent {
 
   render() {
     const { intl } = this.props;
+    const content = document.querySelector('#content');
+    const contentWidth = content === null ? 0 : content.offsetWidth;
+
     return (
       <div className={styles.menuItems}>
         {
           contentWidth >= 720 ? (
-            this.renderMenuItems()
+            this.renderMenuItems(contentWidth)
           ) : (
             <Dropdown
               ref={(ref) => { this.dropdown = ref; }}
