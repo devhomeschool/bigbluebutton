@@ -121,10 +121,6 @@ class UserOptions extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.state = {
-      content: document.querySelector('#content'),
-    };
-
     this.clearStatusId = _.uniqueId('list-item-');
     this.muteId = _.uniqueId('list-item-');
     this.muteAllId = _.uniqueId('list-item-');
@@ -410,7 +406,7 @@ class UserOptions extends PureComponent {
 
   render() {
     const { intl } = this.props;
-    const { content } = this.state;
+    const content = document.querySelector('#content');
     const contentWidth = content === null ? 0 : content.offsetWidth;
 
     return (
@@ -440,7 +436,7 @@ class UserOptions extends PureComponent {
               </DropdownTrigger>
               <DropdownContent
                 className={styles.dropdownContent}
-                placement="right top"
+                placement="left top"
               >
                 <DropdownList>
                   {
