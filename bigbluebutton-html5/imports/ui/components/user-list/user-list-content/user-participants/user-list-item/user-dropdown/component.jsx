@@ -164,7 +164,7 @@ class UserDropdown extends PureComponent {
       dropdownDirection: 'top',
       dropdownVisible: false,
       showNestedOptions: false,
-      canvasState: this.canvas,
+      canvasWidth: null,
     };
 
     this.handleScroll = this.handleScroll.bind(this);
@@ -174,11 +174,16 @@ class UserDropdown extends PureComponent {
     this.renderUserAvatar = this.renderUserAvatar.bind(this);
     this.resetMenuState = this.resetMenuState.bind(this);
     this.makeDropdownItem = this.makeDropdownItem.bind(this);
+    this.canvas = null;
   }
 
   componentWillMount() {
     this.title = _.uniqueId('dropdown-title-');
     this.seperator = _.uniqueId('action-separator-');
+  }
+
+  componentDidMount() {
+    this.setState({ canvasWidth: this.canvas.offsetWidth });
   }
 
   componentDidUpdate() {
@@ -538,7 +543,7 @@ class UserDropdown extends PureComponent {
     } = this.props;
 
     const {
-      canvasState,
+      canvasWidth,
     } = this.state;
 
     const { clientType } = user;
@@ -575,7 +580,7 @@ class UserDropdown extends PureComponent {
         voice={voiceUser.isVoiceUser}
         noVoice={!voiceUser.isVoiceUser}
         color={user.color}
-        height={!canvasState ? 140 : canvasState.offsetWidth}
+        height={!canvasWidth ? 140 : (0.75 * canvasWidth)}
       >
         {!disableVideo
         && !audioModalIsOpen && findStream && showVideo && (amIModerator || amIPresenter)
