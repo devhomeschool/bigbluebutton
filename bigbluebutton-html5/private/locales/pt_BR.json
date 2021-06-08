@@ -496,6 +496,7 @@
     "app.toast.setEmoji.label": "Status de emoji definido como {0}",
     "app.toast.meetingMuteOn.label": "Todos os participantes foram silenciados",
     "app.toast.meetingMuteOff.label": "Mudo da sessão desativado",
+    "app.toast.setEmoji.raiseHand": "levantou a mão",
     "app.notification.recordingStart": "Esta sessão está sendo gravada",
     "app.notification.recordingStop": "Esta sessão não está sendo gravada",
     "app.notification.recordingPaused": "Esta sessão não está mais sendo gravada",

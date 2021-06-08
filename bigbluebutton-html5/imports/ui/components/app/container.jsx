@@ -114,6 +114,25 @@ export default injectIntl(withModalMounter(withTracker(({ intl, baseControls }) 
     requesterUserId: Auth.userID,
   }).fetch();
 
+  const userFilter = {
+    emoji: 1,
+    emojiTime: 1,
+    role: 1,
+    name: 1,
+    userId: 1,
+  };
+
+  let users = Users
+    .find({
+      meetingId: Auth.meetingID,
+      connectionStatus: 'online',
+    }, userFilter)
+    .fetch();
+
+  const amIModerator = Users.findOne({ userId: Auth.userID }, { fields: { role: 1 } }).role === ROLE_MODERATOR;
+
+  const amIPresenter = Users.findOne({ userId: Auth.userID }, { fields: { presenter: 1 } }).presenter;
+
   return {
     captions: CaptionsService.isCaptionsActive() ? <CaptionsContainer /> : null,
     fontSize: getFontSize(),
@@ -121,7 +140,10 @@ export default injectIntl(withModalMounter(withTracker(({ intl, baseControls }) 
     customStyle: getFromUserSettings('bbb_custom_style', false),
     customStyleUrl: getFromUserSettings('bbb_custom_style_url', false),
     openPanel: Session.get('openPanel'),
+    users,
     UserInfo,
+    amIModerator,
+    amIPresenter,
     notify,
     validIOSVersion,
     isPhone: deviceInfo.type().isPhone,
