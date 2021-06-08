@@ -211,7 +211,7 @@ class App extends Component {
         });
       // notify the latest raised hand user to presenter and moderator
       // é necessário criar a mensagem de mão levantada no intl
-      notify(`${raisedHandUsers[0].name} ${intl.formatMessage(intlMessages.raisedHand)}`, 'info', 'raiseHand');
+      notify(`${raisedHandUsers[0].name} ${intl.formatMessage(intlMessages.raisedHand)}`, 'info', 'raiseHand', { autoClose: false });
     }
   }
 
