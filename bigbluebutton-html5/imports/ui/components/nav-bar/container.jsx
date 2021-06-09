@@ -49,13 +49,32 @@ export default withTracker(() => {
   };
 
   const { connectRecordingObserver, processOutsideToggleRecording } = Service;
-  const currentUser = Users.findOne({ userId: Auth.userID }, { fields: { role: 1 } });
+
+  const checkInitialTime = () => {
+    if (!amIPresenter && !amIModerator) return;
+    let presentersAndModerators = Users
+      .find(
+        { meetingId: Auth.meetingID, connectionStatus: 'online'},
+        { presenter: 1, role: 1, name: 1, userId: 1, loginTime: 1 },
+      ).filter((u) => u.presenter || u.role === ROLE_MODERATOR);
+
+    return presentersAndModerators
+      .sort((a, b) => {
+        if (a.loginTime < b.loginTime) return 1
+        if (a.loginTime > b.loginTime) return -1
+        return 0
+      });
+  }
+
+  const currentUser = Users.findOne({ userId: Auth.userID }, { fields: { role: 1, presenter: 1 } });
   const openPanel = Session.get('openPanel');
   const isExpanded = openPanel !== '';
   const amIModerator = currentUser.role === ROLE_MODERATOR;
+  const amIPresenter = currentUser.presenter;
   const hasUnreadMessages = checkUnreadMessages();
 
   return {
+    checkInitialTime,
     amIModerator,
     isExpanded,
     currentUserId: Auth.userID,
