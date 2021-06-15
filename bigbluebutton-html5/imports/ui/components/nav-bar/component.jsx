@@ -61,6 +61,16 @@ class NavBar extends PureComponent {
     Session.set('idChatOpen', '');
   }
 
+  constructor() {
+    super();
+    this.state = {
+      classTime: null,
+    };
+
+    this.initialTime = null;
+    this.calculateTimePassed = this.calculateTimePassed.bind(this);
+  }
+
   componentDidMount() {
     const {
       processOutsideToggleRecording,
@@ -74,11 +84,24 @@ class NavBar extends PureComponent {
       window.addEventListener('message', processOutsideToggleRecording);
     }
 
-    const initialTime = checkInitialTime();
+    this.initialTime = checkInitialTime();
+    setTimeout(() => {
+      this.setState({ classTime: this.calculateTimePassed() });
+    }, 1000);
+  }
+
+  componentDidUpdate() {
+    setTimeout(() => {
+      this.setState({ classTime: this.calculateTimePassed() });
+    }, 60000);
   }
 
   componentWillUnmount() {
     clearInterval(this.interval);
+  }
+
+  calculateTimePassed() {
+    return this.initialTime;
   }
 
   render() {
@@ -95,6 +118,7 @@ class NavBar extends PureComponent {
       amIModerator,
     } = this.props;
 
+    const { classTime } = this.state;
 
     const toggleBtnClasses = {};
     toggleBtnClasses[styles.btn] = true;
@@ -132,6 +156,7 @@ class NavBar extends PureComponent {
             <RecordingIndicator
               mountModal={mountModal}
               amIModerator={amIModerator}
+              classTime={classTime}
             />
             {!amIModerator ? null
               : (

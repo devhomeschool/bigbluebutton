@@ -103,6 +103,7 @@ class RecordingIndicator extends PureComponent {
       allowStartStopRecording,
       notify,
       micUser,
+      classTime,
     } = this.props;
 
     const { time } = this.state;
@@ -193,6 +194,10 @@ class RecordingIndicator extends PureComponent {
 
     return (
       <Fragment>
+        {record
+          ? <span className={styles.presentationTitleSeparator} aria-hidden>|</span>
+          : null}
+        { <span>{!classTime ? null : `${classTime.hours}h:${classTime.minutes}m`}</span> }
         {record
           ? <span className={styles.presentationTitleSeparator} aria-hidden>|</span>
           : null}
