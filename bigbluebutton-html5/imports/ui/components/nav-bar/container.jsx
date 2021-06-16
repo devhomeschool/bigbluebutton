@@ -61,11 +61,11 @@ export default withTracker(() => {
     if (!amIPresenter && !amIModerator) return null;
     const presentersAndModerators = Users
       .find(
-        { meetingId: Auth.meetingID, connectionStatus: 'online', presenter: true },
+        { meetingId: Auth.meetingID, connectionStatus: 'online' },
         {
           presenter: 1, role: 1, name: 1, userId: 1, loginTime: 1,
         },
-      );
+      ).fetch();
     console.log(presentersAndModerators);
     presentersAndModerators.filter(u => u.role === ROLE_MODERATOR);
 
