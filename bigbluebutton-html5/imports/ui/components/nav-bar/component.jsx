@@ -101,7 +101,13 @@ class NavBar extends PureComponent {
   }
 
   calculateTimePassed() {
-    return this.initialTime;
+    const timePassed = +Date.now() - +this.initialTime;
+    const time = {
+      hours: Math.floor((timePassed / (1000 * 60 * 60)) % 24),
+      minutes: Math.floor((timePassed / 1000 / 60) % 60),
+      seconds: Math.floor((timePassed / 1000) % 60),
+    };
+    return time;
   }
 
   render() {
@@ -109,7 +115,7 @@ class NavBar extends PureComponent {
       hasUnreadMessages,
       isExpanded,
       intl,
-      shortcuts: TOGGLE_USERLIST_AK,
+      // shortcuts: TOGGLE_USERLIST_AK,
       mountModal,
       presentationTitle,
       users,
@@ -145,7 +151,7 @@ class NavBar extends PureComponent {
               icon="user"
               className={cx(toggleBtnClasses)}
               aria-expanded={isExpanded}
-              accessKey={TOGGLE_USERLIST_AK}
+              // accessKey={TOGGLE_USERLIST_AK}
             />
             {isExpanded ? null
               : <Icon iconName="right_arrow" className={styles.arrowRight} />
