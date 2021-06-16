@@ -65,7 +65,8 @@ export default withTracker(() => {
         {
           presenter: 1, role: 1, name: 1, userId: 1, loginTime: 1,
         },
-      ).filter(u => u.presenter || u.role === ROLE_MODERATOR);
+      );
+    presentersAndModerators.filter(u => u.presenter || u.role === ROLE_MODERATOR);
 
     const firstModerator = presentersAndModerators
       .sort((a, b) => {
