@@ -61,12 +61,13 @@ export default withTracker(() => {
     if (!amIPresenter && !amIModerator) return null;
     const presentersAndModerators = Users
       .find(
-        { meetingId: Auth.meetingID, connectionStatus: 'online' },
+        { meetingId: Auth.meetingID, connectionStatus: 'online', presenter: true },
         {
           presenter: 1, role: 1, name: 1, userId: 1, loginTime: 1,
         },
       );
-    presentersAndModerators.filter(u => u.presenter || u.role === ROLE_MODERATOR);
+    console.log(presentersAndModerators);
+    presentersAndModerators.filter(u => u.role === ROLE_MODERATOR);
 
     const firstModerator = presentersAndModerators
       .sort((a, b) => {
