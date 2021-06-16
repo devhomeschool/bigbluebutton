@@ -37,7 +37,7 @@ const getPresentersAndModerators = () => {
   const presentersAndModerators = Users.find({ meetingId: Auth.meetingID, connectionStatus: 'online' },
     {
       presenter: 1, role: 1, name: 1, loginTime: 1,
-    });
+    }).fetch();
   presentersAndModerators.filter(u => u.presenter || u.role === ROLE_MODERATOR);
   return presentersAndModerators;
 };
