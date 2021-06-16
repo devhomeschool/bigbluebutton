@@ -32,7 +32,7 @@ const Chat = (props) => {
     isChatLocked,
     actions,
     intl,
-    shortcuts,
+    // shortcuts,
     isMeteorConnected,
     lastReadMessageTime,
     hasUnreadMessages,
@@ -42,10 +42,11 @@ const Chat = (props) => {
     maxMessageLength,
     amIModerator,
     meetingIsBreakout,
+    initialTime,
   } = props;
 
-  const HIDE_CHAT_AK = shortcuts.hidePrivateChat;
-  const CLOSE_CHAT_AK = shortcuts.closePrivateChat;
+  // const HIDE_CHAT_AK = shortcuts.hidePrivateChat;
+  // const CLOSE_CHAT_AK = shortcuts.closePrivateChat;
 
   return (
     <div
@@ -63,7 +64,7 @@ const Chat = (props) => {
               Session.set('openPanel', 'userlist');
             }}
             aria-label={intl.formatMessage(intlMessages.hideChatLabel, { 0: title })}
-            accessKey={HIDE_CHAT_AK}
+            // accessKey={HIDE_CHAT_AK}
             label={title}
             icon="left_arrow"
             className={styles.hideBtn}
@@ -85,7 +86,7 @@ const Chat = (props) => {
                 }}
                 aria-label={intl.formatMessage(intlMessages.closeChatLabel, { 0: title })}
                 label={intl.formatMessage(intlMessages.closeChatLabel, { 0: title })}
-                accessKey={CLOSE_CHAT_AK}
+                // accessKey={CLOSE_CHAT_AK}
               />
             )
             : <ChatDropdown {...{ meetingIsBreakout, isMeteorConnected, amIModerator }} />
@@ -102,6 +103,7 @@ const Chat = (props) => {
           hasUnreadMessages,
           scrollPosition,
           messages,
+          initialTime,
         }}
       />
       <MessageForm

@@ -61,10 +61,21 @@ class NavBar extends PureComponent {
     Session.set('idChatOpen', '');
   }
 
+  constructor() {
+    super();
+    this.state = {
+      classTime: null,
+    };
+
+    this.initialTime = null;
+    this.calculateTimePassed = this.calculateTimePassed.bind(this);
+  }
+
   componentDidMount() {
     const {
       processOutsideToggleRecording,
       connectRecordingObserver,
+      checkInitialTime,
     } = this.props;
 
     if (Meteor.settings.public.allowOutsideCommands.toggleRecording
@@ -72,10 +83,31 @@ class NavBar extends PureComponent {
       connectRecordingObserver();
       window.addEventListener('message', processOutsideToggleRecording);
     }
+
+    this.initialTime = checkInitialTime();
+    setTimeout(() => {
+      this.setState({ classTime: this.calculateTimePassed() });
+    }, 1000);
+  }
+
+  componentDidUpdate() {
+    setTimeout(() => {
+      this.setState({ classTime: this.calculateTimePassed() });
+    }, 60000);
   }
 
   componentWillUnmount() {
     clearInterval(this.interval);
+  }
+
+  calculateTimePassed() {
+    const timePassed = +Date.now() - +this.initialTime;
+    const time = {
+      hours: Math.floor((timePassed / (1000 * 60 * 60)) % 24),
+      minutes: Math.floor((timePassed / 1000 / 60) % 60),
+      seconds: Math.floor((timePassed / 1000) % 60),
+    };
+    return time;
   }
 
   render() {
@@ -83,7 +115,7 @@ class NavBar extends PureComponent {
       hasUnreadMessages,
       isExpanded,
       intl,
-      shortcuts: TOGGLE_USERLIST_AK,
+      // shortcuts: TOGGLE_USERLIST_AK,
       mountModal,
       presentationTitle,
       users,
@@ -92,6 +124,7 @@ class NavBar extends PureComponent {
       amIModerator,
     } = this.props;
 
+    const { classTime } = this.state;
 
     const toggleBtnClasses = {};
     toggleBtnClasses[styles.btn] = true;
@@ -118,7 +151,7 @@ class NavBar extends PureComponent {
               icon="user"
               className={cx(toggleBtnClasses)}
               aria-expanded={isExpanded}
-              accessKey={TOGGLE_USERLIST_AK}
+              // accessKey={TOGGLE_USERLIST_AK}
             />
             {isExpanded ? null
               : <Icon iconName="right_arrow" className={styles.arrowRight} />
@@ -129,6 +162,7 @@ class NavBar extends PureComponent {
             <RecordingIndicator
               mountModal={mountModal}
               amIModerator={amIModerator}
+              classTime={classTime}
             />
             {!amIModerator ? null
               : (

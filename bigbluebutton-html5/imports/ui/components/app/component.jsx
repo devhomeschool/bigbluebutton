@@ -59,6 +59,10 @@ const intlMessages = defineMessages({
     id: 'app.toast.setEmoji.label',
     description: 'message when a user emoji has been set',
   },
+  raisedHand: {
+    id: 'app.toast.setEmoji.raiseHand',
+    description: 'toast message for raised hand notification',
+  },
   meetingMuteOn: {
     id: 'app.toast.meetingMuteOn.label',
     description: 'message used when meeting has been muted',
@@ -143,8 +147,8 @@ class App extends Component {
 
     this.handleWindowResize();
     window.addEventListener('resize', this.handleWindowResize, false);
-    window.ondragover = function (e) { e.preventDefault(); };
-    window.ondrop = function (e) { e.preventDefault(); };
+    window.ondragover = (e) => { e.preventDefault(); };
+    window.ondrop = (e) => { e.preventDefault(); };
 
     if (ENABLE_NETWORK_MONITORING) {
       if (navigator.connection) {
@@ -160,7 +164,14 @@ class App extends Component {
 
   componentDidUpdate(prevProps) {
     const {
-      meetingMuted, notify, currentUserEmoji, intl, hasPublishedPoll,
+      meetingMuted,
+      notify,
+      currentUserEmoji,
+      intl,
+      hasPublishedPoll,
+      users,
+      amIModerator,
+      amIPresenter,
     } = this.props;
 
     if (prevProps.currentUserEmoji.status !== currentUserEmoji.status) {
@@ -191,6 +202,20 @@ class App extends Component {
       notify(
         intl.formatMessage(intlMessages.pollPublishedLabel), 'info', 'polling',
       );
+    }
+    if (!prevProps.users !== users) {
+      // only notify if the user is presenter or moderator
+      if (!amIModerator && !amIPresenter) return;
+      // filter users with raised hand emoji on and order by last emoji time
+      const raisedHandUsers = users.filter(user => user.emoji === 'raiseHand');
+      if (!raisedHandUsers) return;
+      raisedHandUsers.sort((a, b) => {
+        if (a.emojiTime < b.emojiTime) return -1;
+        if (a.emojiTime > b.emojiTime) return 1;
+        return 0;
+      });
+      // notify the latest raised hand user com a opção autoClose desligada
+      notify(`${raisedHandUsers[0].name} ${intl.formatMessage(intlMessages.raisedHand)}`, 'info', 'raiseHand', { autoClose: false });
     }
   }
 
