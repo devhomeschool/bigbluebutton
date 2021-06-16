@@ -53,6 +53,16 @@ const propTypes = {
   mountModal: PropTypes.func.isRequired,
   time: PropTypes.number,
   allowStartStopRecording: PropTypes.bool.isRequired,
+  micUser: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    joined: PropTypes.bool.isRequired,
+  }),
+  notify: PropTypes.func.isRequired,
+  classTime: PropTypes.shape({
+    hours: PropTypes.number,
+    minutes: PropTypes.number,
+    seconds: PropTypes.number,
+  }),
 };
 
 const defaultProps = {
@@ -60,6 +70,8 @@ const defaultProps = {
   record: false,
   recording: false,
   time: 0,
+  micUser: null,
+  classTime: null,
 };
 
 class RecordingIndicator extends PureComponent {
@@ -103,6 +115,7 @@ class RecordingIndicator extends PureComponent {
       allowStartStopRecording,
       notify,
       micUser,
+      classTime,
     } = this.props;
 
     const { time } = this.state;
@@ -193,6 +206,14 @@ class RecordingIndicator extends PureComponent {
 
     return (
       <Fragment>
+        {record
+          ? <span className={styles.presentationTitleSeparator} aria-hidden>|</span>
+          : null}
+        {
+          <span>
+            {!classTime ? null
+              : `${!classTime.hours ? null : `${classTime.hours}h : `}${classTime.minutes}m`}
+          </span> }
         {record
           ? <span className={styles.presentationTitleSeparator} aria-hidden>|</span>
           : null}
