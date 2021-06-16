@@ -1,4 +1,5 @@
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import { defineMessages, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
@@ -26,6 +27,8 @@ import App from './component';
 import NavBarContainer from '../nav-bar/container';
 import ActionsBarContainer from '../actions-bar/container';
 import MediaContainer from '../media/container';
+
+const ROLE_MODERATOR = Meteor.settings.public.user.role_moderator;
 
 const propTypes = {
   navbar: PropTypes.node,
@@ -73,9 +76,9 @@ const currentUserEmoji = currentUser => (currentUser ? {
   status: currentUser.emoji,
   changedAt: currentUser.emojiTime,
 } : {
-    status: 'none',
-    changedAt: null,
-  });
+  status: 'none',
+  changedAt: null,
+});
 
 export default injectIntl(withModalMounter(withTracker(({ intl, baseControls }) => {
   const currentUser = Users.findOne({ userId: Auth.userID }, { fields: { approved: 1, emoji: 1 } });
@@ -122,16 +125,18 @@ export default injectIntl(withModalMounter(withTracker(({ intl, baseControls }) 
     userId: 1,
   };
 
-  let users = Users
+  const users = Users
     .find({
       meetingId: Auth.meetingID,
       connectionStatus: 'online',
     }, userFilter)
     .fetch();
 
-  const amIModerator = Users.findOne({ userId: Auth.userID }, { fields: { role: 1 } }).role === ROLE_MODERATOR;
+  const amIModerator = Users
+    .findOne({ userId: Auth.userID }, { fields: { role: 1 } }).role === ROLE_MODERATOR;
 
-  const amIPresenter = Users.findOne({ userId: Auth.userID }, { fields: { presenter: 1 } }).presenter;
+  const amIPresenter = Users
+    .findOne({ userId: Auth.userID }, { fields: { presenter: 1 } }).presenter;
 
   return {
     captions: CaptionsService.isCaptionsActive() ? <CaptionsContainer /> : null,
