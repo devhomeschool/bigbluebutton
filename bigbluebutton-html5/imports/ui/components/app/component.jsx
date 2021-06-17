@@ -210,7 +210,7 @@ class App extends Component {
       // filter users with raised hand emoji on and order by last emoji time
       const raisedHandUsers = users.filter(user => user.emoji === 'raiseHand');
       console.log(raisedHandUsers);
-      if (raisedHandUsers !== undefined) {
+      if (raisedHandUsers.length !== 0) {
         raisedHandUsers.sort((a, b) => {
           if (a.emojiTime < b.emojiTime) return -1;
           if (a.emojiTime > b.emojiTime) return 1;
