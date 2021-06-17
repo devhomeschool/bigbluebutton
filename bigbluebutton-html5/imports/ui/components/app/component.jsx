@@ -205,15 +205,18 @@ class App extends Component {
     }
     if (!prevProps.users !== users) {
       // only notify if the user is presenter or moderator
+      console.log({ users, amIModerator, amIPresenter });
       if (!amIModerator && !amIPresenter) return;
       // filter users with raised hand emoji on and order by last emoji time
       const raisedHandUsers = users.filter(user => user.emoji === 'raiseHand');
+      console.log(raisedHandUsers);
       if (raisedHandUsers !== undefined) {
         raisedHandUsers.sort((a, b) => {
           if (a.emojiTime < b.emojiTime) return -1;
           if (a.emojiTime > b.emojiTime) return 1;
           return 0;
         });
+        console.log(raisedHandUsers);
         // notify the latest raised hand user com a opção autoClose desligada
         notify(`${raisedHandUsers[0].name} ${intl.formatMessage(intlMessages.raisedHand)}`, 'info', 'raiseHand', { autoClose: false });
       }
