@@ -203,7 +203,7 @@ class App extends Component {
         intl.formatMessage(intlMessages.pollPublishedLabel), 'info', 'polling',
       );
     }
-    if (!prevProps.users !== users) {
+    if (prevProps.users !== users) {
       // only notify if the user is presenter or moderator
       console.log({ users, amIModerator, amIPresenter });
       if (!amIModerator && !amIPresenter) return;
