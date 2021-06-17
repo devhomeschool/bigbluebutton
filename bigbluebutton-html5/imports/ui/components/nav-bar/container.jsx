@@ -66,7 +66,6 @@ export default withTracker(() => {
           presenter: 1, role: 1, name: 1, userId: 1, loginTime: 1,
         },
       ).fetch();
-    console.log(presentersAndModerators);
     presentersAndModerators.filter(u => u.role === ROLE_MODERATOR);
 
     const firstModerator = presentersAndModerators
