@@ -215,7 +215,20 @@ class App extends Component {
           return 0;
         });
         // notify the latest raised hand user com a opção autoClose desligada
-        notify(intl.formatMessage(intlMessages.raisedHand, ({ 0: raisedHandUsers[0].name })), 'info', 'raiseHand', { autoClose: false });
+        raisedHandUsers.map(user => (
+          notify(
+            intl.formatMessage(
+              intlMessages.raisedHand,
+              ({ 0: user.name }),
+            ),
+            'info',
+            'raiseHand',
+            {
+              autoClose: false,
+              toastId: user.name,
+            },
+          )
+        ));
       }
     }
   }
