@@ -42,6 +42,7 @@ const Chat = (props) => {
     maxMessageLength,
     amIModerator,
     meetingIsBreakout,
+    initialTime,
   } = props;
 
   // const HIDE_CHAT_AK = shortcuts.hidePrivateChat;
@@ -102,6 +103,7 @@ const Chat = (props) => {
           hasUnreadMessages,
           scrollPosition,
           messages,
+          initialTime,
         }}
       />
       <MessageForm

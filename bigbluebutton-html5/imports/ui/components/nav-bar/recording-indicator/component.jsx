@@ -211,9 +211,7 @@ class RecordingIndicator extends PureComponent {
           : null}
         {
           <span>
-            {classTime
-              && `${(classTime.hours && classTime.hours !== 0) && `${classTime.hours}h : `}
-              ${classTime.minutes}m`}
+            {classTime && `${classTime.hours && `${classTime.hours}h : `}${classTime.minutes}m`}
           </span> }
         {record
           ? <span className={styles.presentationTitleSeparator} aria-hidden>|</span>
