@@ -203,15 +203,14 @@ class App extends Component {
         intl.formatMessage(intlMessages.pollPublishedLabel), 'info', 'polling',
       );
     }
-    if (prevProps.users !== users) {
-      // only notify if the user is presenter or moderator
-      if (!amIModerator && !amIPresenter) return;
+    // only notify if the user is presenter or moderator
+    if (prevProps.users !== users && (amIModerator || amIPresenter)) {
       // filter users with raised hand emoji on and order by last emoji time
       const raisedHandUsers = users.filter(user => user.emoji === 'raiseHand');
       if (!raisedHandUsers) {
         raisedHandUsers.sort((a, b) => {
-          if (a.emojiTime < b.emojiTime) return -1;
-          if (a.emojiTime > b.emojiTime) return 1;
+          if (a.emojiTime < b.emojiTime) return 1;
+          if (a.emojiTime > b.emojiTime) return -1;
           return 0;
         });
         // notify the latest raised hand user com a opção autoClose desligada
@@ -225,7 +224,6 @@ class App extends Component {
             'raiseHand',
             {
               autoClose: false,
-              toastId: user.name,
             },
           )
         ));
