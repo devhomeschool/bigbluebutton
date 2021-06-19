@@ -104,8 +104,8 @@ class MessageListItem extends Component {
     } = this.props;
 
     const dateTime = new Date(time);
-    const elapsedMinutes = Math.floor(((time - initialTime) / 1000 / 60) % 60);
-    const elapsedHours = Math.floor(((time - initialTime) / (1000 * 60 * 60)) % 24);
+    const elapsedMinutes = Math.floor(((+time - +initialTime) / 1000 / 60) % 60);
+    const elapsedHours = Math.floor(((+time - +initialTime) / (1000 * 60 * 60)) % 24);
 
     const regEx = /<a[^>]+>/i;
 
@@ -139,7 +139,7 @@ class MessageListItem extends Component {
                   )}
               </div>
               <time className={styles.time} dateTime={dateTime}>
-                {`${elapsedHours && `${elapsedHours} h `}${elapsedMinutes} min`}
+                {`${elapsedHours && `${elapsedHours}h `}${elapsedMinutes}min`}
               </time>
             </div>
             <div className={styles.messages}>
