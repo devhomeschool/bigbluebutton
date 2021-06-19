@@ -63,6 +63,21 @@ const sortUsersByName = (a, b) => {
   return 0;
 };
 
+const sortUsersByRaisedHand = (a, b) => {
+  if (a.emoji === 'raiseHand' && b.emoji === 'raiseHand') {
+    if (a.emojiTime < b.emojiTime) {
+      return -1;
+    } if (a.emojiTime > b.emojiTime) {
+      return 1;
+    }
+  } if (a.emoji === 'raiseHand') {
+    return -1;
+  } if (b.emoji !== 'raiseHand') {
+    return 1;
+  }
+  return 0;
+};
+
 const sortUsersByEmoji = (a, b) => {
   if (a.emoji && b.emoji && (a.emoji !== 'none' && b.emoji !== 'none')) {
     if (a.emojiTime < b.emojiTime) {
@@ -118,6 +133,10 @@ const sortUsers = (a, b) => {
 
   if (sort === 0) {
     sort = sortUsersByModerator(a, b);
+  }
+
+  if (sort === 0) {
+    sort = sortUsersByRaisedHand(a, b);
   }
 
   if (sort === 0) {
