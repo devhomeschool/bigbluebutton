@@ -24,14 +24,12 @@ const propTypes = {
   chatAreaId: PropTypes.string.isRequired,
   handleReadMessage: PropTypes.func.isRequired,
   lastReadMessageTime: PropTypes.number,
-  initialTime: PropTypes.number,
 };
 
 const defaultProps = {
   user: null,
   scrollArea: null,
   lastReadMessageTime: 0,
-  initialTime: null,
 };
 
 const intlMessages = defineMessages({
@@ -100,12 +98,11 @@ class MessageListItem extends Component {
       handleReadMessage,
       scrollArea,
       intl,
-      initialTime,
     } = this.props;
 
     const dateTime = new Date(time);
-    const elapsedMinutes = Math.floor(((+time - +initialTime) / 1000 / 60) % 60);
-    const elapsedHours = Math.floor(((+time - +initialTime) / (1000 * 60 * 60)) % 24);
+    const elapsedMinutes = Math.floor(((+Date.now() - +time) / 1000 / 60) % 60);
+    const elapsedHours = Math.floor(((+Date.now() - +time) / (1000 * 60 * 60)) % 24);
 
     const regEx = /<a[^>]+>/i;
 
@@ -139,7 +136,8 @@ class MessageListItem extends Component {
                   )}
               </div>
               <time className={styles.time} dateTime={dateTime}>
-                {`${elapsedHours && `${elapsedHours}h `}${elapsedMinutes}min`}
+                {`${(elapsedHours && elapsedHours !== 0) && `${elapsedHours}h `}
+                  ${elapsedMinutes}min`}
               </time>
             </div>
             <div className={styles.messages}>

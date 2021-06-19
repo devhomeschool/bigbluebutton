@@ -20,13 +20,11 @@ const propTypes = {
   id: PropTypes.string.isRequired,
   lastReadMessageTime: PropTypes.number,
   handleReadMessage: PropTypes.func.isRequired,
-  initialTime: PropTypes.number,
 };
 
 const defaultProps = {
   scrollPosition: null,
   lastReadMessageTime: 0,
-  initialTime: null,
 };
 
 const intlMessages = defineMessages({
@@ -217,7 +215,7 @@ class MessageList extends Component {
 
   render() {
     const {
-      messages, intl, id, lastReadMessageTime, handleReadMessage, initialTime,
+      messages, intl, id, lastReadMessageTime, handleReadMessage,
     } = this.props;
 
     const {
@@ -247,7 +245,6 @@ class MessageList extends Component {
               chatAreaId={id}
               lastReadMessageTime={lastReadMessageTime}
               scrollArea={scrollArea}
-              initialTime={initialTime}
             />
           ))}
         </div>

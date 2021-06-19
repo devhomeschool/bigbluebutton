@@ -66,14 +66,6 @@ export default injectIntl(withTracker(({ intl }) => {
   let partnerIsLoggedOut = false;
   let systemMessageIntl = {};
 
-  const presentersAndModerators = ChatService.getPresentersAndModerators();
-  const firstModerator = presentersAndModerators
-    .sort((a, b) => {
-      if (a.loginTime < b.loginTime) return 1;
-      if (a.loginTime > b.loginTime) return -1;
-      return 0;
-    })[0].loginTime;
-
   const currentUser = ChatService.getUser(Auth.userID);
   const amIModerator = currentUser.role === ROLE_MODERATOR;
 
@@ -185,6 +177,5 @@ export default injectIntl(withTracker(({ intl }) => {
     actions: {
       handleClosePrivateChat: ChatService.closePrivateChat,
     },
-    initialTime: firstModerator,
   };
 })(ChatContainer));
