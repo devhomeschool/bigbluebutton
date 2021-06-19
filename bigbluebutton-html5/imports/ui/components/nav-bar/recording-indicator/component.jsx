@@ -212,7 +212,7 @@ class RecordingIndicator extends PureComponent {
         {
           <span>
             {classTime
-              && `${(classTime.hours && classTime.hours !== 0) && `${classTime.hours}h : `}
+              && `${(classTime.hours && classTime.hours !== 0) && classTime.hours}h : 
               ${classTime.minutes}m`}
           </span> }
         {record
