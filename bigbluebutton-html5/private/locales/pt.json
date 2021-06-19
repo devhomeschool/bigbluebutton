@@ -500,6 +500,7 @@
     "app.toast.chat.system": "Sistema",
     "app.toast.clearedEmoji.label": "Estado emoji limpo",
     "app.toast.setEmoji.label": "Estado emoji definido para {0}",
+    "app.toast.setEmoji.raisedHand": "{0} levantou a mão",
     "app.toast.meetingMuteOn.label": "Todos os utilizadores foram silenciados",
     "app.toast.meetingMuteOff.label": "Esta sessão não se encontra agora silenciada",
     "app.notification.recordingStart": "Esta reunião está a ser gravada",
