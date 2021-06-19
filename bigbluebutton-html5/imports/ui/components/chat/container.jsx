@@ -69,8 +69,8 @@ export default injectIntl(withTracker(({ intl }) => {
   const presentersAndModerators = ChatService.getPresentersAndModerators();
   const firstModerator = presentersAndModerators
     .sort((a, b) => {
-      if (a.loginTime < b.loginTime) return 1;
-      if (a.loginTime > b.loginTime) return -1;
+      if (a.loginTime < b.loginTime) return -1;
+      if (a.loginTime > b.loginTime) return 1;
       return 0;
     })[0].loginTime;
 
