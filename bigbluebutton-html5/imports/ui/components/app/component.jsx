@@ -207,7 +207,7 @@ class App extends Component {
     if (prevProps.users !== users && (amIModerator || amIPresenter)) {
       // filter users with raised hand emoji on and order by last emoji time
       const raisedHandUsers = users.filter(user => user.emoji === 'raiseHand');
-      if (!raisedHandUsers) {
+      if (raisedHandUsers) {
         raisedHandUsers.sort((a, b) => {
           if (a.emojiTime < b.emojiTime) return 1;
           if (a.emojiTime > b.emojiTime) return -1;
@@ -221,9 +221,10 @@ class App extends Component {
               ({ 0: user.name }),
             ),
             'info',
-            'raiseHand',
+            'hand',
             {
               autoClose: false,
+              toastId: user.name,
             },
           )
         ));
