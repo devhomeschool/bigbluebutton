@@ -122,6 +122,7 @@ class NavBar extends PureComponent {
       setEmojiStatus,
       meetingIsBreakout,
       amIModerator,
+      amIPresenter,
     } = this.props;
 
     const { classTime } = this.state;
@@ -162,6 +163,7 @@ class NavBar extends PureComponent {
             <RecordingIndicator
               mountModal={mountModal}
               amIModerator={amIModerator}
+              amIPresenter={amIPresenter}
               classTime={classTime}
             />
             {!amIModerator ? null

@@ -48,6 +48,7 @@ const intlMessages = defineMessages({
 const propTypes = {
   intl: intlShape.isRequired,
   amIModerator: PropTypes.bool,
+  amIPresenter: PropTypes.bool,
   record: PropTypes.bool,
   recording: PropTypes.bool,
   mountModal: PropTypes.func.isRequired,
@@ -67,6 +68,7 @@ const propTypes = {
 
 const defaultProps = {
   amIModerator: false,
+  amIPresenter: false,
   record: false,
   recording: false,
   time: 0,
@@ -111,6 +113,7 @@ class RecordingIndicator extends PureComponent {
       recording,
       mountModal,
       amIModerator,
+      amIPresenter,
       intl,
       allowStartStopRecording,
       notify,
@@ -211,7 +214,7 @@ class RecordingIndicator extends PureComponent {
           : null}
         {
           <span>
-            {classTime
+            {classTime && (amIModerator || amIPresenter)
               && `${classTime.hours} : ${classTime.minutes} : ${classTime.seconds}`}
           </span> }
         {record
