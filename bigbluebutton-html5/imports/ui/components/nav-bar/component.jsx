@@ -93,7 +93,7 @@ class NavBar extends PureComponent {
   componentDidUpdate() {
     setTimeout(() => {
       this.setState({ classTime: this.calculateTimePassed() });
-    }, 60000);
+    }, 1000);
   }
 
   componentWillUnmount() {
