@@ -58,15 +58,15 @@ export default withTracker(() => {
   const hasUnreadMessages = checkUnreadMessages();
 
   const checkInitialTime = () => {
-    if (!amIPresenter && !amIModerator) return null;
-    const presentersAndModerators = Users
+    let presentersAndModerators = Users
       .find(
         { meetingId: Auth.meetingID, connectionStatus: 'online' },
         {
           presenter: 1, role: 1, name: 1, userId: 1, loginTime: 1,
         },
       ).fetch();
-    presentersAndModerators.filter(u => u.role === ROLE_MODERATOR);
+    presentersAndModerators = presentersAndModerators
+      .filter(u => u.role === ROLE_MODERATOR || u.presenter);
 
     const firstModerator = presentersAndModerators
       .sort((a, b) => {
@@ -80,6 +80,7 @@ export default withTracker(() => {
   return {
     checkInitialTime,
     amIModerator,
+    amIPresenter,
     isExpanded,
     currentUserId: Auth.userID,
     processOutsideToggleRecording,
