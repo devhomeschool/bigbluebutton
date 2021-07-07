@@ -5,6 +5,7 @@ import Logger from '/imports/startup/server/logger';
 import { extractCredentials } from '/imports/api/common/server/helpers';
 
 export default function addInitialTime(userId, initialTime) {
+  console.log('begin addInitialTime method');
   const REDIS_CONFIG = Meteor.settings.private.redis;
   const CHANNEL = REDIS_CONFIG.channels.toAkkaApps;
   const EVENT_NAME = 'addInitialTime';
@@ -23,6 +24,6 @@ export default function addInitialTime(userId, initialTime) {
   Logger.verbose('Changed user initialTime', {
     userId, initialTime, changedBy: requesterUserId, meetingId,
   });
-
+  console.log('end addInitialTime method');
   return RedisPubSub.publishUserMessage(CHANNEL, EVENT_NAME, meetingId, requesterUserId, payload);
 }
