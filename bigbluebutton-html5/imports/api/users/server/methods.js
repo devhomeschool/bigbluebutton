@@ -8,8 +8,10 @@ import toggleUserLock from './methods/toggleUserLock';
 import setUserEffectiveConnectionType from './methods/setUserEffectiveConnectionType';
 import userActivitySign from './methods/userActivitySign';
 import userLeftMeeting from './methods/userLeftMeeting';
+import addInitialTime from './methods/addInitialTime';
 
 Meteor.methods({
+  addInitialTime,
   setEmojiStatus,
   assignPresenter,
   changeRole,
