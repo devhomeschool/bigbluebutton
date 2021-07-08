@@ -101,30 +101,12 @@ export default function handleValidateAuthToken({ body }, meetingId) {
     userJoin(meetingId, userId, User.authToken);
   }
 
-  const allUsers = Users.find({ meetingId }, {
-    role: 1,
-    presenter: 1,
-    loginTime: 1,
-    initialTime: 1,
-  });
-
-  let initialTime = allUsers.find(user => user.initialTime);
-
-  if (!initialTime) {
-    initialTime = initialTime.sort(((a, b) => {
-      if (a.loginTime < b.loginTime) return -1;
-      if (a.loginTime > b.loginTime) return 1;
-      return 0;
-    })[0].loginTime);
-  }
-
   const modifier = {
     $set: {
       validated: valid,
       approved: !waitForApproval,
       loginTime: Date.now(),
       inactivityCheck: false,
-      initialTime,
     },
   };
 
