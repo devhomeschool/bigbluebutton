@@ -33,11 +33,13 @@ const CLOSED_CHAT_LIST_KEY = 'closedChatList';
 
 const getUser = userId => Users.findOne({ userId });
 
-const checkInitialTime = () => {
-  const allUsers = Users
-    .find({}, { initialTime: 1 }).fetch();
-  const { initialTime } = allUsers;
-  return initialTime;
+const getPresentersAndModerators = () => {
+  const presentersAndModerators = Users.find({ meetingId: Auth.meetingID, connectionStatus: 'online' },
+    {
+      presenter: 1, role: 1, name: 1, loginTime: 1,
+    }).fetch();
+  presentersAndModerators.filter(u => u.presenter || u.role === ROLE_MODERATOR);
+  return presentersAndModerators;
 };
 
 const getWelcomeProp = () => Meetings.findOne({ meetingId: Auth.meetingID },
@@ -352,6 +354,6 @@ export default {
   clearPublicChatHistory,
   maxTimestampReducer,
   getLastMessageTimestampFromChatList,
-  checkInitialTime,
+  getPresentersAndModerators,
   UnsentMessagesCollection,
 };

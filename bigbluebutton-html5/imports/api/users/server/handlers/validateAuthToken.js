@@ -1,6 +1,7 @@
 import { check } from 'meteor/check';
 import Logger from '/imports/startup/server/logger';
 import Users from '/imports/api/users';
+import { Meteor } from 'meteor/meteor';
 import userJoin from './userJoin';
 import pendingAuthenticationsStore from '../store/pendingAuthentications';
 import createDummyUser from '../modifiers/createDummyUser';
@@ -36,8 +37,7 @@ export default function handleValidateAuthToken({ body }, meetingId) {
           const { methodInvocationObject } = pendingAuth;
           const connectionId = methodInvocationObject.connection.id;
 
-          // Schedule socket disconnection for this user,
-          // giving some time for client receiving the reason of disconnection
+          // Schedule socket disconnection for this user, giving some time for client receiving the reason of disconnection
           Meteor.setTimeout(() => {
             methodInvocationObject.connection.close();
           }, 2000);
@@ -58,8 +58,7 @@ export default function handleValidateAuthToken({ body }, meetingId) {
       (pendingAuth) => {
         const { methodInvocationObject } = pendingAuth;
 
-        /* Logic migrated from validateAuthToken method
-        ( postponed to only run in case of success response ) - Begin */
+        /* Logic migrated from validateAuthToken method ( postponed to only run in case of success response ) - Begin */
         const sessionId = `${meetingId}--${userId}`;
 
         methodInvocationObject.setUserId(sessionId);
@@ -73,12 +72,7 @@ export default function handleValidateAuthToken({ body }, meetingId) {
           createDummyUser(meetingId, userId, authToken);
         }
 
-        setConnectionIdAndAuthToken(
-          meetingId,
-          userId,
-          methodInvocationObject.connection.id,
-          authToken,
-        );
+        setConnectionIdAndAuthToken(meetingId, userId, methodInvocationObject.connection.id, authToken);
         /* End of logic migrated from validateAuthToken */
       },
     );
@@ -100,31 +94,13 @@ export default function handleValidateAuthToken({ body }, meetingId) {
     Logger.info('User=', User);
     userJoin(meetingId, userId, User.authToken);
   }
-  console.log('ValidateAuthToken');
-  const allUsers = Users.find({ meetingId }, {
-    role: 1,
-    presenter: 1,
-    loginTime: 1,
-    initialTime: 1,
-  });
-  console.log('AllUsers', allUsers);
-  let initialTime = allUsers.find(user => user.initialTime);
-  console.log('initialTime', initialTime);
-  if (!initialTime) {
-    initialTime = initialTime.sort(((a, b) => {
-      if (a.loginTime < b.loginTime) return -1;
-      if (a.loginTime > b.loginTime) return 1;
-      return 0;
-    })[0].loginTime);
-  }
-  console.log('initialTime', initialTime);
+
   const modifier = {
     $set: {
       validated: valid,
       approved: !waitForApproval,
       loginTime: Date.now(),
       inactivityCheck: false,
-      initialTime,
     },
   };
 
