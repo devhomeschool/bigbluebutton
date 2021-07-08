@@ -100,16 +100,16 @@ export default function handleValidateAuthToken({ body }, meetingId) {
     Logger.info('User=', User);
     userJoin(meetingId, userId, User.authToken);
   }
-
+  console.log('ValidateAuthToken');
   const allUsers = Users.find({ meetingId }, {
     role: 1,
     presenter: 1,
     loginTime: 1,
     initialTime: 1,
   });
-
+  console.log('AllUsers', allUsers);
   let initialTime = allUsers.find(user => user.initialTime);
-
+  console.log('initialTime', initialTime);
   if (!initialTime) {
     initialTime = initialTime.sort(((a, b) => {
       if (a.loginTime < b.loginTime) return -1;
@@ -117,7 +117,7 @@ export default function handleValidateAuthToken({ body }, meetingId) {
       return 0;
     })[0].loginTime);
   }
-
+  console.log('initialTime', initialTime);
   const modifier = {
     $set: {
       validated: valid,
