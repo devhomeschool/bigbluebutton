@@ -62,19 +62,9 @@ export default withTracker(() => {
       .find(
         { meetingId: Auth.meetingID, connectionStatus: 'online' },
         {
-          presenter: 1, role: 1, name: 1, userId: 1, loginTime: 1, initialTime: 1,
+          presenter: 1, role: 1, name: 1, userId: 1, loginTime: 1,
         },
       ).fetch();
-
-    const initialTime = presentersAndModerators.find(u => u.initialTime);
-
-    // If theres initialTime, currentUser creates initialTime key for itself and updates mongo
-    if (initialTime) {
-      Users.update({ userId: Auth.userID }, { $set: { initialTime } }).fetch();
-      return initialTime;
-    }
-
-    // If theres no initialTime, filter moderators and sort by users loginTime
     presentersAndModerators = presentersAndModerators
       .filter(u => u.role === ROLE_MODERATOR || u.presenter);
 
@@ -84,10 +74,6 @@ export default withTracker(() => {
         if (a.loginTime > b.loginTime) return 1;
         return 0;
       })[0].loginTime;
-
-    // The first loginTime is updated to all users as initialTime
-    Users.updateMany({}, { $set: { initialTime: firstModerator } }).fetch();
-
     return firstModerator;
   };
 
