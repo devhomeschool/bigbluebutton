@@ -85,8 +85,8 @@ export default withTracker(() => {
         return 0;
       })[0].loginTime;
 
-    // The first loginTime is updated to the user as initialTime
-    Users.update({ userId: Auth.userID }, { $set: { initialTime: firstModerator } }).fetch();
+    // The first loginTime is updated to all users as initialTime
+    Users.updateMany({}, { $set: { initialTime: firstModerator } }).fetch();
 
     return firstModerator;
   };
