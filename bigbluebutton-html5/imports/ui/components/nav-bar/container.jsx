@@ -69,13 +69,12 @@ export default withTracker(() => {
           presenter: 1, role: 1, name: 1, userId: 1, loginTime: 1, initialTime: 1,
         },
       ).fetch();
-    console.log('presentersAndModerators find:', presentersAndModerators);
+
     const initialTime = presentersAndModerators.find(u => u.initialTime);
-    console.log('initialTime result:', initialTime);
+
     // If theres initialTime, currentUser creates initialTime key for itself and updates mongo
     if (initialTime) {
-      addInitialTime(Auth.userID, +initialTime);
-      console.log('successfull add');
+      addInitialTime(Auth.userID, initialTime);
       return initialTime;
     }
 
@@ -91,8 +90,7 @@ export default withTracker(() => {
       })[0].loginTime;
 
     // The first loginTime is updated to the user as initialTime
-    console.log('will add first initialTime');
-    addInitialTime(Auth.userID, +firstModerator);
+    addInitialTime(Auth.userID, firstModerator);
 
     return firstModerator;
   };
