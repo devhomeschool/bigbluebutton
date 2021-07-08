@@ -28,5 +28,4 @@ const connectRecordingObserver = () => {
 export default {
   connectRecordingObserver: () => connectRecordingObserver(),
   processOutsideToggleRecording: arg => processOutsideToggleRecording(arg),
-  addInitialTime: (userId, initialTime) => makeCall('addInitialTime', userId, initialTime),
 };

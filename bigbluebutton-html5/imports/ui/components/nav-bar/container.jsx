@@ -48,13 +48,12 @@ export default withTracker(() => {
     return hasUnreadMessages;
   };
 
-  const {
-    connectRecordingObserver,
-    processOutsideToggleRecording,
-    addInitialTime,
-  } = Service;
+  const { connectRecordingObserver, processOutsideToggleRecording } = Service;
 
-  const currentUser = Users.findOne({ userId: Auth.userID }, { fields: { role: 1, presenter: 1 } });
+  const currentUser = Users.findOne(
+    { userId: Auth.userID },
+    { fields: { _id: 1, role: 1, presenter: 1 } },
+  );
   const openPanel = Session.get('openPanel');
   const isExpanded = openPanel !== '';
   const amIModerator = currentUser.role === ROLE_MODERATOR;
@@ -74,7 +73,7 @@ export default withTracker(() => {
 
     // If theres initialTime, currentUser creates initialTime key for itself and updates mongo
     if (initialTime) {
-      addInitialTime(Auth.userID, initialTime);
+      Users.update({ _id: currentUser._id }, { $set: { initialTime } }).fetch();
       return initialTime;
     }
 
@@ -90,7 +89,7 @@ export default withTracker(() => {
       })[0].loginTime;
 
     // The first loginTime is updated to the user as initialTime
-    addInitialTime(Auth.userID, firstModerator);
+    Users.update({ _id: currentUser._id }, { $set: { initialTime: firstModerator } }).fetch();
 
     return firstModerator;
   };
