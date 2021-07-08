@@ -33,13 +33,6 @@ const CLOSED_CHAT_LIST_KEY = 'closedChatList';
 
 const getUser = userId => Users.findOne({ userId });
 
-const checkInitialTime = () => {
-  const allUsers = Users
-    .find({}, { initialTime: 1 }).fetch();
-  const { initialTime } = allUsers;
-  return initialTime;
-};
-
 const getWelcomeProp = () => Meetings.findOne({ meetingId: Auth.meetingID },
   { fields: { welcomeProp: 1 } });
 
@@ -352,6 +345,5 @@ export default {
   clearPublicChatHistory,
   maxTimestampReducer,
   getLastMessageTimestampFromChatList,
-  checkInitialTime,
   UnsentMessagesCollection,
 };
