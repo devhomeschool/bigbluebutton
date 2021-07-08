@@ -1,7 +1,6 @@
 import { check } from 'meteor/check';
 import Logger from '/imports/startup/server/logger';
 import Users from '/imports/api/users';
-import { Meteor } from 'meteor/meteor';
 import userJoin from './userJoin';
 import pendingAuthenticationsStore from '../store/pendingAuthentications';
 import createDummyUser from '../modifiers/createDummyUser';
@@ -14,8 +13,6 @@ const clearOtherSessions = (sessionUserId, current = false) => {
     .filter(i => i !== current)
     .forEach(i => serverSessions[i].close());
 };
-
-const ROLE_MODERATOR = Meteor.settings.public.user.role_moderator;
 
 export default function handleValidateAuthToken({ body }, meetingId) {
   const {
@@ -103,26 +100,24 @@ export default function handleValidateAuthToken({ body }, meetingId) {
     Logger.info('User=', User);
     userJoin(meetingId, userId, User.authToken);
   }
-
+  console.log('ValidateAuthToken');
   const allUsers = Users.find({ meetingId }, {
     role: 1,
     presenter: 1,
     loginTime: 1,
     initialTime: 1,
   });
-
+  console.log('AllUsers', allUsers);
   let initialTime = allUsers.find(user => user.initialTime);
-
+  console.log('initialTime', initialTime);
   if (!initialTime) {
-    initialTime = initialTime
-      .filter(u => u.role === ROLE_MODERATOR || u.presenter);
-    initialTime.sort(((a, b) => {
+    initialTime = initialTime.sort(((a, b) => {
       if (a.loginTime < b.loginTime) return -1;
       if (a.loginTime > b.loginTime) return 1;
       return 0;
     })[0].loginTime);
   }
-
+  console.log('initialTime', initialTime);
   const modifier = {
     $set: {
       validated: valid,
