@@ -104,7 +104,7 @@ export default function handleValidateAuthToken({ body }, meetingId) {
     userJoin(meetingId, userId, User.authToken);
   }
 
-  const allUsers = Users.find({ meetingId }, {
+  const allUsers = Users.find({}, {
     role: 1,
     presenter: 1,
     loginTime: 1,
