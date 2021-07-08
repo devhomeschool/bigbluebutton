@@ -48,10 +48,7 @@ export default withTracker(() => {
     return hasUnreadMessages;
   };
 
-  const {
-    connectRecordingObserver,
-    processOutsideToggleRecording,
-  } = Service;
+  const { connectRecordingObserver, processOutsideToggleRecording } = Service;
 
   const currentUser = Users.findOne({ userId: Auth.userID }, { fields: { role: 1, presenter: 1 } });
   const openPanel = Session.get('openPanel');
@@ -61,10 +58,23 @@ export default withTracker(() => {
   const hasUnreadMessages = checkUnreadMessages();
 
   const checkInitialTime = () => {
-    const allUsers = Users
-      .find({}, { initialTime: 1 }).fetch();
-    const { initialTime } = allUsers;
-    return initialTime;
+    let presentersAndModerators = Users
+      .find(
+        { meetingId: Auth.meetingID, connectionStatus: 'online' },
+        {
+          presenter: 1, role: 1, name: 1, userId: 1, loginTime: 1,
+        },
+      ).fetch();
+    presentersAndModerators = presentersAndModerators
+      .filter(u => u.role === ROLE_MODERATOR || u.presenter);
+
+    const firstModerator = presentersAndModerators
+      .sort((a, b) => {
+        if (a.loginTime < b.loginTime) return -1;
+        if (a.loginTime > b.loginTime) return 1;
+        return 0;
+      })[0].loginTime;
+    return firstModerator;
   };
 
   return {

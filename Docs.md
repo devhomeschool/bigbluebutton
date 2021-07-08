@@ -21,7 +21,7 @@
   A mensagem foi adicionada para o [português de Portugal](./bigbluebutton-html5/private/locales/pt.json), [português brasileiro](./bigbluebutton-html5/private/locales/pt_BR.json) e [inglês](./bigbluebutton-html5/private/locales/en.json).
   No momento em que o componente app entra no ComponentDidUpdate é realizado uma avaliação se alguma informação na lista de usuários foi alterada
   e se o usuário é moderador ou não.
-  Caso haja alterações, é realizado um filtro daqueles usuários que possuem o emoji ``raiseHand``de mão levantada.
+  Caso haja alterações, é realizado um filtro daqueles usuários que possuem o emoji ``raiseHand```de mão levantada.
   Caso existam mãos levantadas é feita a ordenação do array sendo o usuário que levantou primeiro colocado no início do array.
   Após a ordenação é realizado um ``map`` chamando a função ``notify`` do ``react-toastify`` com a mensagem customizada ``raisedHand`` interpolando o nome do usuário.
   Por exemplo, "${Rafael} levantou a mão" ou "${Rafael} raised the hand".
