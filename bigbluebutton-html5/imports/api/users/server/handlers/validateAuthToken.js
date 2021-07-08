@@ -1,6 +1,7 @@
 import { check } from 'meteor/check';
 import Logger from '/imports/startup/server/logger';
 import Users from '/imports/api/users';
+import { Meteor } from 'meteor/meteor';
 import userJoin from './userJoin';
 import pendingAuthenticationsStore from '../store/pendingAuthentications';
 import createDummyUser from '../modifiers/createDummyUser';
@@ -13,6 +14,8 @@ const clearOtherSessions = (sessionUserId, current = false) => {
     .filter(i => i !== current)
     .forEach(i => serverSessions[i].close());
 };
+
+const ROLE_MODERATOR = Meteor.settings.public.user.role_moderator;
 
 export default function handleValidateAuthToken({ body }, meetingId) {
   const {
@@ -36,7 +39,8 @@ export default function handleValidateAuthToken({ body }, meetingId) {
           const { methodInvocationObject } = pendingAuth;
           const connectionId = methodInvocationObject.connection.id;
 
-          // Schedule socket disconnection for this user, giving some time for client receiving the reason of disconnection
+          // Schedule socket disconnection for this user,
+          // giving some time for client receiving the reason of disconnection
           Meteor.setTimeout(() => {
             methodInvocationObject.connection.close();
           }, 2000);
@@ -57,7 +61,8 @@ export default function handleValidateAuthToken({ body }, meetingId) {
       (pendingAuth) => {
         const { methodInvocationObject } = pendingAuth;
 
-        /* Logic migrated from validateAuthToken method ( postponed to only run in case of success response ) - Begin */
+        /* Logic migrated from validateAuthToken method
+        ( postponed to only run in case of success response ) - Begin */
         const sessionId = `${meetingId}--${userId}`;
 
         methodInvocationObject.setUserId(sessionId);
@@ -71,7 +76,12 @@ export default function handleValidateAuthToken({ body }, meetingId) {
           createDummyUser(meetingId, userId, authToken);
         }
 
-        setConnectionIdAndAuthToken(meetingId, userId, methodInvocationObject.connection.id, authToken);
+        setConnectionIdAndAuthToken(
+          meetingId,
+          userId,
+          methodInvocationObject.connection.id,
+          authToken,
+        );
         /* End of logic migrated from validateAuthToken */
       },
     );
@@ -94,12 +104,32 @@ export default function handleValidateAuthToken({ body }, meetingId) {
     userJoin(meetingId, userId, User.authToken);
   }
 
+  const allUsers = Users.find({}, {
+    role: 1,
+    presenter: 1,
+    loginTime: 1,
+    initialTime: 1,
+  });
+
+  let initialTime = allUsers.find(user => user.initialTime);
+
+  if (!initialTime) {
+    initialTime = initialTime
+      .filter(u => u.role === ROLE_MODERATOR || u.presenter);
+    initialTime.sort(((a, b) => {
+      if (a.loginTime < b.loginTime) return -1;
+      if (a.loginTime > b.loginTime) return 1;
+      return 0;
+    })[0].loginTime);
+  }
+
   const modifier = {
     $set: {
       validated: valid,
       approved: !waitForApproval,
       loginTime: Date.now(),
       inactivityCheck: false,
+      initialTime,
     },
   };
 

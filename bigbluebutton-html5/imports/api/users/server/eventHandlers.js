@@ -8,7 +8,6 @@ import handleGetUsers from './handlers/getUsers';
 import handleUserEjected from './handlers/userEjected';
 import handleChangeRole from './handlers/changeRole';
 import handleUserInactivityInspect from './handlers/userInactivityInspect';
-import handleAddInitialTime from './handlers/addInitialTime';
 
 RedisPubSub.on('PresenterAssignedEvtMsg', handlePresenterAssigned);
 RedisPubSub.on('UserJoinedMeetingEvtMsg', handleUserJoined);
@@ -19,4 +18,3 @@ RedisPubSub.on('SyncGetUsersMeetingRespMsg', handleGetUsers);
 RedisPubSub.on('UserEjectedFromMeetingEvtMsg', handleUserEjected);
 RedisPubSub.on('UserRoleChangedEvtMsg', handleChangeRole);
 RedisPubSub.on('UserInactivityInspectMsg', handleUserInactivityInspect);
-RedisPubSub.on('addInitialTime', handleAddInitialTime);

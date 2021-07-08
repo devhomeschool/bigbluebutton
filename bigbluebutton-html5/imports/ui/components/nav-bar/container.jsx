@@ -51,7 +51,6 @@ export default withTracker(() => {
   const {
     connectRecordingObserver,
     processOutsideToggleRecording,
-    addInitialTime,
   } = Service;
 
   const currentUser = Users.findOne({ userId: Auth.userID }, { fields: { role: 1, presenter: 1 } });
@@ -62,39 +61,10 @@ export default withTracker(() => {
   const hasUnreadMessages = checkUnreadMessages();
 
   const checkInitialTime = () => {
-    let presentersAndModerators = Users
-      .find(
-        { meetingId: Auth.meetingID, connectionStatus: 'online' },
-        {
-          presenter: 1, role: 1, name: 1, userId: 1, loginTime: 1, initialTime: 1,
-        },
-      ).fetch();
-    console.log('presentersAndModerators find:', presentersAndModerators);
-    const initialTime = presentersAndModerators.find(u => u.initialTime);
-    console.log('initialTime result:', initialTime);
-    // If theres initialTime, currentUser creates initialTime key for itself and updates mongo
-    if (initialTime) {
-      addInitialTime(Auth.userID, +initialTime);
-      console.log('successfull add');
-      return initialTime;
-    }
-
-    // If theres no initialTime, filter moderators and sort by users loginTime
-    presentersAndModerators = presentersAndModerators
-      .filter(u => u.role === ROLE_MODERATOR || u.presenter);
-
-    const firstModerator = presentersAndModerators
-      .sort((a, b) => {
-        if (a.loginTime < b.loginTime) return -1;
-        if (a.loginTime > b.loginTime) return 1;
-        return 0;
-      })[0].loginTime;
-
-    // The first loginTime is updated to the user as initialTime
-    console.log('will add first initialTime');
-    addInitialTime(Auth.userID, +firstModerator);
-
-    return firstModerator;
+    const allUsers = Users
+      .find({}, { initialTime: 1 }).fetch();
+    const { initialTime } = allUsers;
+    return initialTime;
   };
 
   return {
