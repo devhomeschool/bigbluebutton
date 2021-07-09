@@ -10,6 +10,7 @@ import UserListService from '../user-list/service';
 import Service from './service';
 import NavBar from './component';
 import { meetingIsBreakout } from '/imports/ui/components/app/service';
+import ChatService from '/imports/ui/components/chat/service';
 
 const PUBLIC_CONFIG = Meteor.settings.public;
 const ROLE_MODERATOR = PUBLIC_CONFIG.user.role_moderator;
@@ -58,23 +59,23 @@ export default withTracker(() => {
   const hasUnreadMessages = checkUnreadMessages();
 
   const checkInitialTime = () => {
-    let presentersAndModerators = Users
-      .find(
-        { meetingId: Auth.meetingID, connectionStatus: 'online' },
-        {
-          presenter: 1, role: 1, name: 1, userId: 1, loginTime: 1,
-        },
-      ).fetch();
-    presentersAndModerators = presentersAndModerators
-      .filter(u => u.role === ROLE_MODERATOR || u.presenter);
+    let initialTime = null;
 
-    const firstModerator = presentersAndModerators
-      .sort((a, b) => {
-        if (a.loginTime < b.loginTime) return -1;
-        if (a.loginTime > b.loginTime) return 1;
-        return 0;
-      })[0].loginTime;
-    return firstModerator;
+    // get all messages
+    let firstMessage = ChatService.getPublicGroupMessages();
+    // if there's no message
+    if (!firstMessage[0]) {
+      // send new message
+      ChatService.sendGroupMessage('class start');
+      // get first message
+      firstMessage = ChatService.getPublicGroupMessages();
+      // first message is initialTime
+      initialTime = firstMessage[0].timestamp;
+    } else {
+      // first message is initialTime
+      initialTime = firstMessage[0].timestamp;
+    }
+    return initialTime;
   };
 
   return {
