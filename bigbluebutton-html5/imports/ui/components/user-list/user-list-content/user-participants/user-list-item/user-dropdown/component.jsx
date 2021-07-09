@@ -164,7 +164,6 @@ class UserDropdown extends PureComponent {
       dropdownDirection: 'top',
       dropdownVisible: false,
       showNestedOptions: false,
-      canvasWidth: null,
     };
 
     this.handleScroll = this.handleScroll.bind(this);
@@ -180,10 +179,6 @@ class UserDropdown extends PureComponent {
   componentWillMount() {
     this.title = _.uniqueId('dropdown-title-');
     this.seperator = _.uniqueId('action-separator-');
-  }
-
-  componentDidMount() {
-    this.setState({ canvasWidth: this.canvas.offsetWidth });
   }
 
   componentDidUpdate() {
@@ -542,10 +537,6 @@ class UserDropdown extends PureComponent {
       meetingIsBreakout,
     } = this.props;
 
-    const {
-      canvasWidth,
-    } = this.state;
-
     const { clientType } = user;
     const isVoiceOnly = clientType === 'dial-in-user';
 
@@ -580,7 +571,7 @@ class UserDropdown extends PureComponent {
         voice={voiceUser.isVoiceUser}
         noVoice={!voiceUser.isVoiceUser}
         color={user.color}
-        height={!canvasWidth ? 140 : (0.75 * canvasWidth)}
+        height={140}
       >
         {!disableVideo
         && !audioModalIsOpen && findStream && showVideo && (amIModerator || amIPresenter)
