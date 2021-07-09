@@ -160,7 +160,7 @@ class PanelManager extends PureComponent {
   }
 
   renderChat() {
-    const { intl, enableResize, initialTime } = this.props;
+    const { intl, enableResize } = this.props;
 
     return (
       <section
@@ -168,7 +168,7 @@ class PanelManager extends PureComponent {
         aria-label={intl.formatMessage(intlMessages.chatLabel)}
         key={enableResize ? null : this.chatKey}
       >
-        <ChatContainer initialTime={initialTime} />
+        <ChatContainer />
       </section>
     );
   }
