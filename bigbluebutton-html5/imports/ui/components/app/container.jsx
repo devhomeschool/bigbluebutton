@@ -123,6 +123,8 @@ export default injectIntl(withModalMounter(withTracker(({ intl, baseControls }) 
     role: 1,
     name: 1,
     userId: 1,
+    loginTime: 1,
+    presenter: 1,
   };
 
   const users = Users
@@ -137,6 +139,14 @@ export default injectIntl(withModalMounter(withTracker(({ intl, baseControls }) 
 
   const amIPresenter = Users
     .findOne({ userId: Auth.userID }, { fields: { presenter: 1 } }).presenter;
+
+  const presentersAndModerators = users.filter(u => u.presenter || u.role === ROLE_MODERATOR);
+  const initialTime = presentersAndModerators
+    .sort((a, b) => {
+      if (a.loginTime < b.loginTime) return -1;
+      if (a.loginTime > b.loginTime) return 1;
+      return 0;
+    })[0].loginTime;
 
   return {
     captions: CaptionsService.isCaptionsActive() ? <CaptionsContainer /> : null,
@@ -158,6 +168,7 @@ export default injectIntl(withModalMounter(withTracker(({ intl, baseControls }) 
     hasPublishedPoll: publishedPoll,
     startBandwidthMonitoring,
     handleNetworkConnection: () => updateNavigatorConnection(navigator.connection),
+    initialTime,
   };
 })(AppContainer)));
 
