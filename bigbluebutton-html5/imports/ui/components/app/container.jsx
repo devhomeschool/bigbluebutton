@@ -14,6 +14,7 @@ import deviceInfo from '/imports/utils/deviceInfo';
 import UserInfos from '/imports/api/users-infos';
 import { startBandwidthMonitoring, updateNavigatorConnection } from '/imports/ui/services/network-information/index';
 import logger from '/imports/startup/client/logger';
+import ChatService from '/imports/ui/components/chat/service';
 
 import {
   getFontSize,
@@ -123,6 +124,7 @@ export default injectIntl(withModalMounter(withTracker(({ intl, baseControls }) 
     role: 1,
     name: 1,
     userId: 1,
+    presenter: 1,
   };
 
   const users = Users
@@ -132,11 +134,26 @@ export default injectIntl(withModalMounter(withTracker(({ intl, baseControls }) 
     }, userFilter)
     .fetch();
 
-  const amIModerator = Users
-    .findOne({ userId: Auth.userID }, { fields: { role: 1 } }).role === ROLE_MODERATOR;
+  const amIModerator = users.find(u => u.userId === Auth.userID && u.role === ROLE_MODERATOR);
 
-  const amIPresenter = Users
-    .findOne({ userId: Auth.userID }, { fields: { presenter: 1 } }).presenter;
+  const amIPresenter = users.find(u => u.userId === Auth.userID && u.presenter);
+
+  let initialTime = null;
+
+  // get all messages
+  let firstMessage = ChatService.getPublicGroupMessages();
+  // if there's no message
+  if (!firstMessage[0]) {
+    // send new message
+    ChatService.sendGroupMessage('class start');
+    // get first message
+    firstMessage = ChatService.getPublicGroupMessages();
+    // first message is initialTime
+    initialTime = firstMessage[0].timestamp;
+  } else {
+    // first message is initialTime
+    initialTime = firstMessage[0].timestamp;
+  }
 
   return {
     captions: CaptionsService.isCaptionsActive() ? <CaptionsContainer /> : null,
@@ -158,6 +175,7 @@ export default injectIntl(withModalMounter(withTracker(({ intl, baseControls }) 
     hasPublishedPoll: publishedPoll,
     startBandwidthMonitoring,
     handleNetworkConnection: () => updateNavigatorConnection(navigator.connection),
+    initialTime,
   };
 })(AppContainer)));
 

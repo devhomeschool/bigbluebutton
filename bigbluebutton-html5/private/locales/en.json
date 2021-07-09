@@ -504,7 +504,7 @@
     "app.toast.chat.system": "System",
     "app.toast.clearedEmoji.label": "Emoji status cleared",
     "app.toast.setEmoji.label": "Emoji status set to {0}",
-    "app.toast.setEmoji.raisedHand": "{0} raised the hand",
+    "app.toast.setEmoji.raisedHand": "{0} raised the hand {1} min elapsed",
     "app.toast.meetingMuteOn.label": "All users have been muted",
     "app.toast.meetingMuteOff.label": "Meeting mute turned off",
     "app.notification.recordingStart": "This session is now being recorded",
