@@ -82,8 +82,8 @@ const findOptimalGrid = (canvasWidth, canvasHeight, gutter, aspectRatio, numItem
   return {
     columns,
     rows,
-    width: 600,
-    height: 450,
+    width: (cellWidth * columns) + gutterTotalWidth,
+    height: (cellHeight * rows) + gutterTotalHeight,
     filledArea: (cellWidth * cellHeight) * numItems,
   };
 };
