@@ -140,7 +140,8 @@ export default injectIntl(withModalMounter(withTracker(({ intl, baseControls }) 
   const amIPresenter = Users
     .findOne({ userId: Auth.userID }, { fields: { presenter: 1 } }).presenter;
 
-  const initialTime = users
+  const presentersAndModerators = users.filter(u => u.presenter || u.role === ROLE_MODERATOR);
+  const initialTime = presentersAndModerators
     .sort((a, b) => {
       if (a.loginTime < b.loginTime) return -1;
       if (a.loginTime > b.loginTime) return 1;
