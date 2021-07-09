@@ -14,7 +14,6 @@ import deviceInfo from '/imports/utils/deviceInfo';
 import UserInfos from '/imports/api/users-infos';
 import { startBandwidthMonitoring, updateNavigatorConnection } from '/imports/ui/services/network-information/index';
 import logger from '/imports/startup/client/logger';
-// import ChatService from '/imports/ui/components/chat/service';
 
 import {
   getFontSize,
@@ -124,6 +123,7 @@ export default injectIntl(withModalMounter(withTracker(({ intl, baseControls }) 
     role: 1,
     name: 1,
     userId: 1,
+    loginTime: 1,
     presenter: 1,
   };
 
@@ -134,28 +134,19 @@ export default injectIntl(withModalMounter(withTracker(({ intl, baseControls }) 
     }, userFilter)
     .fetch();
 
-  const amIModerator = users.find(u => u.userId === Auth.userID && u.role === ROLE_MODERATOR);
+  const amIModerator = Users
+    .findOne({ userId: Auth.userID }, { fields: { role: 1 } }).role === ROLE_MODERATOR;
 
-  const amIPresenter = users.find(u => u.userId === Auth.userID && u.presenter);
+  const amIPresenter = Users
+    .findOne({ userId: Auth.userID }, { fields: { presenter: 1 } }).presenter;
 
-  // let initialTime = null;
-
-  // // get all messages
-  // let firstMessage = ChatService.getPublicGroupMessages();
-  // console.log(firstMessage);
-  // // if there's no message
-  // if (!firstMessage[0]) {
-  //   // send new message
-  //   ChatService.sendGroupMessage('class start');
-  //   // get first message
-  //   firstMessage = ChatService.getPublicGroupMessages();
-  //   console.log(firstMessage);
-  //   // first message is initialTime
-  //   initialTime = firstMessage[0].timestamp;
-  // } else {
-  //   // first message is initialTime
-  //   initialTime = firstMessage[0].timestamp;
-  // }
+  const presentersAndModerators = users.filter(u => u.presenter || u.role === ROLE_MODERATOR);
+  const initialTime = presentersAndModerators
+    .sort((a, b) => {
+      if (a.loginTime < b.loginTime) return -1;
+      if (a.loginTime > b.loginTime) return 1;
+      return 0;
+    })[0].loginTime;
 
   return {
     captions: CaptionsService.isCaptionsActive() ? <CaptionsContainer /> : null,
@@ -177,7 +168,7 @@ export default injectIntl(withModalMounter(withTracker(({ intl, baseControls }) 
     hasPublishedPoll: publishedPoll,
     startBandwidthMonitoring,
     handleNetworkConnection: () => updateNavigatorConnection(navigator.connection),
-    // initialTime,
+    initialTime,
   };
 })(AppContainer)));
 
