@@ -10,6 +10,7 @@ import UserListService from '../user-list/service';
 import Service from './service';
 import NavBar from './component';
 import { meetingIsBreakout } from '/imports/ui/components/app/service';
+import { initialTime } from '/imports/ui/components/app/container';
 
 const PUBLIC_CONFIG = Meteor.settings.public;
 const ROLE_MODERATOR = PUBLIC_CONFIG.user.role_moderator;
@@ -57,28 +58,8 @@ export default withTracker(() => {
   const amIPresenter = currentUser.presenter;
   const hasUnreadMessages = checkUnreadMessages();
 
-  const checkInitialTime = () => {
-    let presentersAndModerators = Users
-      .find(
-        { meetingId: Auth.meetingID, connectionStatus: 'online' },
-        {
-          presenter: 1, role: 1, name: 1, userId: 1, loginTime: 1,
-        },
-      ).fetch();
-    presentersAndModerators = presentersAndModerators
-      .filter(u => u.role === ROLE_MODERATOR || u.presenter);
-
-    const firstModerator = presentersAndModerators
-      .sort((a, b) => {
-        if (a.loginTime < b.loginTime) return -1;
-        if (a.loginTime > b.loginTime) return 1;
-        return 0;
-      })[0].loginTime;
-    return firstModerator;
-  };
-
   return {
-    checkInitialTime,
+    initialTime,
     amIModerator,
     amIPresenter,
     isExpanded,
