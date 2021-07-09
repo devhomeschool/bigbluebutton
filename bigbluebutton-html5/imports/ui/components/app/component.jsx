@@ -220,7 +220,7 @@ class App extends Component {
             intl.formatMessage(
               intlMessages.raisedHand,
               ({ 0: user.name }),
-              ({ 1: this.formatTime(user.emojiTime) }),
+              ({ 1: user.emojiTime }),
             ),
             'info',
             'hand',
@@ -255,11 +255,11 @@ class App extends Component {
     return openPanel !== '' && (isPhone || isLayeredView.matches);
   }
 
-  formatTime(time) {
-    const { initialTime } = this.props;
-    const minutes = Math.floor((+time - +initialTime) / 1000 / 60);
-    return minutes;
-  }
+  // formatTime(time) {
+  //   const { initialTime } = this.props;
+  //   const minutes = Math.floor((+time - +initialTime) / 1000 / 60);
+  //   return minutes;
+  // }
 
   renderPanel() {
     const { enableResize } = this.state;
