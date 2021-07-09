@@ -645,11 +645,7 @@ class UserDropdown extends PureComponent {
         className={!actions.length ? styles.userListItem : null}
       >
         <div className={styles.userItemContents}>
-          <div
-            ref={node => this.avatar = node}
-            className={styles.userAvatar}
-            style={{ height: (this.avatar.offsetWidth * 0.75) }}
-          >
+          <div className={styles.userAvatar}>
             {this.renderUserAvatar()}
           </div>
           {<UserName
