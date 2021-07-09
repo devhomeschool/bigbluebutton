@@ -218,8 +218,7 @@ class App extends Component {
           notify(
             intl.formatMessage(
               intlMessages.raisedHand,
-              ({ 0: user.name }),
-              ({ 1: this.formatTime(user.emojiTime) }),
+              ({ 0: user.name, 1: this.formatTime(user.emojiTime) }),
             ),
             'info',
             'hand',
