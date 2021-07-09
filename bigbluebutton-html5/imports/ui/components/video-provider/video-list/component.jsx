@@ -420,17 +420,19 @@ class VideoList extends Component {
               this.grid = ref;
             }}
             className={videoListClassName}
-            style={!amIModerator || !amIPresenter ? {
+            style={amIModerator || amIPresenter ? {
+              width: '100%',
+            } : {
               width: `${optimalGrid.width}px`,
               height: `${optimalGrid.height}px`,
               gridTemplateColumns: `repeat(${optimalGrid.columns}, 1fr)`,
               gridTemplateRows: `repeat(${optimalGrid.rows}, 1fr)`,
             }
-              : { width: '100%' }}
+            }
           >
-            { !amIModerator || !amIPresenter ? null : this.renderPreviousPageButton() }
+            { amIModerator || amIPresenter ? null : this.renderPreviousPageButton() }
             {this.renderVideoList()}
-            { !amIModerator || !amIPresenter ? null : this.renderNextPageButton() }
+            { amIModerator || amIPresenter ? null : this.renderNextPageButton() }
           </div>
         )}
         { !autoplayBlocked ? null : (
