@@ -164,6 +164,7 @@ class UserDropdown extends PureComponent {
       dropdownDirection: 'top',
       dropdownVisible: false,
       showNestedOptions: false,
+      canvasWidth: null,
     };
 
     this.handleScroll = this.handleScroll.bind(this);
@@ -173,11 +174,16 @@ class UserDropdown extends PureComponent {
     this.renderUserAvatar = this.renderUserAvatar.bind(this);
     this.resetMenuState = this.resetMenuState.bind(this);
     this.makeDropdownItem = this.makeDropdownItem.bind(this);
+    this.canvas = null;
   }
 
   componentWillMount() {
     this.title = _.uniqueId('dropdown-title-');
     this.seperator = _.uniqueId('action-separator-');
+  }
+
+  componentDidMount() {
+    this.setState({ canvasWidth: this.canvas.offsetWidth });
   }
 
   componentDidUpdate() {
@@ -521,11 +527,7 @@ class UserDropdown extends PureComponent {
 
   renderUserAvatar() {
     const {
-      normalizeEmojiName,
       user,
-      userInBreakout,
-      breakoutSequence,
-      meetingIsBreakout,
       voiceUser,
       streams,
       showVideo,
@@ -534,31 +536,39 @@ class UserDropdown extends PureComponent {
       swapLayout,
       amIModerator,
       amIPresenter,
+      normalizeEmojiName,
+      userInBreakout,
+      breakoutSequence,
+      meetingIsBreakout,
     } = this.props;
-    const findStream = !streams.length ? null
-      : streams.find(stream => stream.userId === user.userId);
+
+    const {
+      canvasWidth,
+    } = this.state;
 
     const { clientType } = user;
     const isVoiceOnly = clientType === 'dial-in-user';
 
-    const iconUser = user.emoji !== 'none'
-      ? (
-        <Icon
-          style={
-          {
-            zIndex: '3',
-            fontSize: '300%',
-            position: 'absolute',
-            bottom: '20px',
-            left: '10px',
-          }}
-          iconName={normalizeEmojiName(user.emoji)}
-        />)
-      : user.name.toLowerCase().slice(0, 2);
+    const findStream = !streams.length ? null
+      : streams.find(stream => stream.userId === user.userId);
+
+    const userEmoji = user.emoji !== 'none'
+    && (
+      <Icon
+        style={
+        {
+          zIndex: '3',
+          fontSize: '300%',
+          position: 'absolute',
+          bottom: '20px',
+          left: '10px',
+        }}
+        iconName={normalizeEmojiName(user.emoji)}
+      />);
 
     const iconVoiceOnlyUser = (<Icon iconName="audio_on" />);
-    const userIcon = isVoiceOnly ? iconVoiceOnlyUser : iconUser;
-    const icons = userInBreakout && !meetingIsBreakout ? breakoutSequence : userIcon;
+    const userIcon = isVoiceOnly ? iconVoiceOnlyUser : userEmoji;
+    const icons = (userInBreakout && !meetingIsBreakout) ? breakoutSequence : userIcon;
 
     return (
       <UserAvatar
@@ -570,6 +580,7 @@ class UserDropdown extends PureComponent {
         voice={voiceUser.isVoiceUser}
         noVoice={!voiceUser.isVoiceUser}
         color={user.color}
+        height={!canvasWidth ? 140 : (0.75 * canvasWidth)}
       >
         {!disableVideo
         && !audioModalIsOpen && findStream && showVideo && (amIModerator || amIPresenter)
@@ -580,7 +591,7 @@ class UserDropdown extends PureComponent {
               findStream={findStream}
             />
           )
-          : null }
+          : user.name.toLowerCase().slice(0, 2) }
         { icons }
       </UserAvatar>
     );
