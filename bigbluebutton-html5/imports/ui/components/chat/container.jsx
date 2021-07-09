@@ -7,7 +7,6 @@ import Storage from '/imports/ui/services/storage/session';
 import { meetingIsBreakout } from '/imports/ui/components/app/service';
 import Chat from './component';
 import ChatService from './service';
-import { initialTime } from '/imports/ui/components/app/container';
 
 const CHAT_CONFIG = Meteor.settings.public.chat;
 const PUBLIC_CHAT_KEY = CHAT_CONFIG.public_id;
@@ -66,6 +65,14 @@ export default injectIntl(withTracker(({ intl }) => {
   let chatName = title;
   let partnerIsLoggedOut = false;
   let systemMessageIntl = {};
+
+  const presentersAndModerators = ChatService.getPresentersAndModerators();
+  const firstModerator = presentersAndModerators
+    .sort((a, b) => {
+      if (a.loginTime < b.loginTime) return -1;
+      if (a.loginTime > b.loginTime) return 1;
+      return 0;
+    })[0].loginTime;
 
   const currentUser = ChatService.getUser(Auth.userID);
   const amIModerator = currentUser.role === ROLE_MODERATOR;
@@ -178,6 +185,6 @@ export default injectIntl(withTracker(({ intl }) => {
     actions: {
       handleClosePrivateChat: ChatService.closePrivateChat,
     },
-    initialTime,
+    initialTime: firstModerator,
   };
 })(ChatContainer));
