@@ -132,11 +132,9 @@ export default injectIntl(withModalMounter(withTracker(({ intl, baseControls }) 
     }, userFilter)
     .fetch();
 
-  const amIModerator = Users
-    .findOne({ userId: Auth.userID }, { fields: { role: 1 } }).role === ROLE_MODERATOR;
+  const amIModerator = users.find(u => u.userId === Auth.userID && u.role === ROLE_MODERATOR);
 
-  const amIPresenter = Users
-    .findOne({ userId: Auth.userID }, { fields: { presenter: 1 } }).presenter;
+  const amIPresenter = users.find(u => u.userId === Auth.userID && u.presenter);
 
   return {
     captions: CaptionsService.isCaptionsActive() ? <CaptionsContainer /> : null,
