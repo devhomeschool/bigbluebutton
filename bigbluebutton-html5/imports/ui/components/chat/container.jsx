@@ -65,22 +65,14 @@ export default injectIntl(withTracker(({ intl }) => {
   let chatName = title;
   let partnerIsLoggedOut = false;
   let systemMessageIntl = {};
-  let initialTime = null;
 
-  // get all messages
-  let firstMessage = ChatService.getPublicGroupMessages();
-  // if there's no message
-  if (!firstMessage[0]) {
-    // send new message
-    ChatService.sendGroupMessage('class start');
-    // get first message
-    firstMessage = ChatService.getPublicGroupMessages();
-    // first message is initialTime
-    initialTime = firstMessage[0].timestamp;
-  } else {
-    // first message is initialTime
-    initialTime = firstMessage[0].timestamp;
-  }
+  const presentersAndModerators = ChatService.getPresentersAndModerators();
+  const firstModerator = presentersAndModerators
+    .sort((a, b) => {
+      if (a.loginTime < b.loginTime) return -1;
+      if (a.loginTime > b.loginTime) return 1;
+      return 0;
+    })[0].loginTime;
 
   const currentUser = ChatService.getUser(Auth.userID);
   const amIModerator = currentUser.role === ROLE_MODERATOR;
@@ -193,6 +185,6 @@ export default injectIntl(withTracker(({ intl }) => {
     actions: {
       handleClosePrivateChat: ChatService.closePrivateChat,
     },
-    initialTime,
+    initialTime: firstModerator,
   };
 })(ChatContainer));
