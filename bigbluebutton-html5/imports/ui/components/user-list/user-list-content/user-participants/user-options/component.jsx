@@ -12,6 +12,11 @@ import CaptionsService from '/imports/ui/components/captions/service';
 import CaptionsWriterMenu from '/imports/ui/components/captions/writer-menu/container';
 import { styles } from './styles';
 import { getUserNamesLink } from '/imports/ui/components/user-list/service';
+import Dropdown from '/imports/ui/components/dropdown/component';
+import DropdownTrigger from '/imports/ui/components/dropdown/trigger/component';
+import DropdownContent from '/imports/ui/components/dropdown/content/component';
+import DropdownList from '/imports/ui/components/dropdown/list/component';
+import DropdownListItem from '/imports/ui/components/dropdown/list/item/component';
 
 const propTypes = {
   intl: PropTypes.shape({
@@ -180,7 +185,7 @@ class UserOptions extends PureComponent {
     mountModal(<CaptionsWriterMenu />);
   }
 
-  renderMenuItems() {
+  renderMenuItems(contentWidth) {
     const {
       intl,
       isMeetingMuted,
@@ -319,14 +324,128 @@ class UserOptions extends PureComponent {
         : null),
     ]);
 
-    return this.menuItems;
+    this.compactMenuItems = _.compact([
+      (isMeteorConnected ? (
+        <DropdownListItem
+          key={this.clearStatusId}
+          icon="clear_status"
+          label={intl.formatMessage(intlMessages.clearAllLabel)}
+          description={intl.formatMessage(intlMessages.clearAllDesc)}
+          onClick={toggleStatus}
+        />) : null
+      ),
+      (!meetingIsBreakout && isMeteorConnected ? (
+        <DropdownListItem
+          key={this.muteAllId}
+          icon={isMeetingMuted ? 'unmute' : 'mute'}
+          label={intl.formatMessage(intlMessages[isMeetingMuted ? 'unmuteAllLabel' : 'muteAllLabel'])}
+          description={intl.formatMessage(intlMessages[isMeetingMuted ? 'unmuteAllDesc' : 'muteAllDesc'])}
+          onClick={toggleMuteAllUsers}
+        />) : null
+      ),
+      (!meetingIsBreakout && !isMeetingMuted && isMeteorConnected ? (
+        <DropdownListItem
+          key={this.muteId}
+          icon="mute"
+          label={intl.formatMessage(intlMessages.muteAllExceptPresenterLabel)}
+          description={intl.formatMessage(intlMessages.muteAllExceptPresenterDesc)}
+          onClick={toggleMuteAllUsersExceptPresenter}
+        />) : null
+      ),
+      (amIModerator
+        ? (
+          <DropdownListItem
+            icon="download"
+            label={intl.formatMessage(intlMessages.saveUserNames)}
+            key={this.saveUsersNameId}
+            onClick={this.onSaveUserNames}
+          />)
+        : null
+      ),
+      (!meetingIsBreakout && isMeteorConnected ? (
+        <DropdownListItem
+          key={this.lockId}
+          icon="lock"
+          label={intl.formatMessage(intlMessages.lockViewersLabel)}
+          description={intl.formatMessage(intlMessages.lockViewersDesc)}
+          onClick={() => mountModal(<LockViewersContainer />)}
+        />) : null
+      ),
+      (canCreateBreakout && isMeteorConnected ? (
+        <DropdownListItem
+          key={this.createBreakoutId}
+          icon="rooms"
+          label={intl.formatMessage(intlMessages.createBreakoutRoom)}
+          description={intl.formatMessage(intlMessages.createBreakoutRoomDesc)}
+          onClick={this.onCreateBreakouts}
+        />) : null
+      ),
+      (canInviteUsers && isMeteorConnected ? (
+        <DropdownListItem
+          icon="rooms"
+          label={intl.formatMessage(intlMessages.invitationItem)}
+          key={this.createBreakoutId}
+          onClick={this.onInvitationUsers}
+        />) : null
+      ),
+      (amIModerator && CaptionsService.isCaptionsEnabled() && isMeteorConnected
+        ? (
+          <DropdownListItem
+            icon="closed_caption"
+            label={intl.formatMessage(intlMessages.captionsLabel)}
+            description={intl.formatMessage(intlMessages.captionsDesc)}
+            key={this.captionsId}
+            onClick={this.handleCaptionsClick}
+          />
+        )
+        : null),
+    ]);
+
+    return contentWidth >= 720 ? this.menuItems : this.compactMenuItems;
   }
 
   render() {
+    const { intl } = this.props;
+    const content = document.querySelector('#content');
+    const contentWidth = content === null ? 0 : content.offsetWidth;
+
     return (
       <div className={styles.menuItems}>
         {
-          this.renderMenuItems()
+          contentWidth >= 720 ? (
+            this.renderMenuItems(contentWidth)
+          ) : (
+            <Dropdown
+              ref={(ref) => { this.dropdown = ref; }}
+              autoFocus={false}
+              onShow={this.onActionsShow}
+              onHide={this.onActionsHide}
+              className={styles.dropdown}
+            >
+              <DropdownTrigger tabIndex={0}>
+                <Button
+                  label={intl.formatMessage(intlMessages.optionsLabel)}
+                  icon="settings"
+                  ghost
+                  color="primary"
+                  hideLabel
+                  className={styles.optionsButton}
+                  size="sm"
+                  onClick={() => null}
+                />
+              </DropdownTrigger>
+              <DropdownContent
+                className={styles.dropdownContent}
+                placement="left top"
+              >
+                <DropdownList>
+                  {
+                    this.renderMenuItems(contentWidth)
+                  }
+                </DropdownList>
+              </DropdownContent>
+            </Dropdown>
+          )
         }
       </div>
     );

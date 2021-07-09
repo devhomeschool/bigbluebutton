@@ -15,10 +15,13 @@
 }
 
 .avatar {
-  height: 140px;
+  background-color: lightslategray;
+  color: lightslategray;
   position: relative;
-  padding: 5rem 0;
-  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
   text-align: center;
   font-size: .85rem;
   border: 2px solid transparent;
@@ -39,9 +42,8 @@
     padding-right: 0;
     padding-left: 0;
     padding-bottom: 0;
-    color: inherit;
-    top: auto;
-    left: auto;
+    top: 0.1em;
+    left: 0.1em;
     bottom: var(--user-indicators-offset);
     right: var(--user-indicators-offset);
     border: 1.5px solid var(--user-list-bg);
@@ -71,52 +73,21 @@
 }
 
 .talking {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
   background-color: var(--user-color);
+  border: 5px solid green;
   border-radius: inherit;
-
-  :global(.animationsEnabled) & {
-    animation: pulse 1s infinite ease-in;
-  }
-
-  &::before {
-    :global(.animationsDisabled) & {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      background-color: var(--user-color);
-      border-radius: inherit;
-      box-shadow: 0 0 0 4px var(--user-color);
-      opacity: .5;
-    }
-  }
-}
-
-@keyframes pulse {
-  0% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(1.5);
-  }
 }
 
 .moderator {
+  background-color: darkslategray;
   border-radius: 5px;
+  color: darkslategray;
 }
 
 .presenter {
   &:before {
     content: "\00a0\e90b\00a0";
+    z-index: 2;
   }
   @include presenterIndicator();
 }

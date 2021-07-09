@@ -13,9 +13,9 @@ const propTypes = {
   listenOnly: PropTypes.bool,
   voice: PropTypes.bool,
   noVoice: PropTypes.bool,
-  color: PropTypes.string,
   className: PropTypes.string,
   isChat: PropTypes.bool,
+  height: PropTypes.number.isRequired,
 };
 
 const defaultProps = {
@@ -26,7 +26,6 @@ const defaultProps = {
   listenOnly: false,
   voice: false,
   noVoice: false,
-  color: '#000',
   className: null,
   isChat: false,
 };
@@ -38,11 +37,11 @@ const UserAvatar = ({
   talking,
   muted,
   listenOnly,
-  color,
   voice,
   noVoice,
   className,
   isChat,
+  height,
 }) => (
 
   <div
@@ -56,19 +55,12 @@ const UserAvatar = ({
       [styles.voice]: voice,
       [styles.noVoice]: noVoice && !listenOnly,
       [styles.isChat]: isChat,
+      [styles.talking]: (talking && !muted),
     }, className)}
     style={{
-      backgroundColor: color,
-      color, // We need the same color on both for the border
+      height: `${height}px`,
     }}
   >
-
-    <div className={cx({
-      [styles.talking]: (talking && !muted),
-    })}
-    />
-
-
     <div className={styles.content}>
       {children}
     </div>
