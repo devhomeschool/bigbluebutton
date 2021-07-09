@@ -75,7 +75,7 @@ class NavBar extends PureComponent {
     const {
       processOutsideToggleRecording,
       connectRecordingObserver,
-      checkInitialTime,
+      // checkInitialTime,
     } = this.props;
 
     if (Meteor.settings.public.allowOutsideCommands.toggleRecording
@@ -84,16 +84,16 @@ class NavBar extends PureComponent {
       window.addEventListener('message', processOutsideToggleRecording);
     }
 
-    this.initialTime = checkInitialTime();
-    setTimeout(() => {
-      this.setState({ classTime: this.calculateTimePassed() });
-    }, 1000);
+    // this.initialTime = checkInitialTime();
+    // setTimeout(() => {
+    //   this.setState({ classTime: this.calculateTimePassed() });
+    // }, 1000);
   }
 
   componentDidUpdate() {
-    setTimeout(() => {
-      this.setState({ classTime: this.calculateTimePassed() });
-    }, 1000);
+    // setTimeout(() => {
+    //   this.setState({ classTime: this.calculateTimePassed() });
+    // }, 1000);
   }
 
   componentWillUnmount() {
