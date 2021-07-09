@@ -10,7 +10,7 @@ import UserListService from '../user-list/service';
 import Service from './service';
 import NavBar from './component';
 import { meetingIsBreakout } from '/imports/ui/components/app/service';
-import ChatService from '/imports/ui/components/chat/service';
+// import ChatService from '/imports/ui/components/chat/service';
 
 const PUBLIC_CONFIG = Meteor.settings.public;
 const ROLE_MODERATOR = PUBLIC_CONFIG.user.role_moderator;
@@ -58,30 +58,30 @@ export default withTracker(() => {
   const amIPresenter = currentUser.presenter;
   const hasUnreadMessages = checkUnreadMessages();
 
-  const checkInitialTime = () => {
-    let initialTime = null;
+  // const checkInitialTime = () => {
+  //   let initialTime = null;
 
-    // get all messages
-    let firstMessage = ChatService.getPublicGroupMessages();
-    console.log(firstMessage);
-    // if there's no message
-    if (!firstMessage[0]) {
-      // send new message
-      ChatService.sendGroupMessage('class start');
-      // get first message
-      firstMessage = ChatService.getPublicGroupMessages();
-      console.log(firstMessage);
-      // first message is initialTime
-      initialTime = firstMessage[0].timestamp;
-    } else {
-      // first message is initialTime
-      initialTime = firstMessage[0].timestamp;
-    }
-    return initialTime;
-  };
+  //   // get all messages
+  //   let firstMessage = ChatService.getPublicGroupMessages();
+  //   console.log(firstMessage);
+  //   // if there's no message
+  //   if (!firstMessage[0]) {
+  //     // send new message
+  //     ChatService.sendGroupMessage('class start');
+  //     // get first message
+  //     firstMessage = ChatService.getPublicGroupMessages();
+  //     console.log(firstMessage);
+  //     // first message is initialTime
+  //     initialTime = firstMessage[0].timestamp;
+  //   } else {
+  //     // first message is initialTime
+  //     initialTime = firstMessage[0].timestamp;
+  //   }
+  //   return initialTime;
+  // };
 
   return {
-    checkInitialTime,
+    // checkInitialTime,
     amIModerator,
     amIPresenter,
     isExpanded,
