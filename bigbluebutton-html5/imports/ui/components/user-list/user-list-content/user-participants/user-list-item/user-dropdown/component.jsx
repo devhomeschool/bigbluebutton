@@ -173,12 +173,18 @@ class UserDropdown extends PureComponent {
     this.renderUserAvatar = this.renderUserAvatar.bind(this);
     this.resetMenuState = this.resetMenuState.bind(this);
     this.makeDropdownItem = this.makeDropdownItem.bind(this);
-    this.canvas = null;
+    this.avatar = null;
   }
 
   componentWillMount() {
     this.title = _.uniqueId('dropdown-title-');
     this.seperator = _.uniqueId('action-separator-');
+  }
+
+  componentDidMount() {
+    this.setTimeout(() => {
+      console.log(this.avatar.offsetWidth);
+    }, 1000);
   }
 
   componentDidUpdate() {
@@ -571,7 +577,7 @@ class UserDropdown extends PureComponent {
         voice={voiceUser.isVoiceUser}
         noVoice={!voiceUser.isVoiceUser}
         color={user.color}
-        height={140}
+        height={!this.avatar ? 140 : this.avatar.offsetWidth * 0.75}
       >
         {!disableVideo
         && !audioModalIsOpen && findStream && showVideo && (amIModerator || amIPresenter)
@@ -636,7 +642,7 @@ class UserDropdown extends PureComponent {
         className={!actions.length ? styles.userListItem : null}
       >
         <div className={styles.userItemContents}>
-          <div className={styles.userAvatar}>
+          <div className={styles.userAvatar} ref={node => this.avatar = node}>
             {this.renderUserAvatar()}
           </div>
           {<UserName
