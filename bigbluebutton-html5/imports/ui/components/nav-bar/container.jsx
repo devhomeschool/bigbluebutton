@@ -63,14 +63,12 @@ export default withTracker(() => {
 
     // get all messages
     let firstMessage = ChatService.getPublicGroupMessages();
-    console.log(firstMessage);
     // if there's no message
     if (!firstMessage[0]) {
       // send new message
       ChatService.sendGroupMessage('class start');
       // get first message
       firstMessage = ChatService.getPublicGroupMessages();
-      console.log(firstMessage);
       // first message is initialTime
       initialTime = firstMessage[0].timestamp;
     } else {
