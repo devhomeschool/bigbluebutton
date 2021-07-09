@@ -82,8 +82,8 @@ const findOptimalGrid = (canvasWidth, canvasHeight, gutter, aspectRatio, numItem
   return {
     columns,
     rows,
-    width: (cellWidth * columns) + gutterTotalWidth,
-    height: (cellHeight * rows) + gutterTotalHeight,
+    width: 600,
+    height: 450,
     filledArea: (cellWidth * cellHeight) * numItems,
   };
 };
@@ -420,12 +420,13 @@ class VideoList extends Component {
               this.grid = ref;
             }}
             className={videoListClassName}
-            style={{
+            style={!amIModerator || !amIPresenter ? {
               width: `${optimalGrid.width}px`,
               height: `${optimalGrid.height}px`,
               gridTemplateColumns: `repeat(${optimalGrid.columns}, 1fr)`,
               gridTemplateRows: `repeat(${optimalGrid.rows}, 1fr)`,
-            }}
+            }
+              : { width: '100%' }}
           >
             { !amIModerator || !amIPresenter ? null : this.renderPreviousPageButton() }
             {this.renderVideoList()}
