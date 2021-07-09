@@ -646,8 +646,9 @@ class UserDropdown extends PureComponent {
       >
         <div className={styles.userItemContents}>
           <div
-            ref={(ref) => { this.canvas = ref; }}
+            ref={node => this.avatar = node}
             className={styles.userAvatar}
+            style={{ height: (this.avatar.offsetWidth * 0.75) }}
           >
             {this.renderUserAvatar()}
           </div>
