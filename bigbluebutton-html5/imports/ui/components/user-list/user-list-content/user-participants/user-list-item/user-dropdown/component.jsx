@@ -181,11 +181,11 @@ class UserDropdown extends PureComponent {
     this.seperator = _.uniqueId('action-separator-');
   }
 
-  componentDidMount() {
-    setTimeout(() => {
-      console.log(this.avatar.offsetWidth);
-    }, 1500);
-  }
+  // componentDidMount() {
+  //   setTimeout(() => {
+  //     console.log(this.avatar.offsetWidth);
+  //   }, 1500);
+  // }
 
   componentDidUpdate() {
     this.checkDropdownDirection();
