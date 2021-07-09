@@ -184,7 +184,7 @@ class UserDropdown extends PureComponent {
   componentDidMount() {
     setTimeout(() => {
       console.log(this.avatar.offsetWidth);
-    }, 500);
+    }, 1500);
   }
 
   componentDidUpdate() {
