@@ -219,6 +219,7 @@ class App extends Component {
             intl.formatMessage(
               intlMessages.raisedHand,
               ({ 0: user.name }),
+              ({ 1: this.formatTime(user.emojiTime) }),
             ),
             'info',
             'hand',
@@ -238,6 +239,12 @@ class App extends Component {
     if (navigator.connection) {
       navigator.connection.addEventListener('change', handleNetworkConnection, false);
     }
+  }
+
+  formatTime(time) {
+    const { initialTime } = this.props;
+    const elapsedMinutes = Math.floor((+time - +initialTime) / 1000 / 60);
+    return elapsedMinutes;
   }
 
   handleWindowResize() {
