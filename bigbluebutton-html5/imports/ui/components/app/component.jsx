@@ -257,7 +257,7 @@ class App extends Component {
 
   formatTime(time) {
     const { initialTime } = this.props;
-    const minutes = Math.floor((+time - +initialTime) / 1000 / 60);
+    const minutes = +time - +initialTime;
     return minutes;
   }
 
