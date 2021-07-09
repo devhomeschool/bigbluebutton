@@ -494,7 +494,7 @@
     "app.toast.chat.system": "Sistema",
     "app.toast.clearedEmoji.label": "Status de emoji redefinido",
     "app.toast.setEmoji.label": "Status de emoji definido como {0}",
-    "app.toast.setEmoji.raisedHand": "{0} levantou a mão",
+    "app.toast.setEmoji.raisedHand": "{0} levantou a mão {1} min decorridos",
     "app.toast.meetingMuteOn.label": "Todos os participantes foram silenciados",
     "app.toast.meetingMuteOff.label": "Mudo da sessão desativado",
     "app.notification.recordingStart": "Esta sessão está sendo gravada",

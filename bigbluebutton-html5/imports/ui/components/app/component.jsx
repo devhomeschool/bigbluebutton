@@ -117,6 +117,7 @@ class App extends Component {
 
     this.handleWindowResize = throttle(this.handleWindowResize).bind(this);
     this.shouldAriaHide = this.shouldAriaHide.bind(this);
+    this.formatTime = this.formatTime.bind(this);
   }
 
   componentDidMount() {
@@ -219,6 +220,7 @@ class App extends Component {
             intl.formatMessage(
               intlMessages.raisedHand,
               ({ 0: user.name }),
+              ({ 1: this.formatTime(user.emojiTime) }),
             ),
             'info',
             'hand',
@@ -251,6 +253,12 @@ class App extends Component {
   shouldAriaHide() {
     const { openPanel, isPhone } = this.props;
     return openPanel !== '' && (isPhone || isLayeredView.matches);
+  }
+
+  formatTime(time) {
+    const { initialTime } = this.props;
+    const minutes = Math.floor((+time - +initialTime) / 1000 / 60);
+    return minutes;
   }
 
   renderPanel() {
