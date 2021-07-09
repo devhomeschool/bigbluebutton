@@ -261,7 +261,7 @@ class App extends Component {
 
   renderPanel() {
     const { enableResize } = this.state;
-    const { openPanel, isRTL } = this.props;
+    const { openPanel, isRTL, initialTime } = this.props;
 
     return (
       <PanelManager
@@ -269,6 +269,7 @@ class App extends Component {
           openPanel,
           enableResize,
           isRTL,
+          initialTime,
         }}
         shouldAriaHide={this.shouldAriaHide}
       />
@@ -276,7 +277,7 @@ class App extends Component {
   }
 
   renderNavBar() {
-    const { navbar } = this.props;
+    const { navbar, initialTime } = this.props;
 
     if (!navbar) return null;
 
@@ -286,6 +287,7 @@ class App extends Component {
         style={{ height: document.documentElement.clientWidth >= 650 ? '2em' : '6em' }}
       >
         {navbar}
+        {initialTime}
       </header>
     );
   }
