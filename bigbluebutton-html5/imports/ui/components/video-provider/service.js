@@ -145,9 +145,7 @@ class VideoService {
 
       streams.forEach(s => this.sendUserUnshareWebcam(s.stream));
       this.exitedVideo();
-      return streams;
     }
-    return null;
   }
 
   exitedVideo() {
