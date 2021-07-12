@@ -11,6 +11,8 @@ import {
 import { tryGenerateIceCandidates } from '/imports/utils/safari-webrtc';
 import logger from '/imports/startup/client/logger';
 import VideoService from './service';
+import VideoStreams from '/imports/api/video-streams';
+import Auth from '/imports/ui/services/auth';
 
 // Default values and default empty object to be backwards compat with 2.2.
 // FIXME Remove hardcoded defaults 2.3.
@@ -162,7 +164,13 @@ class VideoProvider extends Component {
 
     window.removeEventListener('beforeunload', this.onBeforeUnload);
 
-    const streams = VideoService.exitVideo();
+    VideoService.exitVideo();
+    const streams = VideoStreams.find(
+      {
+        meetingId: Auth.meetingID,
+        userId: Auth.userID,
+      }, { fields: { stream: 1 } },
+    ).fetch();
     console.log('User Stream:', streams);
 
     Object.keys(this.webRtcPeers).forEach((cameraId) => {
