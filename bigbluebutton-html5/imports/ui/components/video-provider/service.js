@@ -142,7 +142,7 @@ class VideoService {
           userId: Auth.userID,
         }, { fields: { stream: 1 } },
       ).fetch();
-
+      console.log(streams);
       streams.forEach(s => this.sendUserUnshareWebcam(s.stream));
       this.exitedVideo();
     }
