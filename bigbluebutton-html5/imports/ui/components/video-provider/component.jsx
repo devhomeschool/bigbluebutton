@@ -163,8 +163,10 @@ class VideoProvider extends Component {
     window.removeEventListener('beforeunload', this.onBeforeUnload);
 
     VideoService.exitVideo();
-
+    // Caso o usuário em questão seja apresentador ou moderator, apenas as webcams
+    // do usuário devem ser desligadas
     Object.keys(this.webRtcPeers).forEach((cameraId) => {
+      // stopWebRTCPeer of the user
       this.stopWebRTCPeer(cameraId);
     });
 
@@ -401,6 +403,7 @@ class VideoProvider extends Component {
     // in this case, 'closed' state is not caused by an error;
     // we stop listening to prevent this from being treated as an error
     const peer = this.webRtcPeers[cameraId];
+    console.log(peer);
     if (peer && peer.peerConnection) {
       const conn = peer.peerConnection;
       conn.oniceconnectionstatechange = null;
