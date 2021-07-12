@@ -162,12 +162,16 @@ class VideoProvider extends Component {
 
     window.removeEventListener('beforeunload', this.onBeforeUnload);
 
-    VideoService.exitVideo();
-    // Caso o usuário em questão seja apresentador ou moderator, apenas as webcams
-    // do usuário devem ser desligadas
+    const streams = VideoService.exitVideo();
+    console.log('User Stream:', streams);
+
     Object.keys(this.webRtcPeers).forEach((cameraId) => {
-      // stopWebRTCPeer of the user
-      this.stopWebRTCPeer(cameraId);
+      console.log('webRtcPeer Streams:', cameraId);
+      streams.forEach((UserStream) => {
+        if (UserStream.cameraId === cameraId) {
+          this.stopWebRTCPeer(cameraId);
+        }
+      });
     });
 
     // Close websocket connection to prevent multiple reconnects from happening
