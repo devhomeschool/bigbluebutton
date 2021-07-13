@@ -147,13 +147,13 @@ class VideoProvider extends Component {
     const shouldDebounce = VideoService.isPaginationEnabled()
       && prevProps.currentVideoPageIndex !== currentVideoPageIndex;
 
+    console.table(streams);
     this.updateStreams(streams, shouldDebounce);
 
     if (!prevProps.isUserLocked && isUserLocked) VideoService.lockUser();
   }
 
   componentWillUnmount() {
-    const { streams } = this.props;
     this.ws.onmessage = null;
     this.ws.onopen = null;
     this.ws.onclose = null;
@@ -163,12 +163,7 @@ class VideoProvider extends Component {
 
     window.removeEventListener('beforeunload', this.onBeforeUnload);
     VideoService.exitVideo();
-    const streamsCameraIds = streams.map(s => s.cameraId);
-    const streamsConnected = Object.keys(this.webRtcPeers);
-    const streamsToDisconnect = streamsConnected
-      .filter(cameraId => !streamsCameraIds.includes(cameraId));
-    streamsToDisconnect.forEach((cameraId) => {
-      console.log('webRTCPeers to disconnect at componentwillUnmount', cameraId);
+    Object.keys(this.webRtcPeers).forEach((cameraId) => {
       this.stopWebRTCPeer(cameraId);
     });
 
@@ -215,8 +210,6 @@ class VideoProvider extends Component {
 
     clearInterval(this.pingInterval);
 
-    console.log('onWsClose call');
-
     VideoService.exitVideo();
 
     this.setState({ socketOpen: false });
@@ -256,14 +249,14 @@ class VideoProvider extends Component {
 
   getStreamsToConnectAndDisconnect(streams) {
     const streamsCameraIds = streams.map(s => s.cameraId);
+    console.table('Streams presentes:', streamsCameraIds);
     const streamsConnected = Object.keys(this.webRtcPeers);
+    console.table('Streams conectadas', streamsConnected);
 
-    const streamsToConnect = streamsCameraIds
-      .filter(cameraId => !streamsConnected.includes(cameraId));
-
-    const streamsToDisconnect = streamsConnected
-      .filter(cameraId => !streamsCameraIds.includes(cameraId));
-
+    const streamsToConnect = streamsCameraIds.filter(cameraId => !streamsConnected.includes(cameraId));
+    console.table('Streams presentes que ainda não estão conectadas: ', streamsToConnect);
+    const streamsToDisconnect = streamsConnected.filter(cameraId => !streamsCameraIds.includes(cameraId));
+    console.table('Streams conectadas que não estão mais presentes: ', streamsToDisconnect);
     return [streamsToConnect, streamsToDisconnect];
   }
 
@@ -286,7 +279,7 @@ class VideoProvider extends Component {
     } else {
       this.connectStreams(streamsToConnect);
     }
-    console.log('updateStreams componentDidUpdate. StreamsToDisconnect:', streamsToDisconnect);
+
     this.disconnectStreams(streamsToDisconnect);
 
     if (CAMERA_QUALITY_THRESHOLDS_ENABLED) {
@@ -409,6 +402,7 @@ class VideoProvider extends Component {
     // in this case, 'closed' state is not caused by an error;
     // we stop listening to prevent this from being treated as an error
     const peer = this.webRtcPeers[cameraId];
+    console.log(peer);
     if (peer && peer.peerConnection) {
       const conn = peer.peerConnection;
       conn.oniceconnectionstatechange = null;
