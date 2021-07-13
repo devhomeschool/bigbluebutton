@@ -163,6 +163,7 @@ class VideoProvider extends Component {
     window.removeEventListener('beforeunload', this.onBeforeUnload);
     VideoService.exitVideo();
     Object.keys(this.webRtcPeers).forEach((cameraId) => {
+      console.log('webRTCPeers', this.webRtcPeers);
       this.stopWebRTCPeer(cameraId);
     });
 
@@ -250,9 +251,11 @@ class VideoProvider extends Component {
     const streamsCameraIds = streams.map(s => s.cameraId);
     const streamsConnected = Object.keys(this.webRtcPeers);
 
-    const streamsToConnect = streamsCameraIds.filter(cameraId => !streamsConnected.includes(cameraId));
+    const streamsToConnect = streamsCameraIds
+      .filter(cameraId => !streamsConnected.includes(cameraId));
 
-    const streamsToDisconnect = streamsConnected.filter(cameraId => !streamsCameraIds.includes(cameraId));
+    const streamsToDisconnect = streamsConnected
+      .filter(cameraId => !streamsCameraIds.includes(cameraId));
 
     return [streamsToConnect, streamsToDisconnect];
   }
@@ -276,8 +279,9 @@ class VideoProvider extends Component {
     } else {
       this.connectStreams(streamsToConnect);
     }
+    console.table(streamsToDisconnect);
 
-    this.disconnectStreams(streamsToDisconnect);
+    // this.disconnectStreams(streamsToDisconnect);
 
     if (CAMERA_QUALITY_THRESHOLDS_ENABLED) {
       const { totalNumberOfStreams } = this.props;
@@ -399,7 +403,7 @@ class VideoProvider extends Component {
     // in this case, 'closed' state is not caused by an error;
     // we stop listening to prevent this from being treated as an error
     const peer = this.webRtcPeers[cameraId];
-    console.log(peer);
+    console.log('stopWebRtcPeer', peer);
     if (peer && peer.peerConnection) {
       const conn = peer.peerConnection;
       conn.oniceconnectionstatechange = null;
