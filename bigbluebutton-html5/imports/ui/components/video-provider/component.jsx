@@ -163,12 +163,12 @@ class VideoProvider extends Component {
 
     window.removeEventListener('beforeunload', this.onBeforeUnload);
     VideoService.exitVideo();
-    Object.keys(this.webRtcPeers).forEach((cameraId) => {
-      this.stopWebRTCPeer(cameraId);
-    });
+    // Object.keys(this.webRtcPeers).forEach((cameraId) => {
+    //   this.stopWebRTCPeer(cameraId);
+    // });
 
     // Close websocket connection to prevent multiple reconnects from happening
-    this.ws.close();
+    // this.ws.close();
   }
 
   onWsMessage(message) {
