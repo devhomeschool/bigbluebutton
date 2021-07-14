@@ -170,9 +170,9 @@ class VideoProvider extends Component {
       Object.keys(this.webRtcPeers).forEach((cameraId) => {
         this.stopWebRTCPeer(cameraId);
       });
-      // Close websocket connection to prevent multiple reconnects from happening
-      this.ws.close();
     }
+    // Close websocket connection to prevent multiple reconnects from happening
+    this.ws.close();
   }
 
   onWsMessage(message) {
