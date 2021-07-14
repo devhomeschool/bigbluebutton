@@ -154,6 +154,7 @@ class VideoProvider extends Component {
   }
 
   componentWillUnmount() {
+    const { userId, findStream } = this.props;
     this.ws.onmessage = null;
     this.ws.onopen = null;
     this.ws.onclose = null;
@@ -162,13 +163,22 @@ class VideoProvider extends Component {
     window.removeEventListener('offline', this.onWsClose);
 
     window.removeEventListener('beforeunload', this.onBeforeUnload);
-    VideoService.exitVideo();
-    // Object.keys(this.webRtcPeers).forEach((cameraId) => {
-    //   this.stopWebRTCPeer(cameraId);
-    // });
-
-    // Close websocket connection to prevent multiple reconnects from happening
-    // this.ws.close();
+    // Deve chamar somente para o usuário quando videoProvider estiver na lista de usuários
+    VideoService.exitVideo(userId || null);
+    // Deve desconectar apenas as câmeras do usuário em questão
+    if (!userId) {
+      Object.keys(this.webRtcPeers).forEach((cameraId) => {
+        this.stopWebRTCPeer(cameraId);
+      });
+      // Close websocket connection to prevent multiple reconnects from happening
+      this.ws.close();
+    } else {
+      Object.keys(this.webRtcPeers).forEach((cameraId) => {
+        if (cameraId === findStream.cameraId) {
+          this.stopWebRTCPeer(cameraId);
+        }
+      });
+    }
   }
 
   onWsMessage(message) {
@@ -204,13 +214,14 @@ class VideoProvider extends Component {
   }
 
   onWsClose() {
+    const { userId } = this.props;
     logger.debug({
       logCode: 'video_provider_onwsclose',
     }, 'Multiple video provider websocket connection closed.');
 
     clearInterval(this.pingInterval);
 
-    VideoService.exitVideo();
+    VideoService.exitVideo(userId || null);
 
     this.setState({ socketOpen: false });
   }
