@@ -136,15 +136,15 @@ class VideoService {
       logger.info({
         logCode: 'video_provider_unsharewebcam',
       }, `Sending unshare all ${Auth.userID} webcams notification to meteor`);
-      const streams = VideoStreams.find(
-        {
-          meetingId: Auth.meetingID,
-          userId: Auth.userID,
-        }, { fields: { stream: 1 } },
-      ).fetch();
-      console.log('exitVideo called for:', streams);
-      streams.forEach(s => this.sendUserUnshareWebcam(s.stream));
-      this.exitedVideo();
+      // const streams = VideoStreams.find(
+      //   {
+      //     meetingId: Auth.meetingID,
+      //     userId: Auth.userID,
+      //   }, { fields: { stream: 1 } },
+      // ).fetch();
+      // console.log('exitVideo called for:', streams);
+      // streams.forEach(s => this.sendUserUnshareWebcam(s.stream));
+      // this.exitedVideo();
     }
   }
 
