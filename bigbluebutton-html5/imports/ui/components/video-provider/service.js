@@ -136,16 +136,18 @@ class VideoService {
       // exitVideo deve ser chamado somente para o usuário que desabilitou sua câmera
       logger.info({
         logCode: 'video_provider_unsharewebcam',
-      }, `Sending unshare all ${Auth.userID} webcams notification to meteor`);
+      }, `Sending unshare all ${userId || Auth.userID} webcams notification to meteor`);
       const streams = VideoStreams.find(
         {
           meetingId: Auth.meetingID,
-          userId: !userId ? Auth.userID : userId,
+          userId: userId || Auth.userID,
         }, { fields: { stream: 1 } },
       ).fetch();
       console.log('exitVideo called for:', streams);
       streams.forEach(s => this.sendUserUnshareWebcam(s.stream));
-      this.exitedVideo();
+      if (!userId) {
+        this.exitedVideo();
+      }
     }
   }
 
