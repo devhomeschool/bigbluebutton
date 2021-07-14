@@ -145,9 +145,7 @@ class VideoService {
       ).fetch();
       console.log('exitVideo called for:', streams);
       streams.forEach(s => this.sendUserUnshareWebcam(s.stream));
-      if (!userId) {
-        this.exitedVideo();
-      }
+      this.exitedVideo();
     }
   }
 
