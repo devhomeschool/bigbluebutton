@@ -154,7 +154,7 @@ class VideoProvider extends Component {
   }
 
   componentWillUnmount() {
-    const { userId, findStream } = this.props;
+    const { userId } = this.props;
     this.ws.onmessage = null;
     this.ws.onopen = null;
     this.ws.onclose = null;
@@ -164,20 +164,14 @@ class VideoProvider extends Component {
 
     window.removeEventListener('beforeunload', this.onBeforeUnload);
     // Deve chamar somente para o usuário quando videoProvider estiver na lista de usuários
-    VideoService.exitVideo(userId || null);
     // Deve desconectar apenas as câmeras do usuário em questão
     if (!userId) {
+      VideoService.exitVideo();
       Object.keys(this.webRtcPeers).forEach((cameraId) => {
         this.stopWebRTCPeer(cameraId);
       });
       // Close websocket connection to prevent multiple reconnects from happening
       this.ws.close();
-    } else {
-      Object.keys(this.webRtcPeers).forEach((cameraId) => {
-        if (cameraId === findStream.cameraId) {
-          this.stopWebRTCPeer(cameraId);
-        }
-      });
     }
   }
 
