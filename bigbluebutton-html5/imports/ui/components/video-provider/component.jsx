@@ -147,8 +147,10 @@ class VideoProvider extends Component {
     const shouldDebounce = VideoService.isPaginationEnabled()
       && prevProps.currentVideoPageIndex !== currentVideoPageIndex;
 
-    console.table(streams);
-    this.updateStreams(streams, shouldDebounce);
+    if (prevProps.streams !== streams) {
+      console.table(streams);
+      this.updateStreams(streams, shouldDebounce);
+    }
 
     if (!prevProps.isUserLocked && isUserLocked) VideoService.lockUser();
   }
