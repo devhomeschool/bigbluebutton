@@ -33,6 +33,15 @@ const CLOSED_CHAT_LIST_KEY = 'closedChatList';
 
 const getUser = userId => Users.findOne({ userId });
 
+const getLoginTimes = () => {
+  const allTimes = Users.find({
+    meetingId: Auth.meetingID,
+    connectionStatus: 'online',
+  },
+  { loginTime: 1 }).fetch();
+  return allTimes;
+};
+
 const getPresentersAndModerators = () => {
   const presentersAndModerators = Users.find({ meetingId: Auth.meetingID, connectionStatus: 'online' },
     {
@@ -355,5 +364,6 @@ export default {
   maxTimestampReducer,
   getLastMessageTimestampFromChatList,
   getPresentersAndModerators,
+  getLoginTimes,
   UnsentMessagesCollection,
 };

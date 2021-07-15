@@ -58,6 +58,12 @@ export default withTracker(() => {
   const hasUnreadMessages = checkUnreadMessages();
 
   const checkInitialTime = () => {
+    const sortLogin = (a, b) => {
+      if (a.loginTime < b.loginTime) return -1;
+      if (a.loginTime > b.loginTime) return 1;
+      return 0;
+    };
+    let initialTime = Date.now();
     let presentersAndModerators = Users
       .find(
         { meetingId: Auth.meetingID, connectionStatus: 'online' },
@@ -68,13 +74,21 @@ export default withTracker(() => {
     presentersAndModerators = presentersAndModerators
       .filter(u => u.role === ROLE_MODERATOR || u.presenter);
 
-    const firstModerator = presentersAndModerators
-      .sort((a, b) => {
-        if (a.loginTime < b.loginTime) return -1;
-        if (a.loginTime > b.loginTime) return 1;
-        return 0;
-      })[0].loginTime;
-    return firstModerator;
+    if (!presentersAndModerators) {
+      const allLoginTimes = Users.find({
+        meetingId: Auth.meetindID,
+        connectionStatus: 'online',
+      },
+      {
+        loginTime: 1,
+      }).fetch();
+      initialTime = allLoginTimes
+        .sort(sortLogin)[0].loginTime;
+    } else {
+      initialTime = presentersAndModerators
+        .sort(sortLogin)[0].loginTime;
+    }
+    return initialTime;
   };
 
   return {

@@ -156,7 +156,7 @@ class VideoProvider extends Component {
   }
 
   componentWillUnmount() {
-    const { streams } = this.props;
+    const { streams, findStream } = this.props;
     this.ws.onmessage = null;
     this.ws.onopen = null;
     this.ws.onclose = null;
@@ -165,8 +165,7 @@ class VideoProvider extends Component {
     window.removeEventListener('offline', this.onWsClose);
 
     window.removeEventListener('beforeunload', this.onBeforeUnload);
-    // Deve chamar somente para o usuário quando videoProvider estiver na lista de usuários
-    // Deve desconectar apenas as câmeras do usuário em questão
+    console.log('findStream', findStream);
     if (!streams) {
       Object.keys(this.webRtcPeers).forEach((cameraId) => {
         this.stopWebRTCPeer(cameraId);
@@ -263,9 +262,11 @@ class VideoProvider extends Component {
     const streamsConnected = Object.keys(this.webRtcPeers);
     console.table('Streams conectadas', streamsConnected);
 
-    const streamsToConnect = streamsCameraIds.filter(cameraId => !streamsConnected.includes(cameraId));
+    const streamsToConnect = streamsCameraIds
+      .filter(cameraId => !streamsConnected.includes(cameraId));
     console.table('Streams presentes que ainda não estão conectadas: ', streamsToConnect);
-    const streamsToDisconnect = streamsConnected.filter(cameraId => !streamsCameraIds.includes(cameraId));
+    const streamsToDisconnect = streamsConnected
+      .filter(cameraId => !streamsCameraIds.includes(cameraId));
     console.table('Streams conectadas que não estão mais presentes: ', streamsToDisconnect);
     return [streamsToConnect, streamsToDisconnect];
   }
