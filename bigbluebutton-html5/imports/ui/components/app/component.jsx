@@ -218,7 +218,7 @@ class App extends Component {
           notify(
             intl.formatMessage(
               intlMessages.raisedHand,
-              ({ 0: user.name, 1: this.formatTime(user.emojiTime) }),
+              ({ 0: user.name, 1: user.emojiTime }),
             ),
             'info',
             'hand',
@@ -240,11 +240,11 @@ class App extends Component {
     }
   }
 
-  formatTime(time) {
-    const { initialTime } = this.props;
-    const elapsedMinutes = Math.floor((+time - +initialTime) / 1000 / 60);
-    return elapsedMinutes;
-  }
+  // formatTime(time) {
+  //   const { initialTime } = this.props;
+  //   const elapsedMinutes = Math.floor((+time - +initialTime) / 1000 / 60);
+  //   return elapsedMinutes;
+  // }
 
   handleWindowResize() {
     const { enableResize } = this.state;

@@ -61,21 +61,21 @@ class NavBar extends PureComponent {
     Session.set('idChatOpen', '');
   }
 
-  constructor() {
-    super();
-    this.state = {
-      classTime: null,
-    };
+  // constructor() {
+  //   super();
+  //   this.state = {
+  //     classTime: null,
+  //   };
 
-    this.initialTime = null;
-    this.calculateTimePassed = this.calculateTimePassed.bind(this);
-  }
+  //   this.initialTime = null;
+  //   this.calculateTimePassed = this.calculateTimePassed.bind(this);
+  // }
 
   componentDidMount() {
     const {
       processOutsideToggleRecording,
       connectRecordingObserver,
-      checkInitialTime,
+      // checkInitialTime,
     } = this.props;
 
     if (Meteor.settings.public.allowOutsideCommands.toggleRecording
@@ -84,31 +84,31 @@ class NavBar extends PureComponent {
       window.addEventListener('message', processOutsideToggleRecording);
     }
 
-    this.initialTime = checkInitialTime();
-    setTimeout(() => {
-      this.setState({ classTime: this.calculateTimePassed() });
-    }, 1000);
+    // this.initialTime = checkInitialTime();
+    // setTimeout(() => {
+    //   this.setState({ classTime: this.calculateTimePassed() });
+    // }, 1000);
   }
 
   componentDidUpdate() {
-    setTimeout(() => {
-      this.setState({ classTime: this.calculateTimePassed() });
-    }, 1000);
+    // setTimeout(() => {
+    //   this.setState({ classTime: this.calculateTimePassed() });
+    // }, 1000);
   }
 
   componentWillUnmount() {
     clearInterval(this.interval);
   }
 
-  calculateTimePassed() {
-    const timePassed = +Date.now() - +this.initialTime;
-    const time = {
-      hours: Math.floor((timePassed / (1000 * 60 * 60)) % 24),
-      minutes: Math.floor((timePassed / 1000 / 60) % 60),
-      seconds: Math.floor((timePassed / 1000) % 60),
-    };
-    return time;
-  }
+  // calculateTimePassed() {
+  //   const timePassed = +Date.now() - +this.initialTime;
+  //   const time = {
+  //     hours: Math.floor((timePassed / (1000 * 60 * 60)) % 24),
+  //     minutes: Math.floor((timePassed / 1000 / 60) % 60),
+  //     seconds: Math.floor((timePassed / 1000) % 60),
+  //   };
+  //   return time;
+  // }
 
   render() {
     const {
@@ -125,7 +125,7 @@ class NavBar extends PureComponent {
       amIPresenter,
     } = this.props;
 
-    const { classTime } = this.state;
+    // const { classTime } = this.state;
 
     const toggleBtnClasses = {};
     toggleBtnClasses[styles.btn] = true;
@@ -164,7 +164,7 @@ class NavBar extends PureComponent {
               mountModal={mountModal}
               amIModerator={amIModerator}
               amIPresenter={amIPresenter}
-              classTime={classTime}
+              // classTime={classTime}
             />
             {!amIModerator ? null
               : (
