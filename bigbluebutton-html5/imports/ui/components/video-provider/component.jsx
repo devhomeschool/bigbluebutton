@@ -156,7 +156,7 @@ class VideoProvider extends Component {
   }
 
   componentWillUnmount() {
-    const { userId, streams, findStream } = this.props;
+    const { streams } = this.props;
     this.ws.onmessage = null;
     this.ws.onopen = null;
     this.ws.onclose = null;
@@ -168,7 +168,6 @@ class VideoProvider extends Component {
     // Deve chamar somente para o usuário quando videoProvider estiver na lista de usuários
     // Deve desconectar apenas as câmeras do usuário em questão
     if (!streams) {
-      // disable only the users websocket
       Object.keys(this.webRtcPeers).forEach((cameraId) => {
         this.stopWebRTCPeer(cameraId);
       });
@@ -178,6 +177,7 @@ class VideoProvider extends Component {
     }
     // Close websocket connection to prevent multiple reconnects from happening
     this.ws.close();
+    console.log('finalizei o componentWillUnmount');
   }
 
   onWsMessage(message) {
@@ -272,12 +272,14 @@ class VideoProvider extends Component {
 
   connectStreams(streamsToConnect) {
     streamsToConnect.forEach((cameraId) => {
+      console.log('Há câmeras para conectar: ', cameraId);
       const isLocal = VideoService.isLocalStream(cameraId);
       this.createWebRTCPeer(cameraId, isLocal);
     });
   }
 
   disconnectStreams(streamsToDisconnect) {
+    console.log('Há câmeras para desconectar: ', streamsToDisconnect);
     streamsToDisconnect.forEach(cameraId => this.stopWebRTCPeer(cameraId));
   }
 
@@ -473,8 +475,10 @@ class VideoProvider extends Component {
 
     // Check if the peer is already being processed
     if (this.webRtcPeers[cameraId]) {
+      console.log('câmera já existe', this.webRtcPeers[cameraId]);
       return;
     }
+    console.log('câmera não existe', cameraId);
 
     this.webRtcPeers[cameraId] = {};
 

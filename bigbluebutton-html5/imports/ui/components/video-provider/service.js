@@ -144,7 +144,18 @@ class VideoService {
         }, { fields: { stream: 1 } },
       ).fetch();
       console.log('exitVideo called for:', streams);
-      streams.forEach(s => this.sendUserUnshareWebcam(s.stream));
+      streams.forEach((s) => {
+        this.sendUserUnshareWebcam(s.stream);
+        console.log('enviou unshareWebcam para: ', s.stream);
+      });
+      console.log('Finalizou o forEach unshareWebcam', streams);
+      const updatedStreams = VideoStreams.find(
+        {
+          meetingId: Auth.meetingID,
+          userId: userId || Auth.userID,
+        }, { fields: { stream: 1 } },
+      ).fetch();
+      console.table('Streams atualizadas, assim espero...: ', updatedStreams);
       this.exitedVideo();
     }
   }
