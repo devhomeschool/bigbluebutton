@@ -141,7 +141,7 @@ class MessageListItem extends Component {
               <time className={styles.time} dateTime={dateTime}>
                 {/* {`${(elapsedHours && elapsedHours !== 0) && elapsedHours}h
                  ${elapsedMinutes}min`} */}
-                { dateTime }
+                { time }
               </time>
             </div>
             <div className={styles.messages}>
