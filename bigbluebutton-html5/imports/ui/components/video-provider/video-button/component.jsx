@@ -6,6 +6,7 @@ import VideoService from '../service';
 import { defineMessages, injectIntl, intlShape } from 'react-intl';
 import { styles } from './styles';
 import { validIOSVersion } from '/imports/ui/components/app/service';
+import Auth from '/imports/ui/services/auth';
 
 const intlMessages = defineMessages({
   joinVideo: {
@@ -58,7 +59,7 @@ const JoinVideoButton = ({
     }
 
     if (exitVideo()) {
-      VideoService.exitVideo();
+      VideoService.exitVideo(Auth.userID);
     } else {
       mountVideoPreview();
     }
