@@ -183,6 +183,10 @@ class VideoProvider extends Component {
     } else if (disconnect) {
       console.log('HÁ CÂMERAS PARA DESLIGAR');
       this.disconnectStreams(disconnect);
+      if (!findStream) {
+        console.log('NÃO EXISTE FINDSTREAM');
+        return;
+      }
       const closeOwnProvider = disconnect.find(cameraId => cameraId === findStream.cameraId);
       if (closeOwnProvider) {
         console.log('VOU DESLIGAR O MEU PRÓPRIO VIDEO-PROVIDER');
