@@ -174,7 +174,7 @@ class VideoProvider extends Component {
       .getStreamsToConnectAndDisconnect(streams);
     console.table('câmeras para conectar e desconectar no willUnMount', connect, disconnect);
 
-    if (!streams) {
+    if (streams.length === 0) {
       console.log('NÃO HÁ NENHUMA STREAM');
       Object.keys(this.webRtcPeers).forEach((cameraId) => {
         this.stopWebRTCPeer(cameraId);
