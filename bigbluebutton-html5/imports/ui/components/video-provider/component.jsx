@@ -440,7 +440,9 @@ class VideoProvider extends Component {
     }
 
     if (isLocal) {
+      console.log('câmera a desconectar é a ', cameraId);
       VideoService.stopVideo(cameraId);
+      this.ws.close();
     }
 
     const role = VideoService.getRole(isLocal);
