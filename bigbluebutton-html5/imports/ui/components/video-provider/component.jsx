@@ -183,7 +183,7 @@ class VideoProvider extends Component {
     } else if (disconnect) {
       console.log('HÁ CÂMERAS PARA DESLIGAR');
       this.disconnectStreams(disconnect);
-      const closeOwnProvider = disconnect.find(stream => stream.cameraId === findStream.cameraId);
+      const closeOwnProvider = disconnect.find(cameraId => cameraId === findStream.cameraId);
       if (closeOwnProvider) {
         console.log('VOU DESLIGAR O MEU PRÓPRIO VIDEO-PROVIDER');
         this.ws.close();
