@@ -6,7 +6,7 @@ public:
     autoJoin: true
     listenOnlyMode: true
     forceListenOnly: false
-    skipCheck: false
+    skipCheck: true
     clientTitle: BigBlueButton
     appName: BigBlueButton HTML5 Client
     bbbServerVersion: 2.2
@@ -209,8 +209,8 @@ public:
     enableVideo: true
     enableVideoMenu: true
     enableListenOnly: true
-    autoShareWebcam: false
-    skipVideoPreview: false
+    autoShareWebcam: true
+    skipVideoPreview: true
     # Entry `thresholds` is an array of:
     # - threshold: minimum number of cameras being shared for profile to applied
     #   profile: a camera profile id from the cameraProfiles configuration array
