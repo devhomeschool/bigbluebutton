@@ -11,10 +11,12 @@ import {
 import { tryGenerateIceCandidates } from '/imports/utils/safari-webrtc';
 import logger from '/imports/startup/client/logger';
 import VideoService from './service';
+import Users from '/imports/api/users';
 
 // Default values and default empty object to be backwards compat with 2.2.
 // FIXME Remove hardcoded defaults 2.3.
 const WS_CONN_TIMEOUT = Meteor.settings.public.kurento.wsConnectionTimeout || 4000;
+const VIEWER = Meteor.settings.user.role_viewer;
 
 const {
   baseTimeout: CAMERA_SHARE_FAILED_WAIT_TIME = 15000,
@@ -189,8 +191,12 @@ class VideoProvider extends Component {
       }
       const closeOwnProvider = disconnect.find(cameraId => cameraId === findStream.cameraId);
       if (closeOwnProvider) {
-        console.log('VOU DESLIGAR O MEU PRÓPRIO VIDEO-PROVIDER');
-        this.ws.close();
+        const viewer = Users.findOne({ role: VIEWER }).fetch();
+        if (!viewer) {
+          // desliga somente quando não existem alunos
+          console.log('VOU DESLIGAR O MEU PRÓPRIO VIDEO-PROVIDER CASO NÃO TENHA ALUNOS');
+          this.ws.close();
+        }
       }
     }
     // Close websocket connection to prevent multiple reconnects from happening
@@ -433,16 +439,13 @@ class VideoProvider extends Component {
     // in this case, 'closed' state is not caused by an error;
     // we stop listening to prevent this from being treated as an error
     const peer = this.webRtcPeers[cameraId];
-    console.log(peer);
     if (peer && peer.peerConnection) {
       const conn = peer.peerConnection;
       conn.oniceconnectionstatechange = null;
     }
 
     if (isLocal) {
-      console.log('câmera a desconectar é a ', cameraId);
       VideoService.stopVideo(cameraId);
-      this.ws.close();
     }
 
     const role = VideoService.getRole(isLocal);
