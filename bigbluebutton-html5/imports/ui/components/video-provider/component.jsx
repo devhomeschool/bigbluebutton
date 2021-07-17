@@ -12,6 +12,7 @@ import { tryGenerateIceCandidates } from '/imports/utils/safari-webrtc';
 import logger from '/imports/startup/client/logger';
 import VideoService from './service';
 import Users from '/imports/api/users';
+import Auth from '/imports/ui/services/auth';
 
 // Default values and default empty object to be backwards compat with 2.2.
 // FIXME Remove hardcoded defaults 2.3.
@@ -191,7 +192,8 @@ class VideoProvider extends Component {
       }
       const closeOwnProvider = disconnect.find(cameraId => cameraId === findStream.cameraId);
       if (closeOwnProvider) {
-        const viewer = Users.findOne({ role: VIEWER }).fetch();
+        const roles = Users.findOne({ meetingId: Auth.meetingID }, { role: 1 }).fetch();
+        const viewer = roles.some(role => role === VIEWER);
         if (!viewer) {
           // desliga somente quando não existem alunos
           console.log('VOU DESLIGAR O MEU PRÓPRIO VIDEO-PROVIDER CASO NÃO TENHA ALUNOS');
