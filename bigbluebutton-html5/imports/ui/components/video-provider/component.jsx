@@ -16,7 +16,7 @@ import Users from '/imports/api/users';
 // Default values and default empty object to be backwards compat with 2.2.
 // FIXME Remove hardcoded defaults 2.3.
 const WS_CONN_TIMEOUT = Meteor.settings.public.kurento.wsConnectionTimeout || 4000;
-const VIEWER = Meteor.settings.user.role_viewer;
+const VIEWER = Meteor.settings.public.user.role_viewer;
 
 const {
   baseTimeout: CAMERA_SHARE_FAILED_WAIT_TIME = 15000,
@@ -267,16 +267,27 @@ class VideoProvider extends Component {
     VideoService.onBeforeUnload();
   }
 
-  updateThreshold(numberOfPublishers) {
-    const { threshold, profile } = VideoService.getThreshold(numberOfPublishers);
-    if (profile) {
-      const publishers = Object.values(this.webRtcPeers)
-        .filter(peer => peer.isPublisher)
-        .forEach((peer) => {
-          // 0 means no threshold in place. Reapply original one if needed
-          const profileToApply = (threshold === 0) ? peer.originalProfileId : profile;
-          VideoService.applyCameraProfile(peer, profileToApply);
-        });
+  setReconnectionTimeout(cameraId, isLocal) {
+    const peer = this.webRtcPeers[cameraId];
+    const peerHasStarted = peer && peer.started === true;
+    const shouldSetReconnectionTimeout = !this.restartTimeout[cameraId] && !peerHasStarted;
+
+    if (shouldSetReconnectionTimeout) {
+      const newReconnectTimer = this.restartTimer[cameraId] || CAMERA_SHARE_FAILED_WAIT_TIME;
+      this.restartTimer[cameraId] = newReconnectTimer;
+
+      logger.info({
+        logCode: 'video_provider_setup_reconnect',
+        extraInfo: {
+          cameraId,
+          reconnectTimer: newReconnectTimer,
+        },
+      }, `Camera has a new reconnect timer of ${newReconnectTimer} ms for ${cameraId}`);
+
+      this.restartTimeout[cameraId] = setTimeout(
+        this._getWebRTCStartTimeout(cameraId, isLocal),
+        this.restartTimer[cameraId],
+      );
     }
   }
 
@@ -293,6 +304,19 @@ class VideoProvider extends Component {
       .filter(cameraId => !streamsCameraIds.includes(cameraId));
     console.table('Streams conectadas que não estão mais presentes: ', streamsToDisconnect);
     return [streamsToConnect, streamsToDisconnect];
+  }
+
+  updateThreshold(numberOfPublishers) {
+    const { threshold, profile } = VideoService.getThreshold(numberOfPublishers);
+    if (profile) {
+      Object.values(this.webRtcPeers)
+        .filter(peer => peer.isPublisher)
+        .forEach((peer) => {
+          // 0 means no threshold in place. Reapply original one if needed
+          const profileToApply = (threshold === 0) ? peer.originalProfileId : profile;
+          VideoService.applyCameraProfile(peer, profileToApply);
+        });
+    }
   }
 
   connectStreams(streamsToConnect) {
@@ -701,30 +725,6 @@ class VideoProvider extends Component {
         error,
       },
     }, `Camera peer creation failed for ${cameraId} due to ${error.message}`);
-  }
-
-  setReconnectionTimeout(cameraId, isLocal) {
-    const peer = this.webRtcPeers[cameraId];
-    const peerHasStarted = peer && peer.started === true;
-    const shouldSetReconnectionTimeout = !this.restartTimeout[cameraId] && !peerHasStarted;
-
-    if (shouldSetReconnectionTimeout) {
-      const newReconnectTimer = this.restartTimer[cameraId] || CAMERA_SHARE_FAILED_WAIT_TIME;
-      this.restartTimer[cameraId] = newReconnectTimer;
-
-      logger.info({
-        logCode: 'video_provider_setup_reconnect',
-        extraInfo: {
-          cameraId,
-          reconnectTimer: newReconnectTimer,
-        },
-      }, `Camera has a new reconnect timer of ${newReconnectTimer} ms for ${cameraId}`);
-
-      this.restartTimeout[cameraId] = setTimeout(
-        this._getWebRTCStartTimeout(cameraId, isLocal),
-        this.restartTimer[cameraId],
-      );
-    }
   }
 
   _getOnIceCandidateCallback(cameraId, isLocal) {
