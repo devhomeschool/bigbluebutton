@@ -168,9 +168,9 @@ class VideoService {
 
     // Check if the target (cameraId) stream exists in the remote collection.
     // If it does, means it was successfully shared. So do the full stop procedure.
-    if (hasTargetStream) {
-      this.sendUserUnshareWebcam(cameraId);
-    }
+    // if (hasTargetStream) {
+    //   this.sendUserUnshareWebcam(cameraId);
+    // }
 
     if (!hasOtherStream) {
       // There's no other remote stream, meaning (OR)
