@@ -192,7 +192,7 @@ class VideoProvider extends Component {
       }
       const closeOwnProvider = disconnect.find(cameraId => cameraId === findStream.cameraId);
       if (closeOwnProvider) {
-        const roles = Users.findOne({ meetingId: Auth.meetingID }, { role: 1 }).fetch();
+        const roles = Users.find({ meetingId: Auth.meetingID }, { role: 1 }).fetch();
         const viewer = roles.some(role => role === VIEWER);
         if (!viewer) {
           // desliga somente quando não existem alunos
