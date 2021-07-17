@@ -177,14 +177,12 @@ class VideoProvider extends Component {
       .getStreamsToConnectAndDisconnect(streams);
     console.table('câmeras para conectar e desconectar no willUnMount', connect, disconnect);
 
-    if (streams.length === 0 || disconnect.length === 0) {
-      console.log('NÃO HÁ NENHUMA STREAM OU NINGUÉM FOI DESCONECTADO');
+    if (streams.length === 0) {
+      console.log('NÃO HÁ NENHUMA STREAM');
       Object.keys(this.webRtcPeers).forEach((cameraId) => {
         this.stopWebRTCPeer(cameraId);
-        if (streams.length === 0) {
-          this.ws.close();
-        }
       });
+      this.ws.close();
     } else if (!disconnect.length === 0) {
       console.log('HÁ CÂMERAS PARA DESLIGAR');
       this.disconnectStreams(disconnect);
@@ -202,6 +200,9 @@ class VideoProvider extends Component {
           this.ws.close();
         }
       }
+    } else if (findStream && disconnect.length === 0) {
+      console.log('HÁ FINDSTREAM E NENHUMA STREAM A DESCONECTAR');
+      this.stopWebRTCPeer(findStream.cameraId);
     }
     // Close websocket connection to prevent multiple reconnects from happening
     console.log('finalizei o componentWillUnmount');
