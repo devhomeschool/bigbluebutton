@@ -83,7 +83,7 @@ const currentUserEmoji = currentUser => (currentUser ? {
 export default injectIntl(withModalMounter(withTracker(({ intl, baseControls }) => {
   const currentUser = Users.findOne({ userId: Auth.userID }, { fields: { approved: 1, emoji: 1 } });
   const currentMeeting = Meetings.findOne({ meetingId: Auth.meetingID },
-    { fields: { publishedPoll: 1, voiceProp: 1 } });
+    { fields: { publishedPoll: 1, voiceProp: 1, 'durationProps.createdTime': 1 } });
   const { publishedPoll, voiceProp } = currentMeeting;
 
   if (!currentUser.approved) {
@@ -140,20 +140,7 @@ export default injectIntl(withModalMounter(withTracker(({ intl, baseControls }) 
   const amIPresenter = Users
     .findOne({ userId: Auth.userID }, { fields: { presenter: 1 } }).presenter;
 
-  // const loginSort = (a, b) => {
-  //   if (a.loginTime < b.loginTime) return -1;
-  //   if (a.loginTime > b.loginTime) return 1;
-  //   return 0;
-  // };
-
-  // let initialTime = Date.now();
-  // const presentersAndModerators = users.filter(u => u.presenter || u.role === ROLE_MODERATOR);
-  // if (!presentersAndModerators) {
-  //   initialTime = users.sort(loginSort)[0].loginTime;
-  // } else {
-  //   initialTime = presentersAndModerators
-  //     .sort(loginSort)[0].loginTime;
-  // }
+  const initialTime = currentMeeting.durationProps.createdTime;
 
   return {
     captions: CaptionsService.isCaptionsActive() ? <CaptionsContainer /> : null,
@@ -175,7 +162,7 @@ export default injectIntl(withModalMounter(withTracker(({ intl, baseControls }) 
     hasPublishedPoll: publishedPoll,
     startBandwidthMonitoring,
     handleNetworkConnection: () => updateNavigatorConnection(navigator.connection),
-    // initialTime,
+    initialTime,
   };
 })(AppContainer)));
 
