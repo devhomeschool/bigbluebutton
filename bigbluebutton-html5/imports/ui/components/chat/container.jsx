@@ -164,6 +164,8 @@ export default injectIntl(withTracker(({ intl }) => {
 
   const { connected: isMeteorConnected } = Meteor.status();
 
+  const initialTime = ChatService.initialTime();
+
   return {
     chatID,
     chatName,
@@ -177,6 +179,6 @@ export default injectIntl(withTracker(({ intl }) => {
     actions: {
       handleClosePrivateChat: ChatService.closePrivateChat,
     },
-    initialTime: ChatService.initialTime,
+    initialTime,
   };
 })(ChatContainer));

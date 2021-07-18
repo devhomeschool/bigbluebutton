@@ -33,7 +33,8 @@ const CLOSED_CHAT_LIST_KEY = 'closedChatList';
 
 const getUser = userId => Users.findOne({ userId });
 
-const initialTime = Meetings.findOne({ meetingId: Auth.meetingID }, { fields: { 'durationProps.createdTime': 1 } });
+const initialTime = () => Meetings.findOne({ meetingId: Auth.meetingID },
+  { fields: { 'durationProps.createdTime': 1 } });
 
 const getWelcomeProp = () => Meetings.findOne({ meetingId: Auth.meetingID },
   { fields: { welcomeProp: 1 } });
