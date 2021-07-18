@@ -48,7 +48,7 @@ const intlMessages = defineMessages({
 const propTypes = {
   intl: intlShape.isRequired,
   amIModerator: PropTypes.bool,
-  // amIPresenter: PropTypes.bool,
+  amIPresenter: PropTypes.bool,
   record: PropTypes.bool,
   recording: PropTypes.bool,
   mountModal: PropTypes.func.isRequired,
@@ -68,7 +68,7 @@ const propTypes = {
 
 const defaultProps = {
   amIModerator: false,
-  // amIPresenter: false,
+  amIPresenter: false,
   record: false,
   recording: false,
   time: 0,
@@ -113,12 +113,12 @@ class RecordingIndicator extends PureComponent {
       recording,
       mountModal,
       amIModerator,
-      // amIPresenter,
+      amIPresenter,
       intl,
       allowStartStopRecording,
       notify,
       micUser,
-      // classTime,
+      classTime,
     } = this.props;
 
     const { time } = this.state;
@@ -212,11 +212,11 @@ class RecordingIndicator extends PureComponent {
         {record
           ? <span className={styles.presentationTitleSeparator} aria-hidden>|</span>
           : null}
-        {/* {
+        {
           <span>
             {classTime && (amIModerator || amIPresenter)
               && `${classTime.hours} : ${classTime.minutes} : ${classTime.seconds}`}
-          </span> } */}
+          </span> }
         {record
           ? <span className={styles.presentationTitleSeparator} aria-hidden>|</span>
           : null}
