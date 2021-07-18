@@ -164,7 +164,7 @@ export default injectIntl(withTracker(({ intl }) => {
 
   const { connected: isMeteorConnected } = Meteor.status();
 
-  const initialTime = ChatService.initialTime();
+  const { durationProps: { createdTime: initialTime } } = ChatService.initialTime();
 
   return {
     chatID,
