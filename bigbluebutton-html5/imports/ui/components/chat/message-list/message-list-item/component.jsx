@@ -106,6 +106,10 @@ class MessageListItem extends Component {
     const dateTime = new Date(time);
     const elapsedMinutes = Math.floor(((+time - +initialTime) / 1000 / 60) % 60);
     const elapsedHours = Math.floor(((+time - +initialTime) / (1000 * 60 * 60)) % 24);
+    console.log('initialTime: ', initialTime);
+    console.log('chat time: ', time);
+    console.log('elapsedMinutes: ', elapsedMinutes);
+    console.log('elapsedHours', elapsedHours);
 
     const regEx = /<a[^>]+>/i;
 
