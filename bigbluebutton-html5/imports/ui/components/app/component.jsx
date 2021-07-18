@@ -117,6 +117,7 @@ class App extends Component {
 
     this.handleWindowResize = throttle(this.handleWindowResize).bind(this);
     this.shouldAriaHide = this.shouldAriaHide.bind(this);
+    this.formatTime = this.formatTime.bind(this);
   }
 
   componentDidMount() {
@@ -218,7 +219,7 @@ class App extends Component {
           notify(
             intl.formatMessage(
               intlMessages.raisedHand,
-              ({ 0: user.name, 1: user.emojiTime }),
+              ({ 0: user.name, 1: this.formatTime(user.emojiTime) }),
             ),
             'info',
             'hand',
@@ -240,11 +241,11 @@ class App extends Component {
     }
   }
 
-  // formatTime(time) {
-  //   const { initialTime } = this.props;
-  //   const elapsedMinutes = Math.floor((+time - +initialTime) / 1000 / 60);
-  //   return elapsedMinutes;
-  // }
+  formatTime(time) {
+    const { initialTime } = this.props;
+    const elapsedMinutes = Math.floor((+time - +initialTime) / 1000 / 60);
+    return elapsedMinutes;
+  }
 
   handleWindowResize() {
     const { enableResize } = this.state;
