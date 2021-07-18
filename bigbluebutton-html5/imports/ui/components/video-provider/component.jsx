@@ -159,7 +159,7 @@ class VideoProvider extends Component {
   }
 
   componentWillUnmount() {
-    const { findStream, userId } = this.props;
+    const { findStream } = this.props;
     // go find updated streams at mongo collection
     const updatedStreams = VideoService.getVideoStreams();
     console.log('buscando novas streams no willUnMount', updatedStreams);
@@ -181,8 +181,8 @@ class VideoProvider extends Component {
       console.log('NÃO HÁ NENHUMA STREAM');
       Object.keys(this.webRtcPeers).forEach((cameraId) => {
         this.stopWebRTCPeer(cameraId);
+        this.ws.close();
       });
-      this.ws.close();
     } else if (!disconnect.length === 0) {
       console.log('HÁ CÂMERAS PARA DESLIGAR');
       this.disconnectStreams(disconnect);
@@ -200,9 +200,6 @@ class VideoProvider extends Component {
           this.ws.close();
         }
       }
-    } else if (findStream && disconnect.length === 0 && userId === Auth.userID) {
-      console.log('HÁ FINDSTREAM E NENHUMA STREAM A DESCONECTAR');
-      this.stopWebRTCPeer(findStream.cameraId);
     }
     // Close websocket connection to prevent multiple reconnects from happening
     console.log('finalizei o componentWillUnmount');
