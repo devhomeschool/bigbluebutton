@@ -437,6 +437,7 @@ class UserOptions extends PureComponent {
               <DropdownContent
                 className={styles.dropdownContent}
                 placement="left top"
+                style={{ left: '0' }}
               >
                 <DropdownList>
                   {
