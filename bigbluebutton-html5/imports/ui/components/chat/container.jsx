@@ -177,5 +177,6 @@ export default injectIntl(withTracker(({ intl }) => {
     actions: {
       handleClosePrivateChat: ChatService.closePrivateChat,
     },
+    initialTime: ChatService.initialTime,
   };
 })(ChatContainer));
