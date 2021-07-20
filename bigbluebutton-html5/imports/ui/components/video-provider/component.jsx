@@ -183,7 +183,7 @@ class VideoProvider extends Component {
         this.stopWebRTCPeer(cameraId);
         this.ws.close();
       });
-    } else if (!disconnect.length === 0) {
+    } else if (!(disconnect.length === 0)) {
       console.log('HÁ CÂMERAS PARA DESLIGAR');
       this.disconnectStreams(disconnect);
       if (!findStream) {
