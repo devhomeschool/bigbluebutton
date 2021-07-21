@@ -156,8 +156,7 @@ class VideoProvider extends Component {
 
     // If my own camera user changed role, restart webRTC
     console.log('minha role é: ', role);
-    console.log(VIEWER);
-    if (findStream && role === VIEWER) {
+    if (prevProps.role !== role) {
       console.log('minha role mudou de', prevProps.role, 'para ', role);
       this.stopWebRTCPeer(findStream.cameraId, true);
     }
