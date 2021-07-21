@@ -131,6 +131,7 @@ class VideoProvider extends Component {
   }
 
   componentDidMount() {
+    const { streams } = this.props;
     this.ws.onopen = this.onWsOpen;
     this.ws.onclose = this.onWsClose;
 
@@ -140,6 +141,8 @@ class VideoProvider extends Component {
     this.ws.onmessage = this.onWsMessage;
 
     window.addEventListener('beforeunload', this.onBeforeUnload);
+    const [streamsToConnect] = this.getStreamsToConnectAndDisconnect(streams);
+    this.connectStreams(streamsToConnect);
   }
 
   componentDidUpdate(prevProps) {
