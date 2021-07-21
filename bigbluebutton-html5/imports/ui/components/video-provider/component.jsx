@@ -156,17 +156,16 @@ class VideoProvider extends Component {
     const shouldDebounce = VideoService.isPaginationEnabled()
       && prevProps.currentVideoPageIndex !== currentVideoPageIndex;
 
-    // If my own camera user changed role, restart webRTC
+    // If my own camera user changed role or presenter, restart webRTC
     console.log('minha role é: ', role);
-    if (prevProps.role !== role || prevProps.presenter !== presenter) {
+    if (prevProps.role !== role || (prevProps.presenter !== presenter && role === VIEWER)) {
       console.log('minha role mudou de', prevProps.role, 'para', role, 'ou mudei de apresentador', prevProps.presenter, 'para', presenter);
-      this.stopWebRTCPeer(findStream.cameraId);
-      const isLocal = VideoService.isLocalStream(findStream.cameraId);
-      this.createWebRTCPeer(findStream.cameraId, isLocal);
+      this.stopWebRTCPeer(findStream.cameraId, true);
+      return;
     }
 
     if (prevProps.streams !== streams) {
-      console.table(streams);
+      console.log('streams anteriores', prevProps.streams, 'e streams atuais', streams);
       this.updateStreams(streams, shouldDebounce);
     }
 
