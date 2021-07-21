@@ -160,11 +160,13 @@ class VideoProvider extends Component {
     console.log('minha role é: ', role);
     if (prevProps.role !== role || (prevProps.presenter !== presenter && role === VIEWER)) {
       console.log('minha role mudou de', prevProps.role, 'para', role, 'ou mudei de apresentador', prevProps.presenter, 'para', presenter);
-      this.stopWebRTCPeer(findStream.cameraId, true);
+      this.stopWebRTCPeer(findStream.cameraId);
+      const isLocal = VideoService.isLocalStream(findStream.cameraId);
+      this.createWebRTCPeer(findStream.cameraId, isLocal);
       return;
     }
 
-    if (prevProps.streams !== streams) {
+    if (prevProps.streams.length !== streams.length) {
       console.log('streams anteriores', prevProps.streams, 'e streams atuais', streams);
       this.updateStreams(streams, shouldDebounce);
     }
@@ -197,7 +199,8 @@ class VideoProvider extends Component {
       return;
     }
 
-    // Caso exista câmeras e o video-provider seja de aluno, reinicia as câmeras
+    // Caso exista câmeras e o video-provider seja de aluno passando para apresentador ou moderador,
+    // reinicia as câmeras
     if (!findStream) {
       Object.keys(this.webRtcPeers).forEach((cameraId) => {
         this.stopWebRTCPeer(cameraId, true);
