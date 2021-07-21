@@ -15,7 +15,7 @@ import VideoService from './service';
 // Default values and default empty object to be backwards compat with 2.2.
 // FIXME Remove hardcoded defaults 2.3.
 const WS_CONN_TIMEOUT = Meteor.settings.public.kurento.wsConnectionTimeout || 4000;
-
+const VIEWER = Meteor.settings.public.user.role_viewer;
 const {
   baseTimeout: CAMERA_SHARE_FAILED_WAIT_TIME = 15000,
   maxTimeout: MAX_CAMERA_SHARE_FAILED_WAIT_TIME = 60000,
@@ -155,7 +155,9 @@ class VideoProvider extends Component {
       && prevProps.currentVideoPageIndex !== currentVideoPageIndex;
 
     // If my own camera user changed role, restart webRTC
-    if (prevProps.role !== role) {
+    console.log('minha role é: ', role);
+    console.log(VIEWER);
+    if (findStream && role === VIEWER) {
       console.log('minha role mudou de', prevProps.role, 'para ', role);
       this.stopWebRTCPeer(findStream.cameraId, true);
     }
