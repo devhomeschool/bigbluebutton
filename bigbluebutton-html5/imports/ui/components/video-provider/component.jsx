@@ -131,7 +131,6 @@ class VideoProvider extends Component {
   }
 
   componentDidMount() {
-    const { streams } = this.props;
     this.ws.onopen = this.onWsOpen;
     this.ws.onclose = this.onWsClose;
 
@@ -165,8 +164,6 @@ class VideoProvider extends Component {
     ) {
       console.log('minha role mudou de', prevProps.role, 'para', role, 'ou mudei de apresentador', prevProps.presenter, 'para', presenter);
       this.stopWebRTCPeer(findStream.cameraId);
-      const isLocal = VideoService.isLocalStream(findStream.cameraId);
-      this.createWebRTCPeer(findStream.cameraId, isLocal);
       return;
     }
 
