@@ -161,7 +161,7 @@ class VideoProvider extends Component {
       prevProps.role !== role
       || (prevProps.presenter !== presenter && role === VIEWER)
     ) {
-      this.stopWebRTCPeer(findStream.cameraId, true);
+      this.stopWebRTCPeer(findStream.cameraId);
       return;
     }
     console.log('streams anteriores', prevProps.streams, 'e streams atuais', streams);
@@ -218,7 +218,7 @@ class VideoProvider extends Component {
         return;
       }
     }
-    this.stopWebRTCPeer(findStream.cameraId, true);
+    this.stopWebRTCPeer(findStream.cameraId);
     console.log('finalizei o componentWillUnmount');
   }
 
