@@ -87,6 +87,7 @@ const propTypes = {
   totalNumberOfStreams: PropTypes.number.isRequired,
   findStream: PropTypes.shape({}).isRequired,
   userId: PropTypes.string.isRequired,
+  role: PropTypes.string.isRequired,
 };
 
 class VideoProvider extends Component {
@@ -141,11 +142,23 @@ class VideoProvider extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { isUserLocked, streams, currentVideoPageIndex } = this.props;
+    const {
+      isUserLocked,
+      streams,
+      currentVideoPageIndex,
+      findStream,
+      role,
+    } = this.props;
 
     // Only debounce when page changes to avoid unecessary debouncing
     const shouldDebounce = VideoService.isPaginationEnabled()
       && prevProps.currentVideoPageIndex !== currentVideoPageIndex;
+
+    // If my own camera user changed role, restart webRTC
+    if (prevProps.role !== role) {
+      console.log('minha role mudou de', prevProps.role, 'para ', role);
+      this.stopWebRTCPeer(findStream.cameraId, true);
+    }
 
     if (prevProps.streams !== streams) {
       console.table(streams);
@@ -202,6 +215,7 @@ class VideoProvider extends Component {
         return;
       }
     }
+    // Se estiver trocando de moderador para aluno, reinicio minha webRTC
     this.stopWebRTCPeer(findStream.cameraId, true);
     console.log('finalizei o componentWillUnmount');
   }

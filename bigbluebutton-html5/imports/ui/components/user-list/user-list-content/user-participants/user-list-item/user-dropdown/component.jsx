@@ -586,6 +586,7 @@ class UserDropdown extends PureComponent {
               swapLayout={swapLayout}
               userId={user.userId}
               findStream={findStream}
+              role={user.role}
             />
           )
           : user.name.toLowerCase().slice(0, 2) }
