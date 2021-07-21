@@ -147,9 +147,6 @@ class VideoProvider extends Component {
       isUserLocked,
       streams,
       currentVideoPageIndex,
-      findStream,
-      role,
-      presenter,
     } = this.props;
 
     // Only debounce when page changes to avoid unecessary debouncing
@@ -157,17 +154,6 @@ class VideoProvider extends Component {
       && prevProps.currentVideoPageIndex !== currentVideoPageIndex;
 
     // If my own camera user changed role or presenter, restart webRTC
-    console.log('minha role é: ', role);
-    if (
-      prevProps.role !== role
-      || (prevProps.presenter !== presenter && role === VIEWER)
-    ) {
-      console.log('minha role mudou de', prevProps.role, 'para', role, 'ou mudei de apresentador', prevProps.presenter, 'para', presenter);
-      const [connect, disconnect] = this
-        .getStreamsToConnectAndDisconnect(streams);
-      this.connectStreams(connect, true);
-      return;
-    }
 
     console.log('streams anteriores', prevProps.streams, 'e streams atuais', streams);
     this.updateStreams(streams, shouldDebounce);
@@ -223,8 +209,6 @@ class VideoProvider extends Component {
         return;
       }
     }
-    // Se estiver trocando de moderador para aluno, reinicio minha webRTC
-    this.stopWebRTCPeer(findStream.cameraId, true);
     console.log('finalizei o componentWillUnmount');
   }
 
