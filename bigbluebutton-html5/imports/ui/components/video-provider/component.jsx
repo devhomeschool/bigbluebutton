@@ -165,7 +165,6 @@ class VideoProvider extends Component {
       console.log('minha role mudou de', prevProps.role, 'para', role, 'ou mudei de apresentador', prevProps.presenter, 'para', presenter);
       const [connect, disconnect] = this
         .getStreamsToConnectAndDisconnect(streams);
-      this.stopWebRTCPeer(findStream.cameraId);
       this.connectStreams(connect, true);
       return;
     }
