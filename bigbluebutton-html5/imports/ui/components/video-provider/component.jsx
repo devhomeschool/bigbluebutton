@@ -326,7 +326,7 @@ class VideoProvider extends Component {
     const { findStream } = this.props;
     if (findStream) {
       const ownProvider = streamsToConnect.find(cameraId => cameraId === findStream.cameraId);
-      if (ownProvider.length !== 0) {
+      if (ownProvider) {
         console.log('connect próprio', ownProvider);
         const isLocal = VideoService.isLocalStream(ownProvider);
         this.createWebRTCPeer(ownProvider, isLocal);
