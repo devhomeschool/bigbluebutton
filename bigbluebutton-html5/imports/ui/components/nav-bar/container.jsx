@@ -58,10 +58,7 @@ export default withTracker(() => {
   const hasUnreadMessages = checkUnreadMessages();
 
   const checkInitialTime = () => {
-    let initialTime = Date.now();
-    if (meetingObject) {
-      initialTime = meetingObject.durationProps.createdTime;
-    }
+    const initialTime = meetingObject.durationProps.createdTime;
     return initialTime;
   };
 
