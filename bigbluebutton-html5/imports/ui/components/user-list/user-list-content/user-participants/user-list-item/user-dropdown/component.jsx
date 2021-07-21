@@ -587,6 +587,7 @@ class UserDropdown extends PureComponent {
               userId={user.userId}
               findStream={findStream}
               role={user.role}
+              presenter={user.presenter}
             />
           )
           : user.name.toLowerCase().slice(0, 2) }
