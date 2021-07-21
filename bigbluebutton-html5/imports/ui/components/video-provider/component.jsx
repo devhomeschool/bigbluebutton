@@ -163,7 +163,10 @@ class VideoProvider extends Component {
       || (prevProps.presenter !== presenter && role === VIEWER)
     ) {
       console.log('minha role mudou de', prevProps.role, 'para', role, 'ou mudei de apresentador', prevProps.presenter, 'para', presenter);
+      const [connect, disconnect] = this
+        .getStreamsToConnectAndDisconnect(streams);
       this.stopWebRTCPeer(findStream.cameraId);
+      this.connectStreams(connect, true);
       return;
     }
 
@@ -342,9 +345,9 @@ class VideoProvider extends Component {
     }
   }
 
-  connectStreams(streamsToConnect) {
+  connectStreams(streamsToConnect, all) {
     const { findStream } = this.props;
-    if (findStream) {
+    if (findStream && !all) {
       const ownProvider = streamsToConnect.find(cameraId => cameraId === findStream.cameraId);
       if (ownProvider) {
         console.log('connect próprio', ownProvider);
