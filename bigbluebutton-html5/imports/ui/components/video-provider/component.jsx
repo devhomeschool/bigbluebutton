@@ -164,7 +164,7 @@ class VideoProvider extends Component {
       return;
     }
 
-    if (prevProps.streams !== streams) {
+    if (prevProps.streams.length !== streams.length) {
       console.log('streams anteriores', prevProps.streams, 'e streams atuais', streams);
       this.updateStreams(streams, shouldDebounce);
     }
