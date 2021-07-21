@@ -141,8 +141,6 @@ class VideoProvider extends Component {
     this.ws.onmessage = this.onWsMessage;
 
     window.addEventListener('beforeunload', this.onBeforeUnload);
-    const [streamsToConnect] = this.getStreamsToConnectAndDisconnect(streams);
-    this.connectStreams(streamsToConnect);
   }
 
   componentDidUpdate(prevProps) {
@@ -161,7 +159,10 @@ class VideoProvider extends Component {
 
     // If my own camera user changed role or presenter, restart webRTC
     console.log('minha role é: ', role);
-    if (prevProps.role !== role || (prevProps.presenter !== presenter && role === VIEWER)) {
+    if (
+      prevProps.role !== role
+      || (prevProps.presenter !== presenter && role === VIEWER)
+    ) {
       console.log('minha role mudou de', prevProps.role, 'para', role, 'ou mudei de apresentador', prevProps.presenter, 'para', presenter);
       this.stopWebRTCPeer(findStream.cameraId);
       const isLocal = VideoService.isLocalStream(findStream.cameraId);
@@ -169,10 +170,8 @@ class VideoProvider extends Component {
       return;
     }
 
-    if (prevProps.streams.length !== streams.length) {
-      console.log('streams anteriores', prevProps.streams, 'e streams atuais', streams);
-      this.updateStreams(streams, shouldDebounce);
-    }
+    console.log('streams anteriores', prevProps.streams, 'e streams atuais', streams);
+    this.updateStreams(streams, shouldDebounce);
 
     if (!prevProps.isUserLocked && isUserLocked) VideoService.lockUser();
   }
