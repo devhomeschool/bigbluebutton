@@ -397,6 +397,7 @@ class App extends Component {
     const {
       customStyle, customStyleUrl, openPanel,
     } = this.props;
+    const { enableResize } = this.state;
     return (
       <main className={styles.main}>
         {this.renderActivityCheck()}
