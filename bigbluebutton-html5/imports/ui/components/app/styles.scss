@@ -225,11 +225,11 @@
 }
 
 .hideActions {
-  bottom: -60px;
+  bottom: -160px;
   min-width: 100px;
 }
 
-.hideAction:nth-child(2) {
+.hideActions div {
     flex-direction: column;
 }
 
