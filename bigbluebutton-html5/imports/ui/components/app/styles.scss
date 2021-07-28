@@ -229,10 +229,8 @@
   min-width: 100px;
 }
 
-.hideAction {
-  .actionsbar {
+.hideAction:nth-child(2) {
     flex-direction: column;
-  }
 }
 
 .showActions {
