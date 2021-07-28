@@ -158,10 +158,11 @@ class VideoProvider extends Component {
 
     // If my own camera user changed role or presenter, restart webRTC
     if (
-      prevProps.role !== role
-      || (prevProps.presenter !== presenter && role === VIEWER)
+      (prevProps.role !== role && !presenter
+      || (prevProps.presenter !== presenter && role === VIEWER))
+      && findStream
     ) {
-      this.stopWebRTCPeer(findStream.cameraId);
+      this.stopWebRTCPeer(findStream.cameraId, true);
       return;
     }
     console.log('streams anteriores', prevProps.streams, 'e streams atuais', streams);
@@ -218,7 +219,7 @@ class VideoProvider extends Component {
         return;
       }
     }
-    this.stopWebRTCPeer(findStream.cameraId);
+    this.stopWebRTCPeer(findStream.cameraId, true);
     console.log('finalizei o componentWillUnmount');
   }
 

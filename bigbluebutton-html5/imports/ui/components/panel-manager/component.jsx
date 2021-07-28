@@ -113,7 +113,8 @@ class PanelManager extends PureComponent {
     return (
       <div
         className={styles.userList}
-        style={openPanel !== '' ? { position: 'relative', left: '0', right: '0' } : { position: 'absolute', left: '-240px', right: '100%' }}
+        style={openPanel !== '' ? { position: 'relative', left: '0', right: '0', overflow: !enableResize ? 'scroll' : 'visible' }
+          : { position: 'absolute', left: '-240px', right: '100%' }}
         aria-label={intl.formatMessage(intlMessages.userListLabel)}
         key={enableResize ? null : this.userlistKey}
         aria-hidden={ariaHidden}

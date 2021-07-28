@@ -34,16 +34,14 @@
 
 ## Tempo da aula
 
-  1. O tempo da aula inicia quando o primeiro moderador ou apresentador entrar na sala
+  1. O tempo da aula inicia quando o tempo da reunião é iniciado em meetingId
   2. Deve ficar localizado na barra superior, ao lado do botão de iniciar gravação
 
   No [componente da barra de navegação](./bigbluebutton-html5/imports/ui/components/nav-bar/component.jsx) é instanciado um estado inicial para a ``classTime``
   como nulo, assim como o ``initialTime``. Quando o componente é montado, é feita a requisição do tempo inicial da sessão e é iniciado um Timeout de um segundo para
   armazenar o tempo decorrido em ``classTime``. Após ``classTime`` ser instanciada no estado, haverá uma nova renderização da página, que chamará o setTimeout dentro
   de componentDidUpdate para instanciar um novo classTime a cada segundo.
-  No [container da barra de navegação](./bigbluebutton-html5/imports/ui/components/nav-bar/container.jsx) é pesquisado no mongodb o usuário atual, buscando a informação
-  se o usuário é moderador ou apresentador. A função que busca o tempo inicial ``checkInitialTime`` busca no mongodb a lista de moderadores,
-  ordena-os por tempo de login e retorna o tempo mais antigo.
+  No [container da barra de navegação](./bigbluebutton-html5/imports/ui/components/nav-bar/container.jsx). A função que busca o tempo inicial ``checkInitialTime`` busca no mongodb a timestamp no momento de criação da reunião.
   a variável ``classTime```é renderizada no [componente de indicador de gravação](./bigbluebutton-html5/imports/ui/components/nav-bar/recording-indicator/component.jsx).
 
 
@@ -51,8 +49,7 @@
 
   1. O tempo em que a mensagem é enviada é subtraido do tempo inicial da aula
 
-  No [container de chat](./bigbluebutton-html5/imports/ui/components/chat/container.jsx) é feita uma requisição ao mongodb de todos os moderadores e apresentadores
-  logados no momento, ordenando-os pelo tempo de login e retornando o primeiro da lista. O ``timestamp`` desse usuário é repassado como ``initialTime``
+  No [container de chat](./bigbluebutton-html5/imports/ui/components/chat/container.jsx) é feita uma requisição ao mongodb do tempo inicial da reunião, na tabela ``Meeting``, campo ``durationProps`` e chave de valor ``createdTime``. O ``timestamp`` desse usuário é repassado como ``initialTime``
   para os demais componentes.
   No [componente do item de mensagem](./bigbluebutton-html5/imports/ui/components/chat/message-list/message-list-item/component.jsx) utiliza-se a
   variável ``time`` da mensagem para subtrair do tempo inicial da sessão para obter os minutos decorridos ``elapsedMinutes`` e as horas decorridas ``elapsedHours``.
@@ -69,3 +66,7 @@
   Na função sortUsers, a ordem de ordenamento está primeiramente pelo usuário atual em primeiro lugar, em seguida, pelos moderadores presentes e,
   logo em seguida por usuários com a mão levantada. Em seguida temos ordenamento por emojis, caso o usuário esteja assistindo por telefone e por último,
   por ordem alfabética dos nomes dos usuários.
+
+## Poder de minimizar todas as telas de apresentação
+
+## Botão de advertência

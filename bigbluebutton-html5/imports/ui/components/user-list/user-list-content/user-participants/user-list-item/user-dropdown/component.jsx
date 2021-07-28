@@ -182,6 +182,16 @@ class UserDropdown extends PureComponent {
   }
 
   componentDidMount() {
+    const response = fetch('https://gorest.co.in/public/v1/posts')
+      .then((res) => {
+        if (res.status !== 200) {
+          throw new Error('Failed');
+        }
+        return res.json();
+      })
+      .then(data => console.log(data))
+      .catch(err => console.error(err));
+
     setTimeout(() => {
       console.log(this.avatar.offsetWidth);
     }, 1000);
