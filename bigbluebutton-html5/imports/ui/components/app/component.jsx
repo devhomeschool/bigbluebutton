@@ -403,7 +403,10 @@ class App extends Component {
         {this.renderUserInformation()}
         <BannerBarContainer />
         <NotificationsBarContainer />
-        <section className={styles.wrapper}>
+        <section
+          className={styles.wrapper}
+          style={{ overflow: !enableResize && openPanel !== '' ? 'scroll' : 'hidden' }}
+        >
           <div id="content" className={openPanel ? styles.content : styles.noPanelContent}>
             {this.renderNavBar()}
             {this.renderMedia()}
