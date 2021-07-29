@@ -46,16 +46,18 @@ const UserAvatar = ({
   const [isWarning, setIsWarning] = useState(false);
 
   useEffect(() => {
-    const socket = openSocket("https://bbb-heroku-test.herokuapp.com/");
+    const socket = openSocket("https://bbb-heroku-test.herokuapp.com/", {
+      transports: ["websocket"],
+    });
+    console.log(socket);
+
     socket.on("user", (data) => {
-      setImmediate(() => {
-        console.log("set Immediate ativado!");
-        if (data.action === "warning") {
-          setIsWarning((prevState) => {
-            return !prevState;
-          });
-        }
-      });
+      console.log(data);
+      if (data.action === "warning") {
+        setIsWarning((prevState) => {
+          return !prevState;
+        });
+      }
     });
   }, []);
 
