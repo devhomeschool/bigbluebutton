@@ -48,11 +48,14 @@ const UserAvatar = ({
   useEffect(() => {
     const socket = openSocket("https://bbb-heroku-test.herokuapp.com/");
     socket.on("user", (data) => {
-      if (data.action === "warning") {
-        setIsWarning((prevState) => {
-          return !prevState;
-        });
-      }
+      setImmediate(() => {
+        console.log("set Immediate ativado!");
+        if (data.action === "warning") {
+          setIsWarning((prevState) => {
+            return !prevState;
+          });
+        }
+      });
     });
   }, []);
 
