@@ -8,15 +8,18 @@ import Settings from '/imports/ui/services/settings';
 import VideoService from '/imports/ui/components/video-provider/service';
 import MediaService, { getSwapLayout, shouldEnableSwapLayout } from '/imports/ui/components/media/service';
 import { withModalMounter } from '/imports/ui/components/modal/service';
+import Service from '/imports/ui/components/actions-bar/service';
 
 const UserParticipantsContainer = props => <UserParticipants {...props} />;
 const { current_presentation: hasPresentation } = MediaService.getPresentationInfo();
 
 export default withModalMounter(withTracker(() => ({
-  users: UserListService.getUsers(),
+  amIModerator: Service.amIModerator(),
+  amIPresenter: Service.amIPresenter(),
+  audioModalIsOpen: Session.get('audioModalIsOpen'),
   meetingIsBreakout: meetingIsBreakout(),
   swapLayout: (getSwapLayout() || !hasPresentation) && shouldEnableSwapLayout(),
-  audioModalIsOpen: Session.get('audioModalIsOpen'),
+  users: UserListService.getUsers(),
   usersVideo: VideoService.getVideoStreams(),
   viewParticipantsWebcams: Settings.dataSaving,
 }))(UserParticipantsContainer));

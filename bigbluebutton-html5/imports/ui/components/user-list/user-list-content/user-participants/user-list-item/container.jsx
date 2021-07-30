@@ -5,7 +5,6 @@ import Meetings from '/imports/api/meetings';
 import Auth from '/imports/ui/services/auth';
 import UserListItem from './component';
 import UserListService from '/imports/ui/components/user-list/service';
-import Service from '/imports/ui/components/actions-bar/service';
 
 const UserListItemContainer = props => <UserListItem {...props} />;
 const isMe = intId => intId === Auth.userID;
@@ -36,7 +35,5 @@ export default withTracker(({ user }) => {
     getEmojiList: UserListService.getEmojiList(),
     getEmoji: UserListService.getEmoji(),
     hasPrivateChatBetweenUsers: UserListService.hasPrivateChatBetweenUsers,
-    amIModerator: Service.amIModerator(),
-    amIPresenter: Service.amIPresenter(),
   };
 })(UserListItemContainer);
