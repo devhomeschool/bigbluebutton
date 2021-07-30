@@ -4,13 +4,8 @@ import VideoProvider from './component';
 import VideoService from './service';
 
 const VideoProviderContainer = ({ children, ...props }) => {
-  const { streams, findStream } = props;
-
-  const allCameras = !streams.length ? null
-    : <VideoProvider {...props}>{children}</VideoProvider>;
-
-  return (findStream ? <VideoProvider {...props}>{children}</VideoProvider>
-    : allCameras);
+  const { streams } = props;
+  return (!streams.length ? null : <VideoProvider {...props}>{children}</VideoProvider>);
 };
 
 export default withTracker((props) => {

@@ -20,18 +20,11 @@ const propTypes = {
   swapLayout: PropTypes.bool.isRequired,
   numberOfPages: PropTypes.number.isRequired,
   currentVideoPageIndex: PropTypes.number.isRequired,
-  userId: PropTypes.string,
-  findStream: PropTypes.shape({
-    cameraId: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-  }),
-  amIModerator: PropTypes.bool.isRequired,
-  amIPresenter: PropTypes.bool.isRequired,
+  getUsers: PropTypes.func,
 };
 
 const defaultProps = {
-  userId: null,
-  findStream: null,
+  getUsers: null,
 };
 
 const intlMessages = defineMessages({
@@ -304,43 +297,9 @@ class VideoList extends Component {
       streams,
       onMount,
       swapLayout,
-      findStream,
-      userId,
-      amIModerator,
-      amIPresenter,
     } = this.props;
     const { focusedId } = this.state;
 
-    if (amIModerator || amIPresenter) {
-      return (
-        <div
-          key={findStream.cameraId}
-          className={cx({
-            [styles.videoListItem]: true,
-            [styles.focused]: focusedId === findStream.cameraId && streams.length > 2,
-          })}
-        >
-          <VideoListItemContainer
-            numOfStreams={streams.length}
-            cameraId={findStream.cameraId}
-            userId={userId}
-            name={findStream.name}
-            mirrored={this.cameraIsMirrored(findStream.cameraId)}
-            actions={[{
-              actionName: ACTION_NAME_MIRROR,
-              label: intl.formatMessage(intlMessages.mirrorLabel),
-              description: intl.formatMessage(intlMessages.mirrorDesc),
-              onClick: () => this.mirrorCamera(findStream.cameraId),
-            }]}
-            onMount={(videoRef) => {
-              this.handleCanvasResize();
-              onMount(findStream.cameraId, videoRef);
-            }}
-            swapLayout={swapLayout}
-          />
-        </div>
-      );
-    }
     return (
       streams.map((stream) => {
         const { cameraId, userId: id, name } = stream;
@@ -394,8 +353,8 @@ class VideoList extends Component {
     const {
       streams,
       intl,
-      amIModerator,
-      amIPresenter,
+      getUsers,
+      onMount,
     } = this.props;
     const { optimalGrid, autoplayBlocked } = this.state;
 
@@ -407,42 +366,50 @@ class VideoList extends Component {
       [styles.videoList]: true,
     });
 
+
     return (
-      <div
-        ref={(ref) => {
-          this.canvas = ref;
-        }}
-        className={canvasClassName}
-      >
-        {!streams.length ? null : (
+      getUsers
+        ? getUsers(
+          this.cameraIsMirrored,
+          this.mirrorCamera, intl,
+          intlMessages,
+          ACTION_NAME_MIRROR,
+          onMount,
+          this.handleCanvasResize,
+        ) : (
           <div
             ref={(ref) => {
-              this.grid = ref;
+              this.canvas = ref;
             }}
-            className={videoListClassName}
-            style={amIModerator || amIPresenter ? {
-              width: '100%',
-            } : {
-              width: `${optimalGrid.width}px`,
-              height: `${optimalGrid.height}px`,
-              gridTemplateColumns: `repeat(${optimalGrid.columns}, 1fr)`,
-              gridTemplateRows: `repeat(${optimalGrid.rows}, 1fr)`,
-            }
-            }
+            className={canvasClassName}
           >
-            { amIModerator || amIPresenter ? null : this.renderPreviousPageButton() }
-            {this.renderVideoList()}
-            { amIModerator || amIPresenter ? null : this.renderNextPageButton() }
+            {!streams.length ? null : (
+              <div
+                ref={(ref) => {
+                  this.grid = ref;
+                }}
+                className={videoListClassName}
+                style={{
+                  width: `${optimalGrid.width}px`,
+                  height: `${optimalGrid.height}px`,
+                  gridTemplateColumns: `repeat(${optimalGrid.columns}, 1fr)`,
+                  gridTemplateRows: `repeat(${optimalGrid.rows}, 1fr)`,
+                }}
+              >
+                { this.renderPreviousPageButton() }
+                {this.renderVideoList()}
+                { this.renderNextPageButton() }
+              </div>
+            )}
+            { !autoplayBlocked ? null : (
+              <AutoplayOverlay
+                autoplayBlockedDesc={intl.formatMessage(intlMessages.autoplayBlockedDesc)}
+                autoplayAllowLabel={intl.formatMessage(intlMessages.autoplayAllowLabel)}
+                handleAllowAutoplay={this.handleAllowAutoplay}
+              />
+            )}
           </div>
-        )}
-        { !autoplayBlocked ? null : (
-          <AutoplayOverlay
-            autoplayBlockedDesc={intl.formatMessage(intlMessages.autoplayBlockedDesc)}
-            autoplayAllowLabel={intl.formatMessage(intlMessages.autoplayAllowLabel)}
-            handleAllowAutoplay={this.handleAllowAutoplay}
-          />
-        )}
-      </div>
+        )
     );
   }
 }

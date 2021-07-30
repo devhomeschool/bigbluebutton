@@ -6,6 +6,8 @@ import { styles } from '/imports/ui/components/user-list/user-list-content/style
 import _ from 'lodash';
 import { findDOMNode } from 'react-dom';
 import UserListItemContainer from './user-list-item/container';
+import VideoProviderContainer from '/imports/ui/components/video-provider/container';
+
 
 const propTypes = {
   compact: PropTypes.bool,
@@ -100,7 +102,15 @@ class UserParticipants extends Component {
     return this.refScrollContainer;
   }
 
-  getUsers() {
+  getUsers(
+    cameraIsMirrored,
+    mirrorCamera,
+    intl,
+    intlMessages,
+    ACTION_NAME_MIRROR,
+    onMount,
+    handleCanvasResize,
+  ) {
     const {
       compact,
       setEmojiStatus,
@@ -110,15 +120,9 @@ class UserParticipants extends Component {
       meetingIsBreakout,
       audioModalIsOpen,
       swapLayout,
-      usersVideo,
-      viewParticipantsWebcams,
     } = this.props;
 
     let index = -1;
-    const { streams } = usersVideo;
-    const { viewParticipantsWebcams: viewWebcams } = viewParticipantsWebcams;
-    const showVideo = streams.length > 0 && viewWebcams;
-    const disableVideo = !viewWebcams;
 
     return users.map(u => (
       <CSSTransition
@@ -139,12 +143,16 @@ class UserParticipants extends Component {
               requestUserInformation,
               currentUser,
               meetingIsBreakout,
-              disableVideo,
               audioModalIsOpen,
               swapLayout,
-              showVideo,
-              streams,
             }}
+            cameraIsMirrored={cameraIsMirrored}
+            mirrorCamera={mirrorCamera}
+            intl={intl}
+            intlMessages={intlMessages}
+            ACTION_NAME_MIRROR={ACTION_NAME_MIRROR}
+            onMount={onMount}
+            handleCanvasResize={handleCanvasResize}
             user={u}
             getScrollContainerRef={this.getScrollContainerRef}
           />
@@ -173,6 +181,18 @@ class UserParticipants extends Component {
   }
 
   render() {
+    const {
+      amIModerator,
+      amIPresenter,
+      audioModalIsOpen,
+      usersVideo,
+      viewParticipantsWebcams,
+    } = this.props;
+
+    const { streams } = usersVideo;
+    const { viewParticipantsWebcams: viewWebcams } = viewParticipantsWebcams;
+    const showVideo = streams.length > 0 && viewWebcams;
+    const disableVideo = !viewWebcams;
     return (
       <div className={styles.userListColumn}>
         <div
@@ -182,7 +202,14 @@ class UserParticipants extends Component {
         >
           <div className={styles.list}>
             <TransitionGroup ref={(ref) => { this.refScrollItems = ref; }}>
-              {this.getUsers()}
+              {!disableVideo
+                && !audioModalIsOpen && showVideo && (amIModerator || amIPresenter)
+                ? (
+                  <VideoProviderContainer
+                    {...this.props}
+                    getUsers={this.getUsers}
+                  />
+                ) : this.getUsers()}
             </TransitionGroup>
           </div>
         </div>

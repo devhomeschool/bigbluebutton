@@ -15,7 +15,6 @@ import VideoService from './service';
 // Default values and default empty object to be backwards compat with 2.2.
 // FIXME Remove hardcoded defaults 2.3.
 const WS_CONN_TIMEOUT = Meteor.settings.public.kurento.wsConnectionTimeout || 4000;
-const VIEWER = Meteor.settings.public.user.role_viewer;
 const {
   baseTimeout: CAMERA_SHARE_FAILED_WAIT_TIME = 15000,
   maxTimeout: MAX_CAMERA_SHARE_FAILED_WAIT_TIME = 60000,
@@ -85,10 +84,6 @@ const propTypes = {
   swapLayout: PropTypes.bool.isRequired,
   currentVideoPageIndex: PropTypes.number.isRequired,
   totalNumberOfStreams: PropTypes.number.isRequired,
-  findStream: PropTypes.shape({}).isRequired,
-  userId: PropTypes.string.isRequired,
-  role: PropTypes.string.isRequired,
-  presenter: PropTypes.bool.isRequired,
 };
 
 class VideoProvider extends Component {
@@ -147,24 +142,12 @@ class VideoProvider extends Component {
       isUserLocked,
       streams,
       currentVideoPageIndex,
-      findStream,
-      role,
-      presenter,
     } = this.props;
 
     // Only debounce when page changes to avoid unecessary debouncing
     const shouldDebounce = VideoService.isPaginationEnabled()
       && prevProps.currentVideoPageIndex !== currentVideoPageIndex;
 
-    // If my own camera user changed role or presenter, restart webRTC
-    if (
-      (prevProps.role !== role && !presenter
-      || (prevProps.presenter !== presenter && role === VIEWER))
-      && findStream
-    ) {
-      this.stopWebRTCPeer(findStream.cameraId, true);
-      return;
-    }
     console.log('streams anteriores', prevProps.streams, 'e streams atuais', streams);
     this.updateStreams(streams, shouldDebounce);
 
@@ -172,7 +155,6 @@ class VideoProvider extends Component {
   }
 
   componentWillUnmount() {
-    const { findStream } = this.props;
     // go find updated streams at mongo collection
     const updatedStreams = VideoService.getVideoStreams();
     console.log('buscando novas streams no willUnMount', updatedStreams);
@@ -196,30 +178,6 @@ class VideoProvider extends Component {
       return;
     }
 
-    // Caso exista câmeras e o video-provider seja de aluno passando para apresentador ou moderador,
-    // reinicia as câmeras
-    if (!findStream) {
-      Object.keys(this.webRtcPeers).forEach((cameraId) => {
-        this.stopWebRTCPeer(cameraId, true);
-      });
-      return;
-    }
-
-    const [connect, disconnect] = this
-      .getStreamsToConnectAndDisconnect(streams);
-    console.log('câmeras para conectar e desconectar no willUnMount', connect, disconnect);
-
-    if (disconnect.length !== 0) {
-      console.log('HÁ CÂMERAS PARA DESLIGAR');
-      const closeOwnProvider = disconnect.find(cameraId => cameraId === findStream.cameraId);
-      if (closeOwnProvider) {
-        console.log('VOU DESLIGAR O MEU PRÓPRIO VIDEO-PROVIDER');
-        this.disconnectStreams(disconnect);
-        this.ws.close();
-        return;
-      }
-    }
-    this.stopWebRTCPeer(findStream.cameraId, true);
     console.log('finalizei o componentWillUnmount');
   }
 
@@ -952,20 +910,10 @@ class VideoProvider extends Component {
   }
 
   render() {
-    const {
-      swapLayout,
-      streams,
-      findStream,
-      userId,
-    } = this.props;
-
     return (
       <VideoListContainer
-        streams={streams}
+        {...this.props}
         onMount={this.createVideoTag}
-        swapLayout={swapLayout}
-        findStream={findStream}
-        userId={userId}
       />
     );
   }

@@ -18,7 +18,7 @@ import { Session } from 'meteor/session';
 import { styles } from './styles';
 import UserName from '../user-name/component';
 import UserIcons from '../user-icons/component';
-import VideoProviderContainer from '/imports/ui/components/video-provider/container';
+import VideoListItemContainer from '/imports/ui/components/video-provider/video-list/video-list-item/container';
 
 const messages = defineMessages({
   presenter: {
@@ -541,16 +541,17 @@ class UserDropdown extends PureComponent {
       user,
       voiceUser,
       streams,
-      showVideo,
-      disableVideo,
-      audioModalIsOpen,
       swapLayout,
-      amIModerator,
-      amIPresenter,
       normalizeEmojiName,
       userInBreakout,
       breakoutSequence,
       meetingIsBreakout,
+      cameraIsMirrored,
+      intl,
+      intlMessages,
+      ACTION_NAME_MIRROR,
+      onMount,
+      handleCanvasResize,
     } = this.props;
 
     const { clientType } = user;
@@ -577,6 +578,14 @@ class UserDropdown extends PureComponent {
     const userIcon = isVoiceOnly ? iconVoiceOnlyUser : userEmoji;
     const icons = (userInBreakout && !meetingIsBreakout) ? breakoutSequence : userIcon;
 
+    const isMirrored = cameraIsMirrored(findStream.cameraId);
+    const actions = [{
+      actionName: ACTION_NAME_MIRROR,
+      label: intl.formatMessage(intlMessages.mirrorLabel),
+      description: intl.formatMessage(intlMessages.mirrorDesc),
+      onClick: () => this.mirrorCamera(findStream.cameraId),
+    }];
+
     return (
       <UserAvatar
         moderator={user.role === ROLE_MODERATOR}
@@ -589,15 +598,20 @@ class UserDropdown extends PureComponent {
         color={user.color}
         height={!this.avatar ? 140 : this.avatar.offsetWidth * 0.75}
       >
-        {!disableVideo
-        && !audioModalIsOpen && findStream && showVideo && (amIModerator || amIPresenter)
+        {findStream
           ? (
-            <VideoProviderContainer
+            <VideoListItemContainer
+              numOfStreams={streams.length}
+              cameraId={findStream.cameraId}
+              userId={findStream.userId}
+              name={findStream.name}
+              mirrored={isMirrored}
+              actions={actions}
+              onMount={(videoRef) => {
+                handleCanvasResize();
+                onMount(findStream.cameraId, videoRef);
+              }}
               swapLayout={swapLayout}
-              userId={user.userId}
-              findStream={findStream}
-              role={user.role}
-              presenter={user.presenter}
             />
           )
           : user.name.toLowerCase().slice(0, 2) }
