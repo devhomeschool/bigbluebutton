@@ -578,14 +578,6 @@ class UserDropdown extends PureComponent {
     const userIcon = isVoiceOnly ? iconVoiceOnlyUser : userEmoji;
     const icons = (userInBreakout && !meetingIsBreakout) ? breakoutSequence : userIcon;
 
-    const isMirrored = cameraIsMirrored(findStream.cameraId);
-    const actions = [{
-      actionName: ACTION_NAME_MIRROR,
-      label: intl.formatMessage(intlMessages.mirrorLabel),
-      description: intl.formatMessage(intlMessages.mirrorDesc),
-      onClick: () => this.mirrorCamera(findStream.cameraId),
-    }];
-
     return (
       <UserAvatar
         moderator={user.role === ROLE_MODERATOR}
@@ -605,8 +597,13 @@ class UserDropdown extends PureComponent {
               cameraId={findStream.cameraId}
               userId={findStream.userId}
               name={findStream.name}
-              mirrored={isMirrored}
-              actions={actions}
+              mirrored={cameraIsMirrored(findStream.cameraId)}
+              actions={[{
+                actionName: ACTION_NAME_MIRROR,
+                label: intl.formatMessage(intlMessages.mirrorLabel),
+                description: intl.formatMessage(intlMessages.mirrorDesc),
+                onClick: () => this.mirrorCamera(findStream.cameraId),
+              }]}
               onMount={(videoRef) => {
                 handleCanvasResize();
                 onMount(findStream.cameraId, videoRef);
