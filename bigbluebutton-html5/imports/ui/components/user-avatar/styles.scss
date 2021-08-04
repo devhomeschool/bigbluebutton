@@ -15,8 +15,18 @@
 }
 
 .button {
-  display: absolute;
-  top: -10px;
+  background-color: #e67700;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-bottom: 10px;
+
+  &:hover {
+    transition: all 0.2s ease-in-out;
+    background-color: #d9480f;
+  }
 }
 
 .avatar {
