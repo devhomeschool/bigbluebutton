@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import PropTypes from "prop-types";
 import cx from "classnames";
 import openSocket from "socket.io-client";
@@ -61,7 +61,9 @@ const UserAvatar = ({
     });
   }, []);
 
-  const createWarningSignal = async () => {
+  const createWarningSignal = async (event) => {
+    event.stopPropagation();
+
     const response = await fetch(
       "https://bbb-heroku-test.herokuapp.com/user/status/warning",
       {
@@ -84,46 +86,43 @@ const UserAvatar = ({
   };
 
   return (
-    <div
-      aria-hidden="true"
-      data-test="userAvatar"
-      className={cx(
-        styles.avatar,
-        {
-          [styles.moderator]: moderator,
-          [styles.presenter]: presenter,
-          [styles.muted]: muted,
-          [styles.listenOnly]: listenOnly,
-          [styles.voice]: voice,
-          [styles.noVoice]: noVoice && !listenOnly,
-        },
-        className
-      )}
-      style={
-        isWarning
-          ? { backgroundColor: "#FF0", color: "#FF0" }
-          : {
-              backgroundColor: color,
-              color, // We need the same color on both for the border
-            }
-      }
-    >
-      <Button
-        ghost
-        circle
-        className={styles.button}
-        onClick={createWarningSignal}
-        icon="alert"
-      />
-
+    <Fragment>
+      <button className={styles.button} onClick={createWarningSignal}>
+        !
+      </button>
       <div
-        className={cx({
-          [styles.talking]: talking && !muted,
-        })}
-      />
+        aria-hidden="true"
+        data-test="userAvatar"
+        className={cx(
+          styles.avatar,
+          {
+            [styles.moderator]: moderator,
+            [styles.presenter]: presenter,
+            [styles.muted]: muted,
+            [styles.listenOnly]: listenOnly,
+            [styles.voice]: voice,
+            [styles.noVoice]: noVoice && !listenOnly,
+          },
+          className
+        )}
+        style={
+          isWarning
+            ? { backgroundColor: "#FF0", color: "#FF0" }
+            : {
+                backgroundColor: color,
+                color, // We need the same color on both for the border
+              }
+        }
+      >
+        <div
+          className={cx({
+            [styles.talking]: talking && !muted,
+          })}
+        />
 
-      <div className={styles.content}>{children}</div>
-    </div>
+        <div className={styles.content}>{children}</div>
+      </div>
+    </Fragment>
   );
 };
 
