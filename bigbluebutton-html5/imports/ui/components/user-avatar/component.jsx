@@ -1,8 +1,6 @@
 import React, { useEffect, useState, Fragment } from "react";
 import PropTypes from "prop-types";
 import cx from "classnames";
-import openSocket from "socket.io-client";
-import Button from "/imports/ui/components/button/component";
 
 import { styles } from "./styles";
 
@@ -42,16 +40,12 @@ const UserAvatar = ({
   voice,
   noVoice,
   className,
+  connection,
 }) => {
   const [isWarning, setIsWarning] = useState(false);
 
   useEffect(() => {
-    const socket = openSocket("https://bbb-heroku-test.herokuapp.com/", {
-      transports: ["websocket"],
-    });
-    console.log(socket);
-
-    socket.on("user", (data) => {
+    connection.on("user", (data) => {
       console.log(data);
       if (data.action === "warning") {
         setIsWarning((prevState) => {
@@ -59,7 +53,7 @@ const UserAvatar = ({
         });
       }
     });
-  }, []);
+  }, [connection]);
 
   const createWarningSignal = async (event) => {
     event.stopPropagation();
