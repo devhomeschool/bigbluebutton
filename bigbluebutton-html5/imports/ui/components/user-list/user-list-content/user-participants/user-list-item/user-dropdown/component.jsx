@@ -19,6 +19,7 @@ import { styles } from "./styles";
 import UserName from "../user-name/component";
 import UserIcons from "../user-icons/component";
 import openSocket from "socket.io-client";
+import UserListService from "../../../../service";
 
 const messages = defineMessages({
   presenter: {
@@ -582,6 +583,7 @@ class UserDropdown extends PureComponent {
       breakoutSequence,
       meetingIsBreakout,
       voiceUser,
+      intl,
     } = this.props;
 
     const { clientType } = user;
@@ -596,6 +598,8 @@ class UserDropdown extends PureComponent {
 
     const iconVoiceOnlyUser = <Icon iconName="audio_on" />;
     const userIcon = isVoiceOnly ? iconVoiceOnlyUser : iconUser;
+    const users = UserListService.getUsers();
+    const setEmojiStatus = UserListService.setEmojiStatus;
 
     return (
       <UserAvatar
@@ -608,6 +612,10 @@ class UserDropdown extends PureComponent {
         noVoice={!voiceUser.isVoiceUser}
         color={user.color}
         connection={this.state.connection}
+        users={users}
+        setEmojiStatus={setEmojiStatus}
+        meetingIsBreakout={meetingIsBreakout}
+        intl={intl}
       >
         {userInBreakout && !meetingIsBreakout ? breakoutSequence : userIcon}
       </UserAvatar>
