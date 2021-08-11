@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent, Fragment } from "react";
 import { defineMessages } from "react-intl";
 import PropTypes from "prop-types";
 import { findDOMNode } from "react-dom";
@@ -19,7 +19,6 @@ import { styles } from "./styles";
 import UserName from "../user-name/component";
 import UserIcons from "../user-icons/component";
 import openSocket from "socket.io-client";
-import UserListService from "../../../../service";
 
 const messages = defineMessages({
   presenter: {
@@ -583,7 +582,6 @@ class UserDropdown extends PureComponent {
       breakoutSequence,
       meetingIsBreakout,
       voiceUser,
-      intl,
     } = this.props;
 
     const { clientType } = user;
@@ -598,8 +596,6 @@ class UserDropdown extends PureComponent {
 
     const iconVoiceOnlyUser = <Icon iconName="audio_on" />;
     const userIcon = isVoiceOnly ? iconVoiceOnlyUser : iconUser;
-    const users = UserListService.getUsers();
-    const setEmojiStatus = UserListService.setEmojiStatus;
 
     return (
       <UserAvatar
@@ -612,11 +608,6 @@ class UserDropdown extends PureComponent {
         noVoice={!voiceUser.isVoiceUser}
         color={user.color}
         connection={this.state.connection}
-        users={users}
-        setEmojiStatus={setEmojiStatus}
-        meetingIsBreakout={meetingIsBreakout}
-        intl={intl}
-        actions={user.role === ROLE_MODERATOR}
       >
         {userInBreakout && !meetingIsBreakout ? breakoutSequence : userIcon}
       </UserAvatar>
@@ -691,39 +682,44 @@ class UserDropdown extends PureComponent {
     if (!actions.length) return contents;
 
     return (
-      <Dropdown
-        ref={(ref) => {
-          this.dropdown = ref;
-        }}
-        keepOpen={isActionsOpen || showNestedOptions}
-        onShow={this.onActionsShow}
-        onHide={this.onActionsHide}
-        className={userItemContentsStyle}
-        autoFocus={false}
-        aria-haspopup="true"
-        aria-live="assertive"
-        aria-relevant="additions"
-      >
-        <DropdownTrigger>{contents}</DropdownTrigger>
-        <DropdownContent
-          style={{
-            visibility: dropdownVisible ? "visible" : "hidden",
-            [dropdownDirection]: `${dropdownOffset}px`,
+      <Fragment>
+        {contents}
+        <Dropdown
+          ref={(ref) => {
+            this.dropdown = ref;
           }}
-          className={styles.dropdownContent}
-          placement={`right ${dropdownDirection}`}
+          keepOpen={isActionsOpen || showNestedOptions}
+          onShow={this.onActionsShow}
+          onHide={this.onActionsHide}
+          className={userItemContentsStyle}
+          autoFocus={false}
+          aria-haspopup="true"
+          aria-live="assertive"
+          aria-relevant="additions"
         >
-          <DropdownList
-            ref={(ref) => {
-              this.list = ref;
+          <DropdownTrigger>
+            <button>OPTIONS</button>
+          </DropdownTrigger>
+          <DropdownContent
+            style={{
+              visibility: dropdownVisible ? "visible" : "hidden",
+              [dropdownDirection]: `${dropdownOffset}px`,
             }}
-            getDropdownMenuParent={this.getDropdownMenuParent}
-            onActionsHide={this.onActionsHide}
+            className={styles.dropdownContent}
+            placement={`right ${dropdownDirection}`}
           >
-            {actions}
-          </DropdownList>
-        </DropdownContent>
-      </Dropdown>
+            <DropdownList
+              ref={(ref) => {
+                this.list = ref;
+              }}
+              getDropdownMenuParent={this.getDropdownMenuParent}
+              onActionsHide={this.onActionsHide}
+            >
+              {actions}
+            </DropdownList>
+          </DropdownContent>
+        </Dropdown>
+      </Fragment>
     );
   }
 }
