@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { defineMessages, injectIntl } from "react-intl";
 import _ from "lodash";
@@ -198,7 +198,7 @@ class UserOptions extends PureComponent {
     mountModal(<CaptionsWriterMenu />);
   }
 
-  renderMenuItems(actions) {
+  renderMenuItems() {
     const {
       intl,
       isMeetingMuted,
@@ -311,97 +311,43 @@ class UserOptions extends PureComponent {
       ) : null,
     ]);
 
-    this.actionItems = _.compact([
-      isMeteorConnected ? (
-        <Button
-          key={this.clearStatusId}
-          icon="clear_status"
-          label={intl.formatMessage(intlMessages.clearAllLabel)}
-          description={intl.formatMessage(intlMessages.clearAllDesc)}
-          onClick={toggleStatus}
-          ghost
-          circle
-          hideLabel
-          className={styles.actionsButton}
-        />
-      ) : null,
-      !meetingIsBreakout && isMeteorConnected ? (
-        <Button
-          key={this.muteAllId}
-          icon={isMeetingMuted ? "unmute" : "mute"}
-          label={intl.formatMessage(
-            intlMessages[isMeetingMuted ? "unmuteAllLabel" : "muteAllLabel"]
-          )}
-          description={intl.formatMessage(
-            intlMessages[isMeetingMuted ? "unmuteAllDesc" : "muteAllDesc"]
-          )}
-          onClick={toggleMuteAllUsers}
-          ghost
-          circle
-          hideLabel
-          className={styles.actionsButton}
-        />
-      ) : null,
-      !meetingIsBreakout && !isMeetingMuted && isMeteorConnected ? (
-        <Button
-          key={this.muteId}
-          icon="mute"
-          label={intl.formatMessage(intlMessages.muteAllExceptPresenterLabel)}
-          description={intl.formatMessage(
-            intlMessages.muteAllExceptPresenterDesc
-          )}
-          onClick={toggleMuteAllUsersExceptPresenter}
-          ghost
-          circle
-          hideLabel
-          className={styles.actionsButton}
-        />
-      ) : null,
-    ]);
-
-    return actions ? this.actionItems : this.menuItems;
+    return this.menuItems;
   }
 
   render() {
     const { isUserOptionsOpen } = this.state;
-    const { intl, actions } = this.props;
+    const { intl } = this.props;
 
     return (
-      <Fragment>
-        {actions ? (
-          this.renderMenuItems(actions)
-        ) : (
-          <Dropdown
-            ref={(ref) => {
-              this.dropdown = ref;
-            }}
-            autoFocus={false}
-            isOpen={isUserOptionsOpen}
-            onShow={this.onActionsShow}
-            onHide={this.onActionsHide}
-            className={styles.dropdown}
-          >
-            <DropdownTrigger tabIndex={0}>
-              <Button
-                label={intl.formatMessage(intlMessages.optionsLabel)}
-                icon="settings"
-                ghost
-                color="primary"
-                hideLabel
-                className={styles.optionsButton}
-                size="sm"
-                onClick={() => null}
-              />
-            </DropdownTrigger>
-            <DropdownContent
-              className={styles.dropdownContent}
-              placement="right top"
-            >
-              <DropdownList>{this.renderMenuItems()}</DropdownList>
-            </DropdownContent>
-          </Dropdown>
-        )}
-      </Fragment>
+      <Dropdown
+        ref={(ref) => {
+          this.dropdown = ref;
+        }}
+        autoFocus={false}
+        isOpen={isUserOptionsOpen}
+        onShow={this.onActionsShow}
+        onHide={this.onActionsHide}
+        className={styles.dropdown}
+      >
+        <DropdownTrigger tabIndex={0}>
+          <Button
+            label={intl.formatMessage(intlMessages.optionsLabel)}
+            icon="settings"
+            ghost
+            color="primary"
+            hideLabel
+            className={styles.optionsButton}
+            size="sm"
+            onClick={() => null}
+          />
+        </DropdownTrigger>
+        <DropdownContent
+          className={styles.dropdownContent}
+          placement="right top"
+        >
+          <DropdownList>{this.renderMenuItems()}</DropdownList>
+        </DropdownContent>
+      </Dropdown>
     );
   }
 }

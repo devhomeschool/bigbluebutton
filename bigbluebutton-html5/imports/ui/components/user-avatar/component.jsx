@@ -1,7 +1,6 @@
 import React, { useEffect, useState, Fragment } from "react";
 import PropTypes from "prop-types";
 import cx from "classnames";
-import UserOptionsContainer from "../user-list/user-list-content/user-participants/user-options/container";
 
 import { styles } from "./styles";
 
@@ -42,11 +41,6 @@ const UserAvatar = ({
   noVoice,
   className,
   connection,
-  users,
-  setEmojiStatus,
-  meetingIsBreakout,
-  intl,
-  actions,
 }) => {
   const [isWarning, setIsWarning] = useState(false);
 
@@ -87,22 +81,9 @@ const UserAvatar = ({
 
   return (
     <Fragment>
-      {moderator && (
-        <div className={styles.actions}>
-          <button className={styles.button} onClick={createWarningSignal}>
-            !
-          </button>
-          <UserOptionsContainer
-            {...{
-              users,
-              setEmojiStatus,
-              meetingIsBreakout,
-              intl,
-              actions,
-            }}
-          />
-        </div>
-      )}
+      <button className={styles.button} onClick={createWarningSignal}>
+        !
+      </button>
 
       <div
         aria-hidden="true"
