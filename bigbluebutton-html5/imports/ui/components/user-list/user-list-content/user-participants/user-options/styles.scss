@@ -1,9 +1,9 @@
 @import "/imports/ui/stylesheets/variables/_all";
 
 :root {
-  --user-manage-menu-top : -0.5rem;
-  --user-manage-menu-right : -0.75rem;
-  --user-manage-menu-width : 12rem;
+  --user-manage-menu-top: -0.5rem;
+  --user-manage-menu-right: -0.75rem;
+  --user-manage-menu-width: 12rem;
 }
 
 .dropdown {
@@ -33,7 +33,7 @@
   }
 }
 
-.optionsButton{
+.optionsButton {
   border-radius: 50%;
   display: block;
   padding: 0;
@@ -51,3 +51,20 @@
   }
 }
 
+.actionsButton {
+  margin: 0;
+
+  span {
+    border: none;
+    box-shadow: none;
+  }
+
+  &:hover,
+  &:focus {
+    span {
+      background-color: transparent !important;
+      color: var(--color-white) !important;
+      opacity: 0.75;
+    }
+  }
+}
