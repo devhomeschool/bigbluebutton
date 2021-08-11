@@ -616,6 +616,7 @@ class UserDropdown extends PureComponent {
         setEmojiStatus={setEmojiStatus}
         meetingIsBreakout={meetingIsBreakout}
         intl={intl}
+        actions={user.role === ROLE_MODERATOR}
       >
         {userInBreakout && !meetingIsBreakout ? breakoutSequence : userIcon}
       </UserAvatar>

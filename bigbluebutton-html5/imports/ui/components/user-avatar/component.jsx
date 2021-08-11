@@ -46,6 +46,7 @@ const UserAvatar = ({
   setEmojiStatus,
   meetingIsBreakout,
   intl,
+  actions,
 }) => {
   const [isWarning, setIsWarning] = useState(false);
 
