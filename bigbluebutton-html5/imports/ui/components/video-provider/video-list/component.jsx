@@ -25,8 +25,8 @@ const propTypes = {
     cameraId: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   }),
-  amIModerator: PropTypes.bool.isRequired,
-  amIPresenter: PropTypes.bool.isRequired,
+  // amIModerator: PropTypes.bool.isRequired,
+  // amIPresenter: PropTypes.bool.isRequired,
 };
 
 const defaultProps = {
@@ -306,12 +306,12 @@ class VideoList extends Component {
       swapLayout,
       findStream,
       userId,
-      amIModerator,
-      amIPresenter,
+      // amIModerator,
+      // amIPresenter,
     } = this.props;
     const { focusedId } = this.state;
 
-    if (amIModerator || amIPresenter) {
+    if (findStream) {
       return (
         <div
           key={findStream.cameraId}
@@ -394,8 +394,9 @@ class VideoList extends Component {
     const {
       streams,
       intl,
-      amIModerator,
-      amIPresenter,
+      findStream,
+      // amIModerator,
+      // amIPresenter,
     } = this.props;
     const { optimalGrid, autoplayBlocked } = this.state;
 
@@ -420,7 +421,7 @@ class VideoList extends Component {
               this.grid = ref;
             }}
             className={videoListClassName}
-            style={amIModerator || amIPresenter ? {
+            style={findStream ? {
               width: '100%',
             } : {
               width: `${optimalGrid.width}px`,
@@ -430,9 +431,9 @@ class VideoList extends Component {
             }
             }
           >
-            { amIModerator || amIPresenter ? null : this.renderPreviousPageButton() }
+            {/* { amIModerator || amIPresenter ? null : this.renderPreviousPageButton() } */}
             {this.renderVideoList()}
-            { amIModerator || amIPresenter ? null : this.renderNextPageButton() }
+            {/* { amIModerator || amIPresenter ? null : this.renderNextPageButton() } */}
           </div>
         )}
         { !autoplayBlocked ? null : (
