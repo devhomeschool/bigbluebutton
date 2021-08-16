@@ -545,8 +545,8 @@ class UserDropdown extends PureComponent {
       disableVideo,
       audioModalIsOpen,
       swapLayout,
-      amIModerator,
-      amIPresenter,
+      // amIModerator,
+      // amIPresenter,
       normalizeEmojiName,
       userInBreakout,
       breakoutSequence,
@@ -590,7 +590,7 @@ class UserDropdown extends PureComponent {
         height={!this.avatar ? 140 : this.avatar.offsetWidth * 0.75}
       >
         {!disableVideo
-        && !audioModalIsOpen && findStream && showVideo && (amIModerator || amIPresenter)
+        && !audioModalIsOpen && findStream && showVideo
           ? (
             <VideoProviderContainer
               swapLayout={swapLayout}
