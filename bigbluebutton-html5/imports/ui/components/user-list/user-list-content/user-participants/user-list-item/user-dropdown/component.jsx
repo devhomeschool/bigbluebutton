@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment } from "react";
+import React, { PureComponent } from "react";
 import { defineMessages } from "react-intl";
 import PropTypes from "prop-types";
 import { findDOMNode } from "react-dom";
@@ -628,11 +628,10 @@ class UserDropdown extends PureComponent {
 
     const actions = this.getUsersActions();
 
-    const userItemContentsStyle = {};
+    const userBtnOptionStyle = {};
 
-    userItemContentsStyle[styles.dropdown] = true;
-    userItemContentsStyle[styles.userListItem] = !isActionsOpen;
-    userItemContentsStyle[styles.usertListItemWithMenu] = isActionsOpen;
+    userBtnOptionStyle[styles.buttonOptions] = true;
+    userBtnOptionStyle[styles.buttonOptionsOpen] = isActionsOpen;
 
     const you = isMe(user.userId) ? intl.formatMessage(messages.you) : "";
 
@@ -682,7 +681,7 @@ class UserDropdown extends PureComponent {
     if (!actions.length) return contents;
 
     return (
-      <Fragment>
+      <div className={styles.listItemContainer}>
         {contents}
         <Dropdown
           ref={(ref) => {
@@ -691,14 +690,14 @@ class UserDropdown extends PureComponent {
           keepOpen={isActionsOpen || showNestedOptions}
           onShow={this.onActionsShow}
           onHide={this.onActionsHide}
-          className={userItemContentsStyle}
+          className={styles.dropdown}
           autoFocus={false}
           aria-haspopup="true"
           aria-live="assertive"
           aria-relevant="additions"
         >
           <DropdownTrigger>
-            <button>OPTIONS</button>
+            <button className={userBtnOptionStyle}>Opções</button>
           </DropdownTrigger>
           <DropdownContent
             style={{
@@ -719,7 +718,7 @@ class UserDropdown extends PureComponent {
             </DropdownList>
           </DropdownContent>
         </Dropdown>
-      </Fragment>
+      </div>
     );
   }
 }

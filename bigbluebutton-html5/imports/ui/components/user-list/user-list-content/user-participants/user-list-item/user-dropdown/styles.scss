@@ -1,7 +1,7 @@
 @import "/imports/ui/components/user-list/styles.scss";
 @import "/imports/ui/stylesheets/variables/_all";
-@import '/imports/ui/stylesheets/mixins/_indicators';
-@import '/imports/ui/stylesheets/mixins/focus';
+@import "/imports/ui/stylesheets/mixins/_indicators";
+@import "/imports/ui/stylesheets/mixins/focus";
 @import "/imports/ui/components/modal/simple/styles";
 
 :root {
@@ -37,7 +37,7 @@
 .leaveActive {
   opacity: 0;
   max-height: 0rem;
-  
+
   :global(.animationsEnabled) & {
     transition: all 500ms;
   }
@@ -86,21 +86,8 @@
 
 .active {
   background-color: var(--list-item-bg-hover);
-  box-shadow: inset 0 0 0 var(--border-size) var(--item-focus-border), inset 1px 0 0 1px var(--item-focus-border);
-}
-
-.usertListItemWithMenu {
-  @include highContrastOutline();
-  outline-style: solid;
-  background-color: var(--list-item-bg-hover);
-  box-shadow: inset 0 0 0 var(--border-size) var(--item-focus-border), inset 1px 0 0 1px var(--item-focus-border);
-  border-top-left-radius: var(--sm-padding-y);
-  border-bottom-left-radius: var(--sm-padding-y);
-
-  &:focus {
-    outline-style: solid;
-    outline-color: transparent !important;
-  }
+  box-shadow: inset 0 0 0 var(--border-size) var(--item-focus-border),
+    inset 1px 0 0 1px var(--item-focus-border);
 }
 
 .userListItem {
@@ -126,7 +113,8 @@
 }
 
 .dropdown {
-  position: static;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .dropdownContent {
@@ -135,6 +123,30 @@
   min-width: 10vw;
   max-width: 100%;
   overflow: visible;
+}
+
+.buttonOptions {
+  font-size: 12px;
+  background-color: #1864ab;
+  color: #fff;
+  border: 0;
+  border-radius: 50px;
+  padding: 6px 14px;
+  cursor: pointer;
+
+  &:hover {
+    transition: all 0.2s ease-in-out;
+    background-color: #339af0;
+  }
+}
+
+.buttonOptionsOpen {
+  background-color: #339af0;
+}
+
+.listItemContainer {
+  display: flex;
+  flex-direction: column;
 }
 
 .emojiSelected {
