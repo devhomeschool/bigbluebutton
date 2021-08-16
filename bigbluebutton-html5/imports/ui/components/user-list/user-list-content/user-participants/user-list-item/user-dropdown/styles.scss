@@ -113,8 +113,7 @@
 }
 
 .dropdown {
-  display: flex;
-  justify-content: flex-end;
+  position: static;
 }
 
 .dropdownContent {
@@ -142,11 +141,6 @@
 
 .buttonOptionsOpen {
   background-color: #339af0;
-}
-
-.listItemContainer {
-  display: flex;
-  flex-direction: column;
 }
 
 .emojiSelected {
