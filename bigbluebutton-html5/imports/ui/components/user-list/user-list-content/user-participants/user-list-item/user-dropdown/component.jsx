@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent, Fragment } from "react";
 import { defineMessages } from "react-intl";
 import PropTypes from "prop-types";
 import { findDOMNode } from "react-dom";
@@ -681,7 +681,7 @@ class UserDropdown extends PureComponent {
     if (!actions.length) return contents;
 
     return (
-      <div className={styles.listItemContainer}>
+      <Fragment>
         {contents}
         <Dropdown
           ref={(ref) => {
@@ -718,7 +718,7 @@ class UserDropdown extends PureComponent {
             </DropdownList>
           </DropdownContent>
         </Dropdown>
-      </div>
+      </Fragment>
     );
   }
 }
