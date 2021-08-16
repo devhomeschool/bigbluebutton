@@ -15,7 +15,7 @@ import VideoService from './service';
 // Default values and default empty object to be backwards compat with 2.2.
 // FIXME Remove hardcoded defaults 2.3.
 const WS_CONN_TIMEOUT = Meteor.settings.public.kurento.wsConnectionTimeout || 4000;
-const VIEWER = Meteor.settings.public.user.role_viewer;
+// const VIEWER = Meteor.settings.public.user.role_viewer;
 const {
   baseTimeout: CAMERA_SHARE_FAILED_WAIT_TIME = 15000,
   maxTimeout: MAX_CAMERA_SHARE_FAILED_WAIT_TIME = 60000,
@@ -87,17 +87,17 @@ const propTypes = {
   totalNumberOfStreams: PropTypes.number.isRequired,
   findStream: PropTypes.shape({}).isRequired,
   userId: PropTypes.string.isRequired,
-  role: PropTypes.string.isRequired,
-  presenter: PropTypes.bool.isRequired,
+  // role: PropTypes.string.isRequired,
+  // presenter: PropTypes.bool.isRequired,
 };
 
 class VideoProvider extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      socketOpen: false,
-    };
+    // this.state = {
+    //   socketOpen: false,
+    // };
 
     this.info = VideoService.getInfo();
 
@@ -147,9 +147,9 @@ class VideoProvider extends Component {
       isUserLocked,
       streams,
       currentVideoPageIndex,
-      findStream,
-      role,
-      presenter,
+      // findStream,
+      // role,
+      // presenter,
     } = this.props;
 
     // Only debounce when page changes to avoid unecessary debouncing
@@ -157,15 +157,15 @@ class VideoProvider extends Component {
       && prevProps.currentVideoPageIndex !== currentVideoPageIndex;
 
     // If my own camera user changed role or presenter, restart webRTC
-    if (
-      (prevProps.role !== role && !presenter
-      || (prevProps.presenter !== presenter && role === VIEWER))
-      && findStream
-    ) {
-      this.stopWebRTCPeer(findStream.cameraId, true);
-      return;
-    }
-    console.log('streams anteriores', prevProps.streams, 'e streams atuais', streams);
+    // if (
+    //   (prevProps.role !== role && !presenter
+    //   || (prevProps.presenter !== presenter && role === VIEWER))
+    //   && findStream
+    // ) {
+    //   this.stopWebRTCPeer(findStream.cameraId, true);
+    //   return;
+    // }
+    // console.log('streams anteriores', prevProps.streams, 'e streams atuais', streams);
     this.updateStreams(streams, shouldDebounce);
 
     if (!prevProps.isUserLocked && isUserLocked) VideoService.lockUser();
@@ -173,10 +173,10 @@ class VideoProvider extends Component {
 
   componentWillUnmount() {
     const { findStream } = this.props;
-    // go find updated streams at mongo collection
-    const updatedStreams = VideoService.getVideoStreams();
-    console.log('buscando novas streams no willUnMount', updatedStreams);
-    const { streams } = updatedStreams;
+    // // go find updated streams at mongo collection
+    // const updatedStreams = VideoService.getVideoStreams();
+    // console.log('buscando novas streams no willUnMount', updatedStreams);
+    // const { streams } = updatedStreams;
     this.ws.onmessage = null;
     this.ws.onopen = null;
     this.ws.onclose = null;
@@ -187,40 +187,41 @@ class VideoProvider extends Component {
     window.removeEventListener('beforeunload', this.onBeforeUnload);
 
     // Caso todas as câmeras sejam desconectadas do banco de dados, as we
-    if (streams.length === 0) {
-      console.log('NÃO HÁ NENHUMA STREAM');
-      Object.keys(this.webRtcPeers).forEach((cameraId) => {
-        this.stopWebRTCPeer(cameraId);
-        this.ws.close();
-      });
-      return;
-    }
+    // if (streams.length === 0) {
+    //   console.log('NÃO HÁ NENHUMA STREAM');
+    //   Object.keys(this.webRtcPeers).forEach((cameraId) => {
+    //     this.stopWebRTCPeer(cameraId);
+    //     this.ws.close();
+    //   });
+    //   return;
+    // }
 
     // Caso exista câmeras e o video-provider seja de aluno passando para apresentador ou moderador,
     // reinicia as câmeras
-    if (!findStream) {
-      Object.keys(this.webRtcPeers).forEach((cameraId) => {
-        this.stopWebRTCPeer(cameraId, true);
-      });
-      return;
-    }
+    // if (!findStream) {
+    //   Object.keys(this.webRtcPeers).forEach((cameraId) => {
+    //     this.stopWebRTCPeer(cameraId, true);
+    //   });
+    //   return;
+    // }
 
-    const [connect, disconnect] = this
-      .getStreamsToConnectAndDisconnect(streams);
-    console.log('câmeras para conectar e desconectar no willUnMount', connect, disconnect);
+    // const [connect, disconnect] = this
+    //   .getStreamsToConnectAndDisconnect(streams);
+    // console.log('câmeras para conectar e desconectar no willUnMount', connect, disconnect);
 
-    if (disconnect.length !== 0) {
-      console.log('HÁ CÂMERAS PARA DESLIGAR');
-      const closeOwnProvider = disconnect.find(cameraId => cameraId === findStream.cameraId);
-      if (closeOwnProvider) {
-        console.log('VOU DESLIGAR O MEU PRÓPRIO VIDEO-PROVIDER');
-        this.disconnectStreams(disconnect);
-        this.ws.close();
-        return;
-      }
-    }
+    // if (disconnect.length !== 0) {
+    //   console.log('HÁ CÂMERAS PARA DESLIGAR');
+    //   const closeOwnProvider = disconnect.find(cameraId => cameraId === findStream.cameraId);
+    //   if (closeOwnProvider) {
+    //     console.log('VOU DESLIGAR O MEU PRÓPRIO VIDEO-PROVIDER');
+    //     this.disconnectStreams(disconnect);
+    //     this.ws.close();
+    //     return;
+    //   }
+    // }
     this.stopWebRTCPeer(findStream.cameraId, true);
-    console.log('finalizei o componentWillUnmount');
+    this.ws.close();
+    // console.log('finalizei o componentWillUnmount');
   }
 
   onWsMessage(message) {
@@ -265,7 +266,7 @@ class VideoProvider extends Component {
 
     VideoService.exitVideo(userId || null);
 
-    this.setState({ socketOpen: false });
+    // this.setState({ socketOpen: false });
   }
 
   onWsOpen() {
@@ -280,7 +281,7 @@ class VideoProvider extends Component {
 
     this.pingInterval = setInterval(this.ping.bind(this), PING_INTERVAL);
 
-    this.setState({ socketOpen: true });
+    // this.setState({ socketOpen: true });
   }
 
   onBeforeUnload() {
@@ -313,16 +314,16 @@ class VideoProvider extends Component {
 
   getStreamsToConnectAndDisconnect(streams) {
     const streamsCameraIds = streams.map(s => s.cameraId);
-    console.log('Streams presentes:', streamsCameraIds);
+    // console.log('Streams presentes:', streamsCameraIds);
     const streamsConnected = Object.keys(this.webRtcPeers);
-    console.log('Streams conectadas', streamsConnected);
+    // console.log('Streams conectadas', streamsConnected);
 
     const streamsToConnect = streamsCameraIds
       .filter(cameraId => !streamsConnected.includes(cameraId));
-    console.log('Streams presentes que ainda não estão conectadas: ', streamsToConnect);
+    // console.log('Streams presentes que ainda não estão conectadas: ', streamsToConnect);
     const streamsToDisconnect = streamsConnected
       .filter(cameraId => !streamsCameraIds.includes(cameraId));
-    console.log('Streams conectadas que não estão mais presentes: ', streamsToDisconnect);
+    // console.log('Streams conectadas que não estão mais presentes: ', streamsToDisconnect);
     return [streamsToConnect, streamsToDisconnect];
   }
 
@@ -344,13 +345,13 @@ class VideoProvider extends Component {
     if (findStream) {
       const ownProvider = streamsToConnect.find(cameraId => cameraId === findStream.cameraId);
       if (ownProvider) {
-        console.log('connect próprio', ownProvider);
+        // console.log('connect próprio', ownProvider);
         const isLocal = VideoService.isLocalStream(ownProvider);
         this.createWebRTCPeer(ownProvider, isLocal);
       }
     } else {
       streamsToConnect.forEach((cameraId) => {
-        console.log('Há câmeras para conectar: ', cameraId);
+        // console.log('Há câmeras para conectar: ', cameraId);
         const isLocal = VideoService.isLocalStream(cameraId);
         this.createWebRTCPeer(cameraId, isLocal);
       });
@@ -358,7 +359,7 @@ class VideoProvider extends Component {
   }
 
   disconnectStreams(streamsToDisconnect) {
-    console.log('Há câmeras para desconectar: ', streamsToDisconnect);
+    // console.log('Há câmeras para desconectar: ', streamsToDisconnect);
     streamsToDisconnect.forEach(cameraId => this.stopWebRTCPeer(cameraId));
   }
 
@@ -553,10 +554,10 @@ class VideoProvider extends Component {
 
     // Check if the peer is already being processed
     if (this.webRtcPeers[cameraId]) {
-      console.log('câmera já existe', this.webRtcPeers[cameraId]);
+      // console.log('câmera já existe', this.webRtcPeers[cameraId]);
       return;
     }
-    console.log('câmera não existe', cameraId);
+    // console.log('câmera não existe', cameraId);
 
     this.webRtcPeers[cameraId] = {};
 
