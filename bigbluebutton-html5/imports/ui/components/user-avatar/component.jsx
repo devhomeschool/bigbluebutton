@@ -1,6 +1,7 @@
-import React, { useEffect, useState, Fragment } from "react";
+import React, { useEffect, useState, Fragment, useContext } from "react";
 import PropTypes from "prop-types";
 import cx from "classnames";
+import { SocketContext } from "../context/socket-context";
 
 import { styles } from "./styles";
 
@@ -40,20 +41,20 @@ const UserAvatar = ({
   voice,
   noVoice,
   className,
-  connection,
 }) => {
+  const context = useContext(SocketContext);
   const [isWarning, setIsWarning] = useState(false);
 
+  const { socket } = context;
   useEffect(() => {
-    connection.on("user", (data) => {
-      console.log(data);
+    socket.on("user", (data) => {
       if (data.action === "warning") {
         setIsWarning((prevState) => {
           return !prevState;
         });
       }
     });
-  }, [connection]);
+  }, [socket]);
 
   const createWarningSignal = async (event) => {
     event.stopPropagation();
@@ -74,9 +75,6 @@ const UserAvatar = ({
     if (!response.ok) {
       throw new Error("Algo deu errado na chamada da api!");
     }
-
-    const resData = await response.json();
-    console.log(resData.message);
   };
 
   return (
