@@ -604,6 +604,7 @@
     "app.whiteboard.toolbar.tools.line": "Línea",
     "app.whiteboard.toolbar.tools.text": "Texto",
     "app.whiteboard.toolbar.thickness": "Grosor de línea",
+    "app.whiteboard.toolbar.tools.eraser": "Borrador",
     "app.whiteboard.toolbar.thicknessDisabled": "Grosor de línea deshabilitado",
     "app.whiteboard.toolbar.color": "Colores",
     "app.whiteboard.toolbar.colorDisabled": "Colores deshabilitados",
