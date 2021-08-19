@@ -18,7 +18,6 @@ import { Session } from "meteor/session";
 import { styles } from "./styles";
 import UserName from "../user-name/component";
 import UserIcons from "../user-icons/component";
-import openSocket from "socket.io-client";
 
 const messages = defineMessages({
   presenter: {
@@ -154,7 +153,6 @@ class UserDropdown extends PureComponent {
       dropdownDirection: "top",
       dropdownVisible: false,
       showNestedOptions: false,
-      connection: false,
     };
 
     this.handleScroll = this.handleScroll.bind(this);
@@ -167,12 +165,6 @@ class UserDropdown extends PureComponent {
   }
 
   componentWillMount() {
-    const socket = openSocket("https://bbb-heroku-test.herokuapp.com/", {
-      transports: ["websocket"],
-    });
-
-    this.setState({ connection: socket });
-
     this.title = _.uniqueId("dropdown-title-");
     this.seperator = _.uniqueId("action-separator-");
   }
@@ -607,7 +599,6 @@ class UserDropdown extends PureComponent {
         voice={voiceUser.isVoiceUser}
         noVoice={!voiceUser.isVoiceUser}
         color={user.color}
-        connection={this.state.connection}
       >
         {userInBreakout && !meetingIsBreakout ? breakoutSequence : userIcon}
       </UserAvatar>
