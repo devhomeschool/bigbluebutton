@@ -124,6 +124,12 @@
   overflow: visible;
 }
 
+.buttonContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .buttonOptions {
   font-size: 12px;
   background-color: #1864ab;
@@ -141,6 +147,20 @@
 
 .buttonOptionsOpen {
   background-color: #339af0;
+}
+
+.buttonWarning {
+  background-color: #e67700;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+
+  &:hover {
+    transition: all 0.2s ease-in-out;
+    background-color: #d9480f;
+  }
 }
 
 .emojiSelected {
