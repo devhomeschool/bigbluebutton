@@ -18,6 +18,7 @@ import { Session } from "meteor/session";
 import { styles } from "./styles";
 import UserName from "../user-name/component";
 import UserIcons from "../user-icons/component";
+import { SocketContext } from "../../../../../context/socket-context";
 
 const messages = defineMessages({
   presenter: {
@@ -144,6 +145,8 @@ class UserDropdown extends PureComponent {
     return contentOffSetTop + contentOffsetHeight < window.innerHeight;
   }
 
+  static contextType = SocketContext;
+
   constructor(props) {
     super(props);
 
@@ -153,6 +156,7 @@ class UserDropdown extends PureComponent {
       dropdownDirection: "top",
       dropdownVisible: false,
       showNestedOptions: false,
+      isWarning: false,
     };
 
     this.handleScroll = this.handleScroll.bind(this);
@@ -165,6 +169,13 @@ class UserDropdown extends PureComponent {
   }
 
   componentWillMount() {
+    const { socket } = this.context;
+    socket.on("user", (data) => {
+      if (data.action === "warning") {
+        this.setState((prevState) => ({ isWarning: !prevState.isWarning }));
+      }
+    });
+
     this.title = _.uniqueId("dropdown-title-");
     this.seperator = _.uniqueId("action-separator-");
   }
@@ -172,6 +183,25 @@ class UserDropdown extends PureComponent {
   componentDidUpdate() {
     this.checkDropdownDirection();
   }
+
+  createWarningSignal = async () => {
+    const response = await fetch(
+      "https://bbb-heroku-test.herokuapp.com/user/status/warning",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: "String apenas para propositos de teste",
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Algo deu errado na chamada da api!");
+    }
+  };
 
   onActionsShow() {
     Session.set("dropdownOpen", true);
@@ -576,6 +606,8 @@ class UserDropdown extends PureComponent {
       voiceUser,
     } = this.props;
 
+    const { isWarning } = this.state;
+
     const { clientType } = user;
     const isVoiceOnly = clientType === "dial-in-user";
 
@@ -599,6 +631,7 @@ class UserDropdown extends PureComponent {
         voice={voiceUser.isVoiceUser}
         noVoice={!voiceUser.isVoiceUser}
         color={user.color}
+        isWarning={isWarning}
       >
         {userInBreakout && !meetingIsBreakout ? breakoutSequence : userIcon}
       </UserAvatar>
@@ -673,42 +706,51 @@ class UserDropdown extends PureComponent {
 
     return (
       <Fragment>
-        {contents}
-        <Dropdown
-          ref={(ref) => {
-            this.dropdown = ref;
-          }}
-          keepOpen={isActionsOpen || showNestedOptions}
-          onShow={this.onActionsShow}
-          onHide={this.onActionsHide}
-          className={styles.dropdown}
-          autoFocus={false}
-          aria-haspopup="true"
-          aria-live="assertive"
-          aria-relevant="additions"
-        >
-          <DropdownTrigger>
-            <button className={userBtnOptionStyle}>Opções</button>
-          </DropdownTrigger>
-          <DropdownContent
-            style={{
-              visibility: dropdownVisible ? "visible" : "hidden",
-              [dropdownDirection]: `${dropdownOffset}px`,
-            }}
-            className={styles.dropdownContent}
-            placement={`right ${dropdownDirection}`}
+        <div className={styles.buttonContainer}>
+          <button
+            className={styles.buttonWarning}
+            onClick={this.createWarningSignal}
           >
-            <DropdownList
-              ref={(ref) => {
-                this.list = ref;
+            !
+          </button>
+          <Dropdown
+            ref={(ref) => {
+              this.dropdown = ref;
+            }}
+            keepOpen={isActionsOpen || showNestedOptions}
+            onShow={this.onActionsShow}
+            onHide={this.onActionsHide}
+            className={styles.dropdown}
+            autoFocus={false}
+            aria-haspopup="true"
+            aria-live="assertive"
+            aria-relevant="additions"
+          >
+            <DropdownTrigger>
+              <button className={userBtnOptionStyle}>Opções</button>
+            </DropdownTrigger>
+            <DropdownContent
+              style={{
+                visibility: dropdownVisible ? "visible" : "hidden",
+                [dropdownDirection]: `${dropdownOffset}px`,
               }}
-              getDropdownMenuParent={this.getDropdownMenuParent}
-              onActionsHide={this.onActionsHide}
+              className={styles.dropdownContent}
+              placement={`right ${dropdownDirection}`}
             >
-              {actions}
-            </DropdownList>
-          </DropdownContent>
-        </Dropdown>
+              <DropdownList
+                ref={(ref) => {
+                  this.list = ref;
+                }}
+                getDropdownMenuParent={this.getDropdownMenuParent}
+                onActionsHide={this.onActionsHide}
+              >
+                {actions}
+              </DropdownList>
+            </DropdownContent>
+          </Dropdown>
+        </div>
+
+        {contents}
       </Fragment>
     );
   }

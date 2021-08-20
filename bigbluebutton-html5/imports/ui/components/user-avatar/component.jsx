@@ -1,7 +1,6 @@
-import React, { useEffect, useState, Fragment, useContext } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import cx from "classnames";
-import { SocketContext } from "../context/socket-context";
 
 import { styles } from "./styles";
 
@@ -41,81 +40,41 @@ const UserAvatar = ({
   voice,
   noVoice,
   className,
+  isWarning,
 }) => {
-  const context = useContext(SocketContext);
-  const [isWarning, setIsWarning] = useState(false);
-
-  const { socket } = context;
-  useEffect(() => {
-    socket.on("user", (data) => {
-      if (data.action === "warning") {
-        setIsWarning((prevState) => {
-          return !prevState;
-        });
-      }
-    });
-  }, [socket]);
-
-  const createWarningSignal = async (event) => {
-    event.stopPropagation();
-
-    const response = await fetch(
-      "https://bbb-heroku-test.herokuapp.com/user/status/warning",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId: "String apenas para propositos de teste",
-        }),
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Algo deu errado na chamada da api!");
-    }
-  };
-
   return (
-    <Fragment>
-      <button className={styles.button} onClick={createWarningSignal}>
-        !
-      </button>
-
+    <div
+      aria-hidden="true"
+      data-test="userAvatar"
+      className={cx(
+        styles.avatar,
+        {
+          [styles.moderator]: moderator,
+          [styles.presenter]: presenter,
+          [styles.muted]: muted,
+          [styles.listenOnly]: listenOnly,
+          [styles.voice]: voice,
+          [styles.noVoice]: noVoice && !listenOnly,
+        },
+        className
+      )}
+      style={
+        isWarning
+          ? { backgroundColor: "#FF0", color: "#FF0" }
+          : {
+              backgroundColor: color,
+              color, // We need the same color on both for the border
+            }
+      }
+    >
       <div
-        aria-hidden="true"
-        data-test="userAvatar"
-        className={cx(
-          styles.avatar,
-          {
-            [styles.moderator]: moderator,
-            [styles.presenter]: presenter,
-            [styles.muted]: muted,
-            [styles.listenOnly]: listenOnly,
-            [styles.voice]: voice,
-            [styles.noVoice]: noVoice && !listenOnly,
-          },
-          className
-        )}
-        style={
-          isWarning
-            ? { backgroundColor: "#FF0", color: "#FF0" }
-            : {
-                backgroundColor: color,
-                color, // We need the same color on both for the border
-              }
-        }
-      >
-        <div
-          className={cx({
-            [styles.talking]: talking && !muted,
-          })}
-        />
+        className={cx({
+          [styles.talking]: talking && !muted,
+        })}
+      />
 
-        <div className={styles.content}>{children}</div>
-      </div>
-    </Fragment>
+      <div className={styles.content}>{children}</div>
+    </div>
   );
 };
 
