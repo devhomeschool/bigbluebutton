@@ -77,6 +77,8 @@
     "app.userlist.menu.removeConfirmation.desc": "Evitar que este usuario reingrese a la sesión.",
     "app.userList.menu.muteUserAudio.label": "Deshabilitar audio de usuario",
     "app.userList.menu.unmuteUserAudio.label": "Habilitar audio de usuario",
+    "app.userList.menu.giveWhiteboardAccess.label" : "Permitir acceso a la pizarra",
+    "app.userList.menu.removeWhiteboardAccess.label": "Quitar acceso a la pizarra",
     "app.userList.userAriaLabel": "{0} {1} {2} estado {3}",
     "app.userList.menu.promoteUser.label": "Promover a moderador",
     "app.userList.menu.demoteUser.label": "Degradar a espectador",

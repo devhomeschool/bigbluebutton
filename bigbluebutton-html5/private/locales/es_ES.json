@@ -74,6 +74,8 @@
     "app.userList.menu.removeUser.label": "Eliminar usuario",
     "app.userList.menu.muteUserAudio.label": "Silenciar usuario",
     "app.userList.menu.unmuteUserAudio.label": "Activar sonido de usuario",
+    "app.userList.menu.giveWhiteboardAccess.label" : "Permitir acceso a la pizarra",
+    "app.userList.menu.removeWhiteboardAccess.label": "Quitar acceso a la pizarra",
     "app.userList.userAriaLabel": "{0} {1} {2} Estado {3}",
     "app.userList.menu.promoteUser.label": "Promocionar a moderador",
     "app.userList.menu.demoteUser.label": "Devolver participante a observador",

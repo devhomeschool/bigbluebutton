@@ -77,6 +77,8 @@
     "app.userlist.menu.removeConfirmation.desc": "Impedir este utilizador de entrar novamente na sessão.",
     "app.userList.menu.muteUserAudio.label": "Silenciar utilizador",
     "app.userList.menu.unmuteUserAudio.label": "Ativar microfone do utilizador",
+    "app.userList.menu.giveWhiteboardAccess.label" : "Permitir acesso ao quadro branco",
+    "app.userList.menu.removeWhiteboardAccess.label": "Remover acesso ao quadro branco",
     "app.userList.userAriaLabel": "{0} {1} {2}  Estado {3}",
     "app.userList.menu.promoteUser.label": "Promover a moderador",
     "app.userList.menu.demoteUser.label": "Despromover a participante",

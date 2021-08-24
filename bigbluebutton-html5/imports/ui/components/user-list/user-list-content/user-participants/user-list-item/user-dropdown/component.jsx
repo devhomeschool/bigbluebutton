@@ -69,6 +69,14 @@ const messages = defineMessages({
     id: "app.userList.menu.makePresenter.label",
     description: "label to make another user presenter",
   },
+  giveWhiteboardAccess: {
+    id: 'app.userList.menu.giveWhiteboardAccess.label',
+    description: 'label to give user whiteboard access',
+  },
+  removeWhiteboardAccess: {
+    id: 'app.userList.menu.removeWhiteboardAccess.label',
+    description: 'label to remove user whiteboard access',
+  },
   RemoveUserLabel: {
     id: "app.userList.menu.removeUser.label",
     description: "Forcefully remove this user from the meeting",
@@ -293,6 +301,7 @@ class UserDropdown extends PureComponent {
       allowedToDemote,
       allowedToChangeStatus,
       allowedToChangeUserLockStatus,
+      allowedToChangeWhiteboardAccess,
     } = actionPermissions;
 
     const { disablePrivateChat } = lockSettingsProps;
@@ -428,6 +437,17 @@ class UserDropdown extends PureComponent {
           "unmute"
         )
       );
+    }
+
+    if (allowedToChangeWhiteboardAccess && !user.presenter && isMeteorConnected) {
+      const label = user.whiteboardAccess ? intl.formatMessage(messages.removeWhiteboardAccess) : intl.formatMessage(messages.giveWhiteboardAccess);
+
+      actions.push(this.makeDropdownItem(
+        'changeWhiteboardAccess',
+        label,
+        () => WhiteboardService.changeWhiteboardAccess(user.userId, !user.whiteboardAccess),
+        'pen_tool',
+      ));
     }
 
     if (allowedToSetPresenter && isMeteorConnected) {
