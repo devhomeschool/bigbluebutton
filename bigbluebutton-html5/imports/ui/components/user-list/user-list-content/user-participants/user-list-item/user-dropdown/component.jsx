@@ -643,8 +643,16 @@ class UserDropdown extends PureComponent {
   }
 
   render() {
-    const { compact, currentUser, user, intl, isThisMeetingLocked, isMe } =
-      this.props;
+    const {
+      compact,
+      currentUser,
+      user,
+      intl,
+      isThisMeetingLocked,
+      isMe,
+      removeUser,
+      mountModal,
+    } = this.props;
 
     const {
       isActionsOpen,
@@ -717,44 +725,59 @@ class UserDropdown extends PureComponent {
           >
             !
           </button>
-          <Dropdown
-            ref={(ref) => {
-              this.dropdown = ref;
-            }}
-            keepOpen={isActionsOpen || showNestedOptions}
-            onShow={this.onActionsShow}
-            onHide={this.onActionsHide}
-            className={styles.dropdown}
-            autoFocus={false}
-            aria-haspopup="true"
-            aria-live="assertive"
-            aria-relevant="additions"
+          <button
+            className={styles.buttonRemove}
+            onClick={() =>
+              mountModal(
+                <RemoveUserModal
+                  intl={intl}
+                  user={user}
+                  onConfirm={removeUser}
+                />
+              )
+            }
           >
-            <DropdownTrigger>
-              <button className={userBtnOptionStyle}>Opções</button>
-            </DropdownTrigger>
-            <DropdownContent
-              style={{
-                visibility: dropdownVisible ? "visible" : "hidden",
-                [dropdownDirection]: `${dropdownOffset}px`,
-              }}
-              className={styles.dropdownContent}
-              placement={`right ${dropdownDirection}`}
-            >
-              <DropdownList
-                ref={(ref) => {
-                  this.list = ref;
-                }}
-                getDropdownMenuParent={this.getDropdownMenuParent}
-                onActionsHide={this.onActionsHide}
-              >
-                {actions}
-              </DropdownList>
-            </DropdownContent>
-          </Dropdown>
+            x
+          </button>
         </div>
 
         {contents}
+
+        <Dropdown
+          ref={(ref) => {
+            this.dropdown = ref;
+          }}
+          keepOpen={isActionsOpen || showNestedOptions}
+          onShow={this.onActionsShow}
+          onHide={this.onActionsHide}
+          className={styles.dropdown}
+          autoFocus={false}
+          aria-haspopup="true"
+          aria-live="assertive"
+          aria-relevant="additions"
+        >
+          <DropdownTrigger>
+            <button className={userBtnOptionStyle}>Opções</button>
+          </DropdownTrigger>
+          <DropdownContent
+            style={{
+              visibility: dropdownVisible ? "visible" : "hidden",
+              [dropdownDirection]: `${dropdownOffset}px`,
+            }}
+            className={styles.dropdownContent}
+            placement={`right ${dropdownDirection}`}
+          >
+            <DropdownList
+              ref={(ref) => {
+                this.list = ref;
+              }}
+              getDropdownMenuParent={this.getDropdownMenuParent}
+              onActionsHide={this.onActionsHide}
+            >
+              {actions}
+            </DropdownList>
+          </DropdownContent>
+        </Dropdown>
       </Fragment>
     );
   }
