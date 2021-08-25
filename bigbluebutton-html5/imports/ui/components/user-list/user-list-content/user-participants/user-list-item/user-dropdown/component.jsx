@@ -169,9 +169,11 @@ class UserDropdown extends PureComponent {
   }
 
   componentWillMount() {
+    const { user } = this.props;
     const { socket } = this.context;
+
     socket.on("user", (data) => {
-      if (data.action === "warning") {
+      if (data.action === "warning" && user.userId === data.userId) {
         this.setState((prevState) => ({ isWarning: !prevState.isWarning }));
       }
     });
@@ -185,6 +187,8 @@ class UserDropdown extends PureComponent {
   }
 
   createWarningSignal = async () => {
+    const { user } = this.props;
+
     const response = await fetch(
       "https://bbb-heroku-test.herokuapp.com/user/status/warning",
       {
@@ -193,7 +197,7 @@ class UserDropdown extends PureComponent {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          userId: "String apenas para propositos de teste",
+          userId: user.userId,
         }),
       }
     );
