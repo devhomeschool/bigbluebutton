@@ -735,12 +735,15 @@ class UserDropdown extends PureComponent {
       <Fragment>
         {amIModerator && (
           <div className={styles.buttonContainer}>
-            <button
-              className={styles.buttonWarning}
-              onClick={this.createWarningSignal}
-            >
-              !
-            </button>
+            {!isMe(user.userId) && (
+              <button
+                className={styles.buttonWarning}
+                onClick={this.createWarningSignal}
+              >
+                !
+              </button>
+            )}
+
             {allowedToRemove && (
               <button
                 className={styles.buttonRemove}
