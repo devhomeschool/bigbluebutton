@@ -653,6 +653,9 @@ class UserDropdown extends PureComponent {
       removeUser,
       mountModal,
       assignPresenter,
+      getAvailableActions,
+      meetingIsBreakout,
+      voiceUser,
     } = this.props;
 
     const {
@@ -716,38 +719,55 @@ class UserDropdown extends PureComponent {
       </div>
     );
 
+    const amIModerator = currentUser.role === ROLE_MODERATOR;
+    const actionPermissions = getAvailableActions(
+      amIModerator,
+      meetingIsBreakout,
+      user,
+      voiceUser
+    );
+
+    const { allowedToRemove, allowedToSetPresenter } = actionPermissions;
+
     if (!actions.length) return contents;
 
     return (
       <Fragment>
-        <div className={styles.buttonContainer}>
-          <button
-            className={styles.buttonWarning}
-            onClick={this.createWarningSignal}
-          >
-            !
-          </button>
-          <button
-            className={styles.buttonRemove}
-            onClick={() =>
-              mountModal(
-                <RemoveUserModal
-                  intl={intl}
-                  user={user}
-                  onConfirm={removeUser}
-                />
-              )
-            }
-          >
-            x
-          </button>
-          <button
-            className={styles.buttonPromote}
-            onClick={() => assignPresenter(user.userId)}
-          >
-            p
-          </button>
-        </div>
+        {amIModerator && (
+          <div className={styles.buttonContainer}>
+            <button
+              className={styles.buttonWarning}
+              onClick={this.createWarningSignal}
+            >
+              !
+            </button>
+            {allowedToRemove && (
+              <button
+                className={styles.buttonRemove}
+                onClick={() =>
+                  mountModal(
+                    <RemoveUserModal
+                      intl={intl}
+                      user={user}
+                      onConfirm={removeUser}
+                    />
+                  )
+                }
+              >
+                x
+              </button>
+            )}
+
+            {allowedToSetPresenter && (
+              <button
+                className={styles.buttonPromote}
+                onClick={() => assignPresenter(user.userId)}
+              >
+                p
+              </button>
+            )}
+          </div>
+        )}
 
         <Dropdown
           ref={(ref) => {
