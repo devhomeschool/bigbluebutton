@@ -173,6 +173,20 @@
   }
 }
 
+.buttonPromote {
+  background-color: #0b7285;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+
+  &:hover {
+    transition: all 0.2s ease-in-out;
+    background-color: #15aabf;
+  }
+}
+
 .emojiSelected {
   span,
   i {
