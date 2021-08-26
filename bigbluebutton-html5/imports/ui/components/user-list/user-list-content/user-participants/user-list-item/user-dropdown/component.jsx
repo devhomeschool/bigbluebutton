@@ -652,6 +652,7 @@ class UserDropdown extends PureComponent {
       isMe,
       removeUser,
       mountModal,
+      assignPresenter,
     } = this.props;
 
     const {
@@ -739,6 +740,12 @@ class UserDropdown extends PureComponent {
             }
           >
             x
+          </button>
+          <button
+            className={styles.buttonPromote}
+            onClick={() => assignPresenter(user.userId)}
+          >
+            p
           </button>
         </div>
 
