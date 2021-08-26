@@ -664,10 +664,11 @@ class UserDropdown extends PureComponent {
 
     const actions = this.getUsersActions();
 
-    const userBtnOptionStyle = {};
+    const userItemContentsStyle = {};
 
-    userBtnOptionStyle[styles.buttonOptions] = true;
-    userBtnOptionStyle[styles.buttonOptionsOpen] = isActionsOpen;
+    userItemContentsStyle[styles.dropdown] = true;
+    userItemContentsStyle[styles.userListItem] = !isActionsOpen;
+    userItemContentsStyle[styles.usertListItemWithMenu] = isActionsOpen;
 
     const you = isMe(user.userId) ? intl.formatMessage(messages.you) : "";
 
@@ -741,8 +742,6 @@ class UserDropdown extends PureComponent {
           </button>
         </div>
 
-        {contents}
-
         <Dropdown
           ref={(ref) => {
             this.dropdown = ref;
@@ -750,15 +749,13 @@ class UserDropdown extends PureComponent {
           keepOpen={isActionsOpen || showNestedOptions}
           onShow={this.onActionsShow}
           onHide={this.onActionsHide}
-          className={styles.dropdown}
+          className={userItemContentsStyle}
           autoFocus={false}
           aria-haspopup="true"
           aria-live="assertive"
           aria-relevant="additions"
         >
-          <DropdownTrigger>
-            <button className={userBtnOptionStyle}>Opções</button>
-          </DropdownTrigger>
+          <DropdownTrigger>{contents}</DropdownTrigger>
           <DropdownContent
             style={{
               visibility: dropdownVisible ? "visible" : "hidden",
