@@ -631,40 +631,6 @@ class UserDropdown extends PureComponent {
     return isActionsOpen && !dropdownVisible;
   }
 
-  checkIndividualAccess() {
-    const {
-      user,
-      isMeteorConnected,
-      intl,
-      currentUser,
-      meetingIsBreakout,
-      changeWhiteboardMode,
-      isMe,
-    } = this.props;
-    const amIModerator = currentUser.role === ROLE_MODERATOR;
-    const amISubjectUser = isMe(user.userId);
-
-    const allowedToRemove = amIModerator
-      && !amISubjectUser
-      && !meetingIsBreakout;
-
-    if (allowedToRemove && !user.presenter && isMeteorConnected) {
-      let label = intl.formatMessage(messages.giveWhiteboardAccess);
-
-      if (user.whiteboardAccess) {
-        label = intl.formatMessage(messages.removeWhiteboardAccess);
-      }
-
-      return ({
-        label,
-        onClick: () => changeWhiteboardMode(!user.whiteboardAccess, user.userId),
-        icon: 'pen_tool',
-      });
-    }
-
-    return false;
-  }
-
   renderUserAvatar() {
     const {
       normalizeEmojiName,
@@ -721,6 +687,8 @@ class UserDropdown extends PureComponent {
       getAvailableActions,
       meetingIsBreakout,
       voiceUser,
+      isMeteorConnected,
+      changeWhiteboardMode,
     } = this.props;
 
     const {
@@ -740,8 +708,6 @@ class UserDropdown extends PureComponent {
     userItemContentsStyle[styles.usertListItemWithMenu] = isActionsOpen;
 
     const you = isMe(user.userId) ? intl.formatMessage(messages.you) : '';
-
-    const individualAccess = this.checkIndividualAccess();
 
     const presenter = user.presenter
       ? intl.formatMessage(messages.presenter)
@@ -840,20 +806,21 @@ class UserDropdown extends PureComponent {
                 p
               </button>
             )}
-            { individualAccess
+            { (allowedToRemove && !user.presenter && isMeteorConnected)
               && (
               <Button
                 hideLabel
                 role="button"
-                color="default"
+                color="primary"
                 size="md"
                 circle
-                label={individualAccess.label}
+                label={user.whiteboardAccess
+                  ? intl.formatMessage(messages.removeWhiteboardAccess)
+                  : intl.formatMessage(messages.giveWhiteboardAccess)}
                 aria-label=""
-                icon={individualAccess.icon}
+                icon="pen_tool"
                 customIcon=""
-                onClick={() => individualAccess.onClick}
-                className={styles.buttonWarning}
+                onClick={() => changeWhiteboardMode(!user.whiteboardAccess, user.userId)}
               />
               )
             }
