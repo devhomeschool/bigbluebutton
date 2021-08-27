@@ -1,12 +1,12 @@
-import React from "react";
-import PropTypes from "prop-types";
-import cx from "classnames";
+import React from 'react';
+import PropTypes from 'prop-types';
+import cx from 'classnames';
 
-import { styles } from "./styles";
+import { styles } from './styles';
 
 const propTypes = {
   children: PropTypes.node.isRequired,
-  moderator: PropTypes.bool.isRequired,
+  moderator: PropTypes.bool,
   presenter: PropTypes.bool,
   talking: PropTypes.bool,
   muted: PropTypes.bool,
@@ -15,6 +15,8 @@ const propTypes = {
   noVoice: PropTypes.bool,
   color: PropTypes.string,
   className: PropTypes.string,
+  isWarning: PropTypes.bool.isRequired,
+  whiteboardAccess: PropTypes.bool.isRequired,
 };
 
 const defaultProps = {
@@ -25,7 +27,7 @@ const defaultProps = {
   listenOnly: false,
   voice: false,
   noVoice: false,
-  color: "#000",
+  color: '#000',
   className: null,
 };
 
@@ -40,43 +42,43 @@ const UserAvatar = ({
   voice,
   noVoice,
   className,
+  whiteboardAccess,
   isWarning,
-}) => {
-  return (
+}) => (
+  <div
+    aria-hidden="true"
+    data-test="userAvatar"
+    className={cx(
+      styles.avatar,
+      {
+        [styles.moderator]: moderator,
+        [styles.presenter]: presenter,
+        [styles.muted]: muted,
+        [styles.listenOnly]: listenOnly,
+        [styles.voice]: voice,
+        [styles.noVoice]: noVoice && !listenOnly,
+        [styles.whiteboardAccess]: whiteboardAccess && !presenter,
+      },
+      className,
+    )}
+    style={
+      isWarning
+        ? { backgroundColor: '#FF0', color: '#FF0' }
+        : {
+          backgroundColor: color,
+          color, // We need the same color on both for the border
+        }
+    }
+  >
     <div
-      aria-hidden="true"
-      data-test="userAvatar"
-      className={cx(
-        styles.avatar,
-        {
-          [styles.moderator]: moderator,
-          [styles.presenter]: presenter,
-          [styles.muted]: muted,
-          [styles.listenOnly]: listenOnly,
-          [styles.voice]: voice,
-          [styles.noVoice]: noVoice && !listenOnly,
-        },
-        className
-      )}
-      style={
-        isWarning
-          ? { backgroundColor: "#FF0", color: "#FF0" }
-          : {
-              backgroundColor: color,
-              color, // We need the same color on both for the border
-            }
-      }
-    >
-      <div
-        className={cx({
-          [styles.talking]: talking && !muted,
-        })}
-      />
+      className={cx({
+        [styles.talking]: talking && !muted,
+      })}
+    />
 
-      <div className={styles.content}>{children}</div>
-    </div>
-  );
-};
+    <div className={styles.content}>{children}</div>
+  </div>
+);
 
 UserAvatar.propTypes = propTypes;
 UserAvatar.defaultProps = defaultProps;
