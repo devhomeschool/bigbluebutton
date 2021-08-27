@@ -15,7 +15,7 @@ import { withModalMounter } from '/imports/ui/components/modal/service';
 import RemoveUserModal from '/imports/ui/components/modal/remove-user/component';
 import _ from 'lodash';
 import { Session } from 'meteor/session';
-import { SocketContext } from 'imports/ui/components/context/socket-context';
+import SocketContext from 'imports/ui/components/context/socket-context';
 import { styles } from './styles';
 import UserName from '../user-name/component';
 import UserIcons from '../user-icons/component';
