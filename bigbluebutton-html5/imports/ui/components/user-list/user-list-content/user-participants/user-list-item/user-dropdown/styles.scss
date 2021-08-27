@@ -90,6 +90,21 @@
     inset 1px 0 0 1px var(--item-focus-border);
 }
 
+.usertListItemWithMenu {
+  @include highContrastOutline();
+  outline-style: solid;
+  background-color: var(--list-item-bg-hover);
+  box-shadow: inset 0 0 0 var(--border-size) var(--item-focus-border),
+    inset 1px 0 0 1px var(--item-focus-border);
+  border-top-left-radius: var(--sm-padding-y);
+  border-bottom-left-radius: var(--sm-padding-y);
+
+  &:focus {
+    outline-style: solid;
+    outline-color: transparent !important;
+  }
+}
+
 .userListItem {
   @extend %list-item;
   flex-flow: column;
@@ -127,26 +142,7 @@
 .buttonContainer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-}
-
-.buttonOptions {
-  font-size: 12px;
-  background-color: #1864ab;
-  color: #fff;
-  border: 0;
-  border-radius: 50px;
-  padding: 6px 14px;
-  cursor: pointer;
-
-  &:hover {
-    transition: all 0.2s ease-in-out;
-    background-color: #339af0;
-  }
-}
-
-.buttonOptionsOpen {
-  background-color: #339af0;
+  justify-content: space-around;
 }
 
 .buttonWarning {
@@ -160,6 +156,34 @@
   &:hover {
     transition: all 0.2s ease-in-out;
     background-color: #d9480f;
+  }
+}
+
+.buttonRemove {
+  background-color: #c92a2a;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+
+  &:hover {
+    transition: all 0.2s ease-in-out;
+    background-color: #fa5252;
+  }
+}
+
+.buttonPromote {
+  background-color: #0b7285;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+
+  &:hover {
+    transition: all 0.2s ease-in-out;
+    background-color: #15aabf;
   }
 }
 

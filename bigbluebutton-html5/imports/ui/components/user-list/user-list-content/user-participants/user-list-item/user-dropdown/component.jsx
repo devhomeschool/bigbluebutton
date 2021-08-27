@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { defineMessages } from 'react-intl';
 import PropTypes from 'prop-types';
 import { findDOMNode } from 'react-dom';
@@ -180,9 +180,10 @@ class UserDropdown extends PureComponent {
   }
 
   componentWillMount() {
+    const { user } = this.props;
     const { socket } = this.context;
     socket.on('user', (data) => {
-      if (data.action === 'warning') {
+      if (data.action === 'warning' && user.userId === data.userId) {
         this.setState(prevState => ({ isWarning: !prevState.isWarning }));
       }
     });
@@ -196,6 +197,8 @@ class UserDropdown extends PureComponent {
   }
 
   createWarningSignal = async () => {
+    const { user } = this.props;
+
     const response = await fetch(
       'https://bbb-heroku-test.herokuapp.com/user/status/warning',
       {
@@ -204,7 +207,7 @@ class UserDropdown extends PureComponent {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          userId: 'String apenas para propositos de teste',
+          userId: user.userId,
         }),
       },
     );
@@ -712,6 +715,12 @@ class UserDropdown extends PureComponent {
       intl,
       isThisMeetingLocked,
       isMe,
+      removeUser,
+      mountModal,
+      assignPresenter,
+      getAvailableActions,
+      meetingIsBreakout,
+      voiceUser,
     } = this.props;
 
     const {
@@ -724,10 +733,11 @@ class UserDropdown extends PureComponent {
 
     const actions = this.getUsersActions();
 
-    const userBtnOptionStyle = {};
+    const userItemContentsStyle = {};
 
-    userBtnOptionStyle[styles.buttonOptions] = true;
-    userBtnOptionStyle[styles.buttonOptionsOpen] = isActionsOpen;
+    userItemContentsStyle[styles.dropdown] = true;
+    userItemContentsStyle[styles.userListItem] = !isActionsOpen;
+    userItemContentsStyle[styles.usertListItemWithMenu] = isActionsOpen;
 
     const you = isMe(user.userId) ? intl.formatMessage(messages.you) : '';
 
@@ -778,34 +788,77 @@ class UserDropdown extends PureComponent {
       </div>
     );
 
+    const amIModerator = currentUser.role === ROLE_MODERATOR;
+    const actionPermissions = getAvailableActions(
+      amIModerator,
+      meetingIsBreakout,
+      user,
+      voiceUser,
+    );
+
+    const { allowedToRemove, allowedToSetPresenter } = actionPermissions;
+
     if (!actions.length) return contents;
 
     return (
-      <div className={styles.buttonContainer}>
-        <button
-          type="button"
-          className={styles.buttonWarning}
-          onClick={this.createWarningSignal}
-        >
-            !
-        </button>
-        { individualAccess
-          && (
-          <Button
-            hideLabel
-            role="button"
-            color="default"
-            size="md"
-            circle
-            label={individualAccess.label}
-            aria-label=""
-            icon={individualAccess.icon}
-            customIcon=""
-            onClick={() => individualAccess.onClick}
-            className={styles.buttonWarning}
-          />
-          )
-        }
+      <Fragment>
+        {amIModerator && (
+          <div className={styles.buttonContainer}>
+            {!isMe(user.userId) && (
+              <button
+                type="button"
+                className={styles.buttonWarning}
+                onClick={this.createWarningSignal}
+              >
+                !
+              </button>
+            )}
+
+            {allowedToRemove && (
+              <button
+                type="button"
+                className={styles.buttonRemove}
+                onClick={() => mountModal(
+                  <RemoveUserModal
+                    intl={intl}
+                    user={user}
+                    onConfirm={removeUser}
+                  />,
+                )
+                }
+              >
+                x
+              </button>
+            )}
+
+            {allowedToSetPresenter && (
+              <button
+                type="button"
+                className={styles.buttonPromote}
+                onClick={() => assignPresenter(user.userId)}
+              >
+                p
+              </button>
+            )}
+            { individualAccess
+              && (
+              <Button
+                hideLabel
+                role="button"
+                color="default"
+                size="md"
+                circle
+                label={individualAccess.label}
+                aria-label=""
+                icon={individualAccess.icon}
+                customIcon=""
+                onClick={() => individualAccess.onClick}
+                className={styles.buttonWarning}
+              />
+              )
+            }
+          </div>
+        )}
         <Dropdown
           ref={(ref) => {
             this.dropdown = ref;
@@ -813,7 +866,7 @@ class UserDropdown extends PureComponent {
           keepOpen={isActionsOpen || showNestedOptions}
           onShow={this.onActionsShow}
           onHide={this.onActionsHide}
-          className={styles.dropdown}
+          className={userItemContentsStyle}
           autoFocus={false}
           aria-haspopup="true"
           aria-live="assertive"
@@ -821,7 +874,6 @@ class UserDropdown extends PureComponent {
         >
           <DropdownTrigger>
             {contents}
-/
           </DropdownTrigger>
           <DropdownContent
             style={{
@@ -842,7 +894,7 @@ class UserDropdown extends PureComponent {
             </DropdownList>
           </DropdownContent>
         </Dropdown>
-      </div>
+      </Fragment>
     );
   }
 }
