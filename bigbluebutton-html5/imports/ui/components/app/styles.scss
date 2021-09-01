@@ -222,6 +222,11 @@
   min-width: 380px;
   padding: 0 var(--bars-padding) var(--bars-padding);
   position: absolute;
+  bottom: 0;
+}
+
+.hideActions {
+  min-width: 100px;
 }
 
 .hideActions div {
