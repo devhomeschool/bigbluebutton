@@ -18,7 +18,7 @@
     border: none;
     box-shadow: none;
     background-color: transparent !important;
-    color: #000 !important;
+    color: var(--color-primary) !important;
   }
 
   &:hover {
@@ -37,7 +37,7 @@
 
   padding: 5px;
   background-color: var(--color-primary);
-  border: var(--border-size-large) solid #000;
+  border: var(--border-size-large) solid var(--color-primary);
 
   &:focus {
     background-clip: padding-box;
@@ -49,8 +49,8 @@
   @extend %recordingControl;
 
   padding: 7px;
-  border: var(--border-size-small) solid #000;
-  
+  border: var(--border-size-small) solid var(--color-primary);
+
   &:focus {
     padding: 5px;
     border: var(--border-size-large) solid var(--color-white);

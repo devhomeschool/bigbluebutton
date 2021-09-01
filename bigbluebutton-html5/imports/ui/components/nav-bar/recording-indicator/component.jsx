@@ -151,7 +151,7 @@ class RecordingIndicator extends PureComponent {
     const recordingIndicatorIcon = (
       <span className={styles.recordingIndicatorIcon}>
         <svg xmlns="http://www.w3.org/2000/svg" height="100%" version="1" viewBox="0 0 20 20">
-          <g stroke="#000" fill="#000" strokeLinecap="square">
+          <g stroke="var(--color-primary)" fill="var(--color-primary)" strokeLinecap="square">
             <circle
               fill="none"
               strokeWidth="1"
@@ -160,8 +160,8 @@ class RecordingIndicator extends PureComponent {
               cy="10"
             />
             <circle
-              stroke={recording ? '#F00' : '#000'}
-              fill={recording ? '#F00' : '#000'}
+              stroke={recording ? '#F00' : 'var(--color-primary)'}
+              fill={recording ? '#F00' : 'var(--color-primary)'}
               r="4"
               cx="10"
               cy="10"
@@ -213,7 +213,7 @@ class RecordingIndicator extends PureComponent {
           ? <span className={styles.presentationTitleSeparator} aria-hidden>|</span>
           : null}
         {
-          <span>
+          <span className={styles.presentationTitle}>
             {classTime && (amIModerator || amIPresenter)
               && `${classTime.hours} : ${classTime.minutes} : ${classTime.seconds}`}
           </span> }
