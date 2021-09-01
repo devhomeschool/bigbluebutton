@@ -105,7 +105,8 @@ const UserName = (props) => {
           {(isMe(user.userId)) ? `(${intl.formatMessage(messages.you)})` : ''}
         </i>
         <div className={styles.userIcon}>
-          {`${userEmoji} Status`}
+          {userEmoji}
+          Status
         </div>
       </span>
       {
