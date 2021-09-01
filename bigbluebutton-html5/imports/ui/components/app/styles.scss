@@ -224,17 +224,12 @@
   position: absolute;
 }
 
-.hideActions {
-  bottom: -180px;
-  min-width: 100px;
-}
-
 .hideActions div {
-    flex-direction: column;
+    display: none;
 }
 
-.showActions {
-  bottom: 0px;
+.showActions div {
+  display: flex;
 }
 
 .button {
