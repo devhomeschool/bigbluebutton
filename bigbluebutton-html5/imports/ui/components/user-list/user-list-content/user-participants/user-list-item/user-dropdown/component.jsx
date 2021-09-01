@@ -182,7 +182,7 @@ class UserDropdown extends PureComponent {
   }
 
   componentDidMount() {
-    const response = fetch('https://gorest.co.in/public/v1/posts')
+    fetch('https://gorest.co.in/public/v1/posts')
       .then((res) => {
         if (res.status !== 200) {
           throw new Error('Failed');
@@ -547,7 +547,7 @@ class UserDropdown extends PureComponent {
       swapLayout,
       // amIModerator,
       // amIPresenter,
-      normalizeEmojiName,
+      // normalizeEmojiName,
       userInBreakout,
       breakoutSequence,
       meetingIsBreakout,
@@ -559,22 +559,8 @@ class UserDropdown extends PureComponent {
     const findStream = !streams.length ? null
       : streams.find(stream => stream.userId === user.userId);
 
-    const userEmoji = user.emoji !== 'none'
-    && (
-      <Icon
-        style={
-        {
-          zIndex: '3',
-          fontSize: '300%',
-          position: 'absolute',
-          bottom: '20px',
-          left: '10px',
-        }}
-        iconName={normalizeEmojiName(user.emoji)}
-      />);
-
     const iconVoiceOnlyUser = (<Icon iconName="audio_on" />);
-    const userIcon = isVoiceOnly ? iconVoiceOnlyUser : userEmoji;
+    const userIcon = isVoiceOnly && iconVoiceOnlyUser;
     const icons = (userInBreakout && !meetingIsBreakout) ? breakoutSequence : userIcon;
 
     return (
@@ -614,6 +600,7 @@ class UserDropdown extends PureComponent {
       intl,
       isThisMeetingLocked,
       isMe,
+      normalizeEmojiName,
     } = this.props;
 
     const {
@@ -654,7 +641,7 @@ class UserDropdown extends PureComponent {
         className={!actions.length ? styles.userListItem : null}
       >
         <div className={styles.userItemContents}>
-          <div className={styles.userAvatar} ref={node => this.avatar = node}>
+          <div className={styles.userAvatar} ref={(node) => { this.avatar = node; }}>
             {this.renderUserAvatar()}
           </div>
           {<UserName
@@ -666,6 +653,7 @@ class UserDropdown extends PureComponent {
               userAriaLabel,
               isActionsOpen,
               isMe,
+              normalizeEmojiName,
             }}
           />}
           {<UserIcons
