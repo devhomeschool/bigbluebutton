@@ -4,7 +4,7 @@
   @extend %flex-column;
   min-width: 0;
   flex-grow: 1;
-  margin: 0 0 0 var(--sm-padding-x);
+  margin: 2px 0 0;
   justify-content: center;
   font-size: 0.95rem;
 
@@ -55,7 +55,7 @@
   background-color: var(--color-primary);
   border-radius: 0.25em;
   color: var(--color-white);
-  font-size: 1.25rem;
+  font-size: 1rem;
   padding: 0.1em 0.25em;
   margin: 0 5px;
 }
