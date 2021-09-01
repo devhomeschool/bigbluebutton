@@ -43,6 +43,7 @@ const propTypes = {
   isMe: PropTypes.func.isRequired,
   userAriaLabel: PropTypes.string.isRequired,
   isActionsOpen: PropTypes.bool.isRequired,
+  normalizeEmojiName: PropTypes.func.isRequired,
 };
 
 const ROLE_MODERATOR = Meteor.settings.public.user.role_moderator;
@@ -56,6 +57,7 @@ const UserName = (props) => {
     isActionsOpen,
     isMe,
     user,
+    normalizeEmojiName,
   } = props;
 
   if (compact) {
@@ -81,6 +83,12 @@ const UserName = (props) => {
     userNameSub.push(intl.formatMessage(messages.guest));
   }
 
+  const userEmoji = user.emoji !== 'none'
+    && (
+      <Icon
+        iconName={normalizeEmojiName(user.emoji)}
+      />);
+
   return (
     <div
       className={styles.userName}
@@ -93,7 +101,12 @@ const UserName = (props) => {
           {user.name}
 &nbsp;
         </span>
-        <i>{(isMe(user.userId)) ? `(${intl.formatMessage(messages.you)})` : ''}</i>
+        <i>
+          {(isMe(user.userId)) ? `(${intl.formatMessage(messages.you)})` : ''}
+        </i>
+        <div className={styles.userIcon}>
+          {`${userEmoji} Status`}
+        </div>
       </span>
       {
         userNameSub.length
