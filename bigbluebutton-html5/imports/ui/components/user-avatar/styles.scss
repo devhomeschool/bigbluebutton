@@ -15,8 +15,8 @@
 }
 
 .avatar {
-  background-color: lightslategray;
-  color: lightslategray;
+  background-color: var(--color-primary);
+  color: var(--color-primary);
   position: relative;
   display: flex;
   align-items: center;
@@ -76,12 +76,6 @@
   background-color: var(--user-color);
   border: 5px solid green;
   border-radius: inherit;
-}
-
-.moderator {
-  background-color: darkslategray;
-  border-radius: 5px;
-  color: darkslategray;
 }
 
 .presenter {
