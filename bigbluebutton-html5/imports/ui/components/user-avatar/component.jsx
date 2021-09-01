@@ -6,7 +6,7 @@ import { styles } from './styles';
 
 const propTypes = {
   children: PropTypes.node.isRequired,
-  moderator: PropTypes.bool,
+  // moderator: PropTypes.bool,
   presenter: PropTypes.bool,
   talking: PropTypes.bool,
   muted: PropTypes.bool,
@@ -19,7 +19,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-  moderator: false,
+  // moderator: false,
   presenter: false,
   talking: false,
   muted: false,
@@ -32,7 +32,7 @@ const defaultProps = {
 
 const UserAvatar = ({
   children,
-  moderator,
+  // moderator,
   presenter,
   talking,
   muted,
@@ -48,7 +48,7 @@ const UserAvatar = ({
     aria-hidden="true"
     data-test="userAvatar"
     className={cx(styles.avatar, {
-      [styles.moderator]: moderator,
+      // [styles.moderator]: moderator,
       [styles.presenter]: presenter,
       [styles.muted]: muted,
       [styles.listenOnly]: listenOnly,
