@@ -1,8 +1,8 @@
-@import "/imports/ui/components/user-list/styles.scss";
-@import "/imports/ui/stylesheets/variables/_all";
-@import "/imports/ui/stylesheets/mixins/_indicators";
-@import "/imports/ui/stylesheets/mixins/focus";
-@import "/imports/ui/components/modal/simple/styles";
+@import '/imports/ui/components/user-list/styles.scss';
+@import '/imports/ui/stylesheets/variables/_all';
+@import '/imports/ui/stylesheets/mixins/_indicators';
+@import '/imports/ui/stylesheets/mixins/focus';
+@import '/imports/ui/components/modal/simple/styles';
 
 :root {
   --description-margin: 3.5rem;
@@ -122,7 +122,7 @@
 
   padding: var(--lg-padding-y) 0 var(--lg-padding-y) var(--lg-padding-y);
 
-  [dir="rtl"] & {
+  [dir='rtl'] & {
     padding: var(--lg-padding-y) var(--lg-padding-y) var(--lg-padding-y) 0;
   }
 }
@@ -146,16 +146,11 @@
 }
 
 .buttonWarning {
-  background-color: #e67700;
-  width: 30px;
-  height: 30px;
-  border: 0;
-  border-radius: 50%;
-  cursor: pointer;
+  background-color: #e67700 !important;
 
   &:hover {
     transition: all 0.2s ease-in-out;
-    background-color: #d9480f;
+    background-color: #d9480f !important;
   }
 }
 
