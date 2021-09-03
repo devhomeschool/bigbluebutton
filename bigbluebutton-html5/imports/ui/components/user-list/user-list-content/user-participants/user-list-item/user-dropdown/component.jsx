@@ -694,7 +694,6 @@ class UserDropdown extends PureComponent {
       isMe,
       removeUser,
       mountModal,
-      assignPresenter,
       getAvailableActions,
       meetingIsBreakout,
       voiceUser,
@@ -771,7 +770,7 @@ class UserDropdown extends PureComponent {
       voiceUser
     );
 
-    const { allowedToRemove, allowedToSetPresenter } = actionPermissions;
+    const { allowedToRemove } = actionPermissions;
 
     if (!actions.length) return contents;
 
@@ -785,7 +784,18 @@ class UserDropdown extends PureComponent {
                 className={styles.buttonWarning}
                 onClick={this.createWarningSignal}
               >
-                !
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  className={styles.icon}
+                  viewBox='0 0 20 20'
+                  fill='currentColor'
+                >
+                  <path
+                    fill-rule='evenodd'
+                    d='M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z'
+                    clip-rule='evenodd'
+                  />
+                </svg>
               </button>
             )}
 
@@ -803,38 +813,34 @@ class UserDropdown extends PureComponent {
                   )
                 }
               >
-                x
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  className={styles.icon}
+                  viewBox='0 0 20 20'
+                  fill='currentColor'
+                >
+                  <path d='M11 6a3 3 0 11-6 0 3 3 0 016 0zM14 17a6 6 0 00-12 0h12zM13 8a1 1 0 100 2h4a1 1 0 100-2h-4z' />
+                </svg>
               </button>
             )}
 
-            {allowedToSetPresenter && (
+            {allowedToRemove && !user.presenter && isMeteorConnected && (
               <button
                 type='button'
                 className={styles.buttonPromote}
-                onClick={() => assignPresenter(user.userId)}
-              >
-                p
-              </button>
-            )}
-            {allowedToRemove && !user.presenter && isMeteorConnected && (
-              <Button
-                hideLabel
-                role='button'
-                color='primary'
-                size='md'
-                circle
-                label={
-                  user.whiteboardAccess
-                    ? intl.formatMessage(messages.removeWhiteboardAccess)
-                    : intl.formatMessage(messages.giveWhiteboardAccess)
-                }
-                aria-label=''
-                icon='pen_tool'
-                customIcon=''
                 onClick={() =>
                   changeWhiteboardMode(!user.whiteboardAccess, user.userId)
                 }
-              />
+              >
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  className={styles.icon}
+                  viewBox='0 0 20 20'
+                  fill='currentColor'
+                >
+                  <path d='M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z' />
+                </svg>
+              </button>
             )}
           </div>
         )}

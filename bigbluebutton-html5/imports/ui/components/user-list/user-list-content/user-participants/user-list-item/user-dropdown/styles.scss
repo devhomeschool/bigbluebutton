@@ -145,41 +145,102 @@
   justify-content: space-around;
 }
 
+@mixin defaultBtn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 45px;
+  width: 45px;
+  border: none;
+  border-radius: 50%;
+
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
 .buttonWarning {
-  background-color: #e67700 !important;
+  @include defaultBtn();
+  background-color: #f59f00;
+
+  &::after {
+    pointer-events: none;
+    content: 'Atençâo!';
+    position: absolute;
+    background-color: rgba(51, 51, 51, 0);
+    color: rgba(255, 255, 255, 0);
+    padding: 6px 12px;
+    top: 0;
+    transition: all 0.3s;
+  }
 
   &:hover {
-    transition: all 0.2s ease-in-out;
-    background-color: #d9480f !important;
+    background-color: rgba(252, 196, 25, 1);
+
+    &::after {
+      background-color: rgba(51, 51, 51, 0.8);
+      color: rgba(255, 255, 255, 1);
+      top: -40px;
+    }
   }
 }
 
 .buttonRemove {
-  background-color: #c92a2a;
-  width: 30px;
-  height: 30px;
-  border: 0;
-  border-radius: 50%;
-  cursor: pointer;
+  @include defaultBtn();
+  background-color: #f03e3e;
+
+  &::after {
+    pointer-events: none;
+    content: 'Expulsar';
+    position: absolute;
+    background-color: rgba(51, 51, 51, 0);
+    color: rgba(255, 255, 255, 0);
+    padding: 6px 12px;
+    top: 0px;
+    transition: all 0.3s;
+  }
 
   &:hover {
-    transition: all 0.2s ease-in-out;
-    background-color: #fa5252;
+    background-color: #ff6b6b;
+
+    &::after {
+      background-color: rgba(51, 51, 51, 0.8);
+      color: rgba(255, 255, 255, 1);
+      top: -40px;
+    }
   }
 }
 
 .buttonPromote {
-  background-color: #0b7285;
-  width: 30px;
-  height: 30px;
-  border: 0;
-  border-radius: 50%;
-  cursor: pointer;
+  @include defaultBtn();
+  background-color: #1098ad;
+
+  &::after {
+    pointer-events: none;
+    content: 'Apresentador';
+    position: absolute;
+    background-color: rgba(51, 51, 51, 0);
+    color: rgba(255, 255, 255, 0);
+    padding: 6px 12px;
+    top: 0px;
+    transition: all 0.3s;
+  }
 
   &:hover {
-    transition: all 0.2s ease-in-out;
-    background-color: #15aabf;
+    background-color: #22b8cf;
+
+    &::after {
+      background-color: rgba(51, 51, 51, 0.8);
+      color: rgba(255, 255, 255, 1);
+      top: -40px;
+    }
   }
+}
+
+.icon {
+  height: 30px;
+  width: 30px;
+  fill: #fff;
 }
 
 .emojiSelected {
