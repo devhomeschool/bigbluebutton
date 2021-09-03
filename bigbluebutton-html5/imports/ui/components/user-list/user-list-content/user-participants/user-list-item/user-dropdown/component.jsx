@@ -21,6 +21,7 @@ import UserName from '../user-name/component';
 import UserIcons from '../user-icons/component';
 import Button from '/imports/ui/components/button/component';
 
+
 const messages = defineMessages({
   presenter: {
     id: 'app.userList.presenter',
@@ -180,6 +181,7 @@ class UserDropdown extends PureComponent {
   componentWillMount() {
     const { user } = this.props;
     const { socket } = this.context;
+
     socket.on('user', (data) => {
       if (data.action === 'warning' && user.userId === data.userId) {
         this.setState((prevState) => ({ isWarning: !prevState.isWarning }));
