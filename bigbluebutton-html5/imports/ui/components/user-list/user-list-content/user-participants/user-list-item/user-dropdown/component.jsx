@@ -784,7 +784,9 @@ class UserDropdown extends PureComponent {
                 type='button'
                 className={styles.buttonWarning}
                 onClick={this.createWarningSignal}
-              />
+              >
+                !
+              </button>
             )}
 
             {allowedToRemove && (
