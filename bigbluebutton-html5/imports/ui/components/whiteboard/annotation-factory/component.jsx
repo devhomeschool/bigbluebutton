@@ -9,6 +9,7 @@ import Rectangle from '../annotations/rectangle/component';
 import Text from '../annotations/text/container';
 import Triangle from '../annotations/triangle/component';
 import Pencil from '../annotations/pencil/component';
+import Eraser from '../annotations/eraser/component';
 
 const ANNOTATION_CONFIG = Meteor.settings.public.whiteboard.annotations;
 const DRAW_END = ANNOTATION_CONFIG.status.end;
@@ -27,7 +28,13 @@ export default class AnnotationFactory extends Component {
     );
   }
 
-  static renderReactiveAnnotation(annotationInfo, slideWidth, slideHeight, drawObject, whiteboardId) {
+  static renderReactiveAnnotation(
+    annotationInfo,
+    slideWidth,
+    slideHeight,
+    drawObject,
+    whiteboardId,
+  ) {
     return (
       <ReactiveAnnotationContainer
         key={annotationInfo._id}
@@ -46,23 +53,29 @@ export default class AnnotationFactory extends Component {
   }
 
   renderAnnotation(annotationInfo) {
-    const drawObject = this.props.annotationSelector[annotationInfo.annotationType];
+    const {
+      annotationSelector,
+      slideWidth,
+      slideHeight,
+      whiteboardId,
+    } = this.props;
+    const drawObject = annotationSelector[annotationInfo.annotationType];
 
     if (annotationInfo.status === DRAW_END) {
       return AnnotationFactory.renderStaticAnnotation(
         annotationInfo,
-        this.props.slideWidth,
-        this.props.slideHeight,
+        slideWidth,
+        slideHeight,
         drawObject,
-        this.props.whiteboardId,
+        whiteboardId,
       );
     }
     return AnnotationFactory.renderReactiveAnnotation(
       annotationInfo,
-      this.props.slideWidth,
-      this.props.slideHeight,
+      slideWidth,
+      slideHeight,
       drawObject,
-      this.props.whiteboardId,
+      whiteboardId,
     );
   }
 
@@ -88,7 +101,7 @@ AnnotationFactory.propTypes = {
 
   // array of annotations, optional
   annotationsInfo: PropTypes.arrayOf(PropTypes.object).isRequired,
-  annotationSelector: PropTypes.objectOf(PropTypes.func).isRequired,
+  annotationSelector: PropTypes.objectOf(PropTypes.func),
 };
 
 AnnotationFactory.defaultProps = {
@@ -97,6 +110,7 @@ AnnotationFactory.defaultProps = {
     line: Line,
     poll_result: Poll,
     rectangle: Rectangle,
+    eraser: Eraser,
     text: Text,
     triangle: Triangle,
     pencil: Pencil,

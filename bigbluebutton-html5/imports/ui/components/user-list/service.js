@@ -46,6 +46,14 @@ export const setModeratorOnlyMessage = msg => Storage.setItem('ModeratorOnlyMess
 
 const getCustomLogoUrl = () => Storage.getItem(CUSTOM_LOGO_URL_KEY);
 
+const sortByWhiteboardAccess = (a, b) => {
+  const _a = a.whiteboardAccess;
+  const _b = b.whiteboardAccess;
+  if (!_b && _a) return -1;
+  if (!_a && _b) return 1;
+  return 0;
+};
+
 const sortUsersByName = (a, b) => {
   const aName = a.name.toLowerCase();
   const bName = b.name.toLowerCase();
@@ -126,6 +134,10 @@ const sortUsers = (a, b) => {
 
   if (sort === 0) {
     sort = sortUsersByPhoneUser(a, b);
+  }
+
+  if (sort === 0) {
+    sort = sortByWhiteboardAccess(a, b);
   }
 
   if (sort === 0) {
@@ -315,6 +327,13 @@ const curatedVoiceUser = (intId) => {
   };
 };
 
+const isUserPresenter = (userId) => {
+  const user = Users.findOne({ userId },
+    { fields: { presenter: 1 } });
+  return user ? user.presenter : false;
+};
+
+
 const getAvailableActions = (amIModerator, isBreakoutRoom, subjectUser, subjectVoiceUser) => {
   const isDialInUser = isVoiceOnlyUser(subjectUser.userId) || subjectUser.phone_user;
   const amISubjectUser = isMe(subjectUser.userId);
@@ -364,6 +383,11 @@ const getAvailableActions = (amIModerator, isBreakoutRoom, subjectUser, subjectV
     && !isSubjectUserModerator
     && isMeetingLocked(Auth.meetingID);
 
+  const amIPresenter = () => isUserPresenter(Auth.userID);
+
+  const allowedToChangeWhiteboardAccess = amIPresenter
+    && !amISubjectUser;
+
   return {
     allowedToChatPrivately,
     allowedToMuteAudio,
@@ -375,6 +399,7 @@ const getAvailableActions = (amIModerator, isBreakoutRoom, subjectUser, subjectV
     allowedToDemote,
     allowedToChangeStatus,
     allowedToChangeUserLockStatus,
+    allowedToChangeWhiteboardAccess,
   };
 };
 
@@ -505,12 +530,6 @@ const sortUsersByLastName = (a, b) => {
   if (aName < bName) return -1;
   if (aName > bName) return 1;
   return 0;
-};
-
-const isUserPresenter = (userId) => {
-  const user = Users.findOne({ userId },
-    { fields: { presenter: 1 } });
-  return user ? user.presenter : false;
 };
 
 export const getUserNamesLink = (docTitle, fnSortedLabel, lnSortedLabel) => {

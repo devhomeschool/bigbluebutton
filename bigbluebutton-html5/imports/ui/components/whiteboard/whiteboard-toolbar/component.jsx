@@ -554,7 +554,7 @@ class WhiteboardToolbar extends Component {
       thicknessSelected,
     } = this.state;
 
-    const isDisabled = annotationSelected.value === 'hand' || !annotations.length;
+    const isDisabled = annotationSelected.value === 'hand' || annotationSelected.value === 'eraser' || !annotations.length;
     return (
       <ToolbarMenuItem
         disabled={isDisabled}
@@ -657,7 +657,7 @@ class WhiteboardToolbar extends Component {
       colorSelected,
     } = this.state;
 
-    const isDisabled = annotationSelected.value === 'hand' || !annotations.length;
+    const isDisabled = annotationSelected.value === 'hand' || annotationSelected.value === 'eraser' || !annotations.length;
     return (
       <ToolbarMenuItem
         disabled={isDisabled}
@@ -758,19 +758,29 @@ class WhiteboardToolbar extends Component {
   }
 
   renderMultiUserItem() {
-    const { intl, multiUser, isMeteorConnected } = this.props;
+    const {
+      intl,
+      multiUser,
+      isMeteorConnected,
+      withAccessNum,
+    } = this.props;
 
     return (
-      <ToolbarMenuItem
-        disabled={!isMeteorConnected}
-        label={multiUser
-          ? intl.formatMessage(intlMessages.toolbarMultiUserOff)
-          : intl.formatMessage(intlMessages.toolbarMultiUserOn)
+      <span className={styles.multiUserToolItem}>
+        { withAccessNum > 0
+        && <span className={styles.multiUserTool}>{withAccessNum}</span>
         }
-        icon={multiUser ? 'multi_whiteboard' : 'whiteboard'}
-        onItemClick={this.handleSwitchWhiteboardMode}
-        className={styles.toolbarButton}
-      />
+        <ToolbarMenuItem
+          disabled={!isMeteorConnected}
+          label={multiUser
+            ? intl.formatMessage(intlMessages.toolbarMultiUserOff)
+            : intl.formatMessage(intlMessages.toolbarMultiUserOn)
+          }
+          icon={multiUser ? 'multi_whiteboard' : 'whiteboard'}
+          onItemClick={this.handleSwitchWhiteboardMode}
+          className={styles.toolbarButton}
+        />
+      </span>
     );
   }
 
@@ -828,6 +838,7 @@ WhiteboardToolbar.propTypes = {
   colors: PropTypes.arrayOf(PropTypes.shape({
     value: PropTypes.string.isRequired,
   }).isRequired),
+
   // defines an array of thickness values for the toolbar and their corresponding session values
   thicknessRadiuses: PropTypes.arrayOf(PropTypes.shape({
     value: PropTypes.number.isRequired,
@@ -835,6 +846,7 @@ WhiteboardToolbar.propTypes = {
 
   intl: intlShape,
 
+  withAccessNum: PropTypes.number.isRequired,
 };
 
 export default injectWbResizeEvent(injectIntl(WhiteboardToolbar));
