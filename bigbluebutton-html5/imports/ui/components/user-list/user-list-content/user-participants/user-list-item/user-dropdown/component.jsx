@@ -15,11 +15,12 @@ import { withModalMounter } from '/imports/ui/components/modal/service';
 import RemoveUserModal from '/imports/ui/components/modal/remove-user/component';
 import _ from 'lodash';
 import { Session } from 'meteor/session';
+import SocketContext from '/imports/ui/components/context/socket-context';
 import { styles } from './styles';
 import UserName from '../user-name/component';
 import UserIcons from '../user-icons/component';
-import { SocketContext } from '../../../../../context/socket-context';
-import Button from '../../../../../button/component';
+import Button from '/imports/ui/components/button/component';
+
 
 const messages = defineMessages({
   presenter: {
@@ -69,6 +70,14 @@ const messages = defineMessages({
   makePresenterLabel: {
     id: 'app.userList.menu.makePresenter.label',
     description: 'label to make another user presenter',
+  },
+  giveWhiteboardAccess: {
+    id: 'app.userList.menu.giveWhiteboardAccess.label',
+    description: 'label to give user whiteboard access',
+  },
+  removeWhiteboardAccess: {
+    id: 'app.userList.menu.removeWhiteboardAccess.label',
+    description: 'label to remove user whiteboard access',
   },
   RemoveUserLabel: {
     id: 'app.userList.menu.removeUser.label',
@@ -275,6 +284,7 @@ class UserDropdown extends PureComponent {
       isMe,
       meetingIsBreakout,
       mountModal,
+      changeWhiteboardMode,
     } = this.props;
     const { showNestedOptions } = this.state;
 
@@ -298,6 +308,7 @@ class UserDropdown extends PureComponent {
       allowedToDemote,
       allowedToChangeStatus,
       allowedToChangeUserLockStatus,
+      // allowedToChangeWhiteboardAccess,
     } = actionPermissions;
 
     const { disablePrivateChat } = lockSettingsProps;
@@ -435,6 +446,35 @@ class UserDropdown extends PureComponent {
       );
     }
 
+    // if (allowedToChangeWhiteboardAccess && !user.presenter && isMeteorConnected) {
+    //   const label = user.whiteboardAccess ? intl.formatMessage(messages.removeWhiteboardAccess)
+    //     : intl.formatMessage(messages.giveWhiteboardAccess);
+
+    //   actions.push(this.makeDropdownItem(
+    //     'changeWhiteboardAccess',
+    //     label,
+    //     () => WhiteboardService.changeWhiteboardAccess(user.userId, !user.whiteboardAccess),
+    //     'pen_tool',
+    //   ));
+    // }
+
+    if (allowedToRemove && !user.presenter && isMeteorConnected) {
+      let label = intl.formatMessage(messages.giveWhiteboardAccess);
+
+      if (user.whiteboardAccess) {
+        label = intl.formatMessage(messages.removeWhiteboardAccess);
+      }
+
+      actions.push(
+        this.makeDropdownItem(
+          'giveIndividualAccess',
+          label,
+          () => changeWhiteboardMode(!user.whiteboardAccess, user.userId),
+          'pen_tool'
+        )
+      );
+    }
+
     if (allowedToSetPresenter && isMeteorConnected) {
       actions.push(
         this.makeDropdownItem(
@@ -442,7 +482,9 @@ class UserDropdown extends PureComponent {
           isMe(user.userId)
             ? intl.formatMessage(messages.takePresenterLabel)
             : intl.formatMessage(messages.makePresenterLabel),
-          () => this.onActionsHide(assignPresenter(user.userId)),
+          () => {
+            this.onActionsHide(assignPresenter(user.userId));
+          },
           'presentation'
         )
       );
@@ -636,6 +678,7 @@ class UserDropdown extends PureComponent {
         voice={voiceUser.isVoiceUser}
         noVoice={!voiceUser.isVoiceUser}
         color={user.color}
+        whiteboardAccess={user.whiteboardAccess}
         isWarning={isWarning}
       >
         {userInBreakout && !meetingIsBreakout ? breakoutSequence : userIcon}
@@ -657,6 +700,8 @@ class UserDropdown extends PureComponent {
       getAvailableActions,
       meetingIsBreakout,
       voiceUser,
+      isMeteorConnected,
+      changeWhiteboardMode,
     } = this.props;
 
     const {
@@ -737,20 +782,18 @@ class UserDropdown extends PureComponent {
         {amIModerator && (
           <div className={styles.buttonContainer}>
             {!isMe(user.userId) && (
-              <Button
-                role='button'
-                size='md'
-                circle
-                customIcon={
-                  <img src='svgs/warning.svg' width='16' height='16' />
-                }
+              <button
+                type='button'
                 className={styles.buttonWarning}
                 onClick={this.createWarningSignal}
-              />
+              >
+                !
+              </button>
             )}
 
             {allowedToRemove && (
               <button
+                type='button'
                 className={styles.buttonRemove}
                 onClick={() =>
                   mountModal(
@@ -768,15 +811,35 @@ class UserDropdown extends PureComponent {
 
             {allowedToSetPresenter && (
               <button
+                type='button'
                 className={styles.buttonPromote}
                 onClick={() => assignPresenter(user.userId)}
               >
                 p
               </button>
             )}
+            {allowedToRemove && !user.presenter && isMeteorConnected && (
+              <Button
+                hideLabel
+                role='button'
+                color='primary'
+                size='md'
+                circle
+                label={
+                  user.whiteboardAccess
+                    ? intl.formatMessage(messages.removeWhiteboardAccess)
+                    : intl.formatMessage(messages.giveWhiteboardAccess)
+                }
+                aria-label=''
+                icon='pen_tool'
+                customIcon=''
+                onClick={() =>
+                  changeWhiteboardMode(!user.whiteboardAccess, user.userId)
+                }
+              />
+            )}
           </div>
         )}
-
         <Dropdown
           ref={(ref) => {
             this.dropdown = ref;
