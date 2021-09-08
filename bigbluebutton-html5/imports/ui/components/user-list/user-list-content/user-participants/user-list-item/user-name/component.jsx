@@ -84,10 +84,7 @@ const UserName = (props) => {
   }
 
   const userEmoji = user.emoji !== 'none'
-    && (
-      <Icon
-        iconName={normalizeEmojiName(user.emoji)}
-      />);
+    && `Status ${<Icon iconName={normalizeEmojiName(user.emoji)} />}`;
 
   return (
     <div
@@ -106,7 +103,6 @@ const UserName = (props) => {
         </i>
         <div className={styles.userIcon}>
           {userEmoji}
-          Status
         </div>
       </span>
       {
