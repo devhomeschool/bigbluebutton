@@ -6,7 +6,6 @@ import { styles } from './styles';
 
 const propTypes = {
   children: PropTypes.node.isRequired,
-  color: PropTypes.string.isRequired,
   // moderator: PropTypes.bool,
   presenter: PropTypes.bool,
   talking: PropTypes.bool,
@@ -43,7 +42,6 @@ const UserAvatar = ({
   voice,
   noVoice,
   className,
-  color,
   isChat,
   height,
   whiteboardAccess,
@@ -65,8 +63,8 @@ const UserAvatar = ({
     }, className)}
     style={{
       height: `${height}px`,
-      backgroundColor: `${isWarning ? '#FF0' : color}`,
-      color: `${isWarning ? '#FF0' : color}`,
+      backgroundColor: `${isWarning && '#FF0'}`,
+      color: `${isWarning && '#FF0'}`,
     }}
   >
     <div className={styles.content}>

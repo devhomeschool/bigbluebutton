@@ -700,7 +700,6 @@ class UserDropdown extends PureComponent {
         listenOnly={voiceUser.isListenOnly}
         voice={voiceUser.isVoiceUser}
         noVoice={!voiceUser.isVoiceUser}
-        color={user.color}
         height={!this.avatar ? 140 : this.avatar.offsetWidth * 0.75}
         isWarning={isWarning}
       >
