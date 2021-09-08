@@ -63,8 +63,8 @@ const UserAvatar = ({
     }, className)}
     style={{
       height: `${height}px`,
-      backgroundColor: `${isWarning && '#FF0'}`,
-      color: `${isWarning && '#FF0'}`,
+      backgroundColor: `${isWarning ? '#FF0' : ''}`,
+      color: `${isWarning ? '#FF0' : ''}`,
     }}
   >
     <div className={styles.content}>
