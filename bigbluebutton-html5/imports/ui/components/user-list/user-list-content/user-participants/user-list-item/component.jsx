@@ -52,6 +52,7 @@ class UserListItem extends PureComponent {
       streams,
       amIModerator,
       amIPresenter,
+      changeWhiteboardMode,
     } = this.props;
 
     const contents = (
@@ -90,6 +91,7 @@ class UserListItem extends PureComponent {
           streams,
           amIModerator,
           amIPresenter,
+          changeWhiteboardMode,
         }}
       />
     );

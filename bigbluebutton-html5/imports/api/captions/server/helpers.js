@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import { hashSHA1 } from '/imports/api/common/server/helpers';
+import { hashSHA1 } from '/imports/api/common/server/etherpad';
 import { check } from 'meteor/check';
 
 const ETHERPAD = Meteor.settings.private.etherpad;
@@ -11,7 +11,7 @@ const CAPTIONS_TOKEN = '_cc_';
 const TOKEN = '$';
 
 // Captions padId should look like: {prefix}_cc_{locale}
-const generatePadId = (meetingId, locale) => `${hashSHA1(meetingId+locale+ETHERPAD.apikey)}${CAPTIONS_TOKEN}${locale}`;
+const generatePadId = (meetingId, locale) => `${hashSHA1(meetingId + locale + ETHERPAD.apikey)}${CAPTIONS_TOKEN}${locale}`;
 
 const isCaptionsPad = (padId) => {
   const splitPadId = padId.split(CAPTIONS_TOKEN);

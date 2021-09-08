@@ -23,13 +23,13 @@
   justify-content: center;
   border-radius: 5px;
   text-align: center;
-  font-size: .85rem;
+  font-size: 0.85rem;
   border: 2px solid transparent;
   width: inherit;
   overflow: hidden;
 
   :global(.animationsEnabled) & {
-    transition: .3s ease-in-out;
+    transition: 0.3s ease-in-out;
   }
 
   &:after,
@@ -38,7 +38,7 @@
     position: absolute;
     width: 0;
     height: 0;
-    padding-top: .5rem;
+    padding-top: 0.5rem;
     padding-right: 0;
     padding-left: 0;
     padding-bottom: 0;
@@ -51,23 +51,23 @@
     background-color: var(--user-indicator-voice-bg);
     color: var(--user-avatar-text);
     opacity: 0;
-    font-family: 'bbb-icons';
-    font-size: .65rem;
+    font-family: "bbb-icons";
+    font-size: 0.65rem;
     line-height: 0;
     text-align: center;
     vertical-align: middle;
-    letter-spacing: -.65rem;
+    letter-spacing: -0.65rem;
     z-index: 1;
 
     [dir="rtl"] & {
       left: var(--user-indicators-offset);
       right: auto;
-      padding-right: .65rem;
+      padding-right: 0.65rem;
       padding-left: 0;
     }
 
     :global(.animationsEnabled) & {
-        transition: .3s ease-in-out;
+      transition: 0.3s ease-in-out;
     }
   }
 }
@@ -76,12 +76,55 @@
   background-color: var(--user-color);
   border: 5px solid green;
   border-radius: inherit;
+
+  :global(.animationsEnabled) & {
+    animation: pulse 1s infinite ease-in;
+  }
+
+  &::before {
+    :global(.animationsDisabled) & {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-color: var(--user-color);
+      border-radius: inherit;
+      box-shadow: 0 0 0 4px var(--user-color);
+      opacity: 0.5;
+    }
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
+.moderator {
+  border-radius: 5px;
 }
 
 .presenter {
   &:before {
     content: "\00a0\e90b\00a0";
     z-index: 2;
+  }
+  @include presenterIndicator();
+}
+
+.whiteboardAccess {
+  &:before {
+    content: "\00a0\e925\00a0";
+    padding: var(--md-padding-y);
+    border-radius: 50% !important;
   }
   @include presenterIndicator();
 }
