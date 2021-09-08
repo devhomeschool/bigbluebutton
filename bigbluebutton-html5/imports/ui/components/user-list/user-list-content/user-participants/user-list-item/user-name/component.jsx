@@ -83,9 +83,6 @@ const UserName = (props) => {
     userNameSub.push(intl.formatMessage(messages.guest));
   }
 
-  const userEmoji = user.emoji !== 'none'
-    && `Status ${<Icon iconName={normalizeEmojiName(user.emoji)} />}`;
-
   return (
     <div
       className={styles.userName}
@@ -102,7 +99,9 @@ const UserName = (props) => {
           {(isMe(user.userId)) ? `(${intl.formatMessage(messages.you)})` : ''}
         </i>
         <div className={styles.userIcon}>
-          {userEmoji}
+          {user.emoji !== 'none' && (
+            <Icon iconName={normalizeEmojiName(user.emoji)} />
+          )}
         </div>
       </span>
       {
