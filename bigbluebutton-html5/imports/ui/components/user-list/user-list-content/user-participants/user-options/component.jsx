@@ -141,19 +141,17 @@ class UserOptions extends PureComponent {
     const { intl, meetingName } = this.props;
     const date = new Date();
     getUserNamesLink(
-      intl.formatMessage(intlMessages.savedNamesListTitle,
-        {
-          0: meetingName,
-          1: `${date.toLocaleDateString(
-            document.documentElement.lang,
-          )}:${date.toLocaleTimeString(
-            document.documentElement.lang,
-          )}`,
-        }),
+      intl.formatMessage(intlMessages.savedNamesListTitle, {
+        0: meetingName,
+        1: `${date.toLocaleDateString(
+          document.documentElement.lang,
+        )}:${date.toLocaleTimeString(document.documentElement.lang)}`,
+      }),
       intl.formatMessage(intlMessages.sortedFirstNameHeading),
       intl.formatMessage(intlMessages.sortedLastNameHeading),
-    ).dispatchEvent(new MouseEvent('click',
-      { bubbles: true, cancelable: true, view: window }));
+    ).dispatchEvent(
+      new MouseEvent('click', { bubbles: true, cancelable: true, view: window }),
+    );
   }
 
   onCreateBreakouts() {
@@ -165,10 +163,7 @@ class UserOptions extends PureComponent {
   }
 
   handleCreateBreakoutRoomClick(isInvitation) {
-    const {
-      mountModal,
-      isBreakoutRecordable,
-    } = this.props;
+    const { mountModal, isBreakoutRecordable } = this.props;
 
     return mountModal(
       <BreakoutRoom
@@ -332,36 +327,40 @@ class UserOptions extends PureComponent {
           label={intl.formatMessage(intlMessages.clearAllLabel)}
           description={intl.formatMessage(intlMessages.clearAllDesc)}
           onClick={toggleStatus}
-        />) : null
-      ),
+        />
+      ) : null),
       (!meetingIsBreakout && isMeteorConnected ? (
         <DropdownListItem
           key={this.muteAllId}
           icon={isMeetingMuted ? 'unmute' : 'mute'}
-          label={intl.formatMessage(intlMessages[isMeetingMuted ? 'unmuteAllLabel' : 'muteAllLabel'])}
-          description={intl.formatMessage(intlMessages[isMeetingMuted ? 'unmuteAllDesc' : 'muteAllDesc'])}
+          label={intl.formatMessage(
+            intlMessages[isMeetingMuted ? 'unmuteAllLabel' : 'muteAllLabel'],
+          )}
+          description={intl.formatMessage(
+            intlMessages[isMeetingMuted ? 'unmuteAllDesc' : 'muteAllDesc'],
+          )}
           onClick={toggleMuteAllUsers}
-        />) : null
-      ),
+        />
+      ) : null),
       (!meetingIsBreakout && !isMeetingMuted && isMeteorConnected ? (
         <DropdownListItem
           key={this.muteId}
           icon="mute"
           label={intl.formatMessage(intlMessages.muteAllExceptPresenterLabel)}
-          description={intl.formatMessage(intlMessages.muteAllExceptPresenterDesc)}
+          description={intl.formatMessage(
+            intlMessages.muteAllExceptPresenterDesc,
+          )}
           onClick={toggleMuteAllUsersExceptPresenter}
-        />) : null
-      ),
-      (amIModerator
-        ? (
-          <DropdownListItem
-            icon="download"
-            label={intl.formatMessage(intlMessages.saveUserNames)}
-            key={this.saveUsersNameId}
-            onClick={this.onSaveUserNames}
-          />)
-        : null
-      ),
+        />
+      ) : null),
+      (amIModerator ? (
+        <DropdownListItem
+          icon="download"
+          label={intl.formatMessage(intlMessages.saveUserNames)}
+          key={this.saveUsersNameId}
+          onClick={this.onSaveUserNames}
+        />
+      ) : null),
       (!meetingIsBreakout && isMeteorConnected ? (
         <DropdownListItem
           key={this.lockId}
@@ -369,8 +368,7 @@ class UserOptions extends PureComponent {
           label={intl.formatMessage(intlMessages.lockViewersLabel)}
           description={intl.formatMessage(intlMessages.lockViewersDesc)}
           onClick={() => mountModal(<LockViewersContainer />)}
-        />) : null
-      ),
+        />) : null),
       (canCreateBreakout && isMeteorConnected ? (
         <DropdownListItem
           key={this.createBreakoutId}
@@ -378,27 +376,27 @@ class UserOptions extends PureComponent {
           label={intl.formatMessage(intlMessages.createBreakoutRoom)}
           description={intl.formatMessage(intlMessages.createBreakoutRoomDesc)}
           onClick={this.onCreateBreakouts}
-        />) : null
-      ),
+        />
+      ) : null),
       (canInviteUsers && isMeteorConnected ? (
         <DropdownListItem
           icon="rooms"
           label={intl.formatMessage(intlMessages.invitationItem)}
           key={this.createBreakoutId}
           onClick={this.onInvitationUsers}
-        />) : null
-      ),
-      (amIModerator && CaptionsService.isCaptionsEnabled() && isMeteorConnected
-        ? (
-          <DropdownListItem
-            icon="closed_caption"
-            label={intl.formatMessage(intlMessages.captionsLabel)}
-            description={intl.formatMessage(intlMessages.captionsDesc)}
-            key={this.captionsId}
-            onClick={this.handleCaptionsClick}
-          />
-        )
-        : null),
+        />
+      ) : null),
+      (amIModerator
+      && CaptionsService.isCaptionsEnabled()
+      && isMeteorConnected ? (
+        <DropdownListItem
+          icon="closed_caption"
+          label={intl.formatMessage(intlMessages.captionsLabel)}
+          description={intl.formatMessage(intlMessages.captionsDesc)}
+          key={this.captionsId}
+          onClick={this.handleCaptionsClick}
+        />
+        ) : null),
     ]);
 
     return contentWidth >= 720 ? this.menuItems : this.compactMenuItems;

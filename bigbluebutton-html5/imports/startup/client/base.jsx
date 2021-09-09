@@ -64,6 +64,45 @@ class Base extends Component {
     }
   }
 
+  /**
+   * Callback for handling changes on users collection.
+   * Depending on what are the changes, we show the alerts.
+   * for more information see:
+   *  https://docs.meteor.com/api/collections.html#Mongo-Cursor-observeChanges
+   */
+  static handleUserJoinAlert(id, userFields) {
+    const subscriptionsReady = Session.get('subscriptionsReady');
+
+    if (!subscriptionsReady || !userFields.name) return;
+
+    const {
+      userJoinAudioAlerts,
+      userJoinPushAlerts,
+    } = Settings.application;
+
+    if (!userJoinAudioAlerts && !userJoinPushAlerts) return;
+
+    if (userJoinAudioAlerts) {
+      AudioService.playAlertSound(`${Meteor.settings.public.app.cdn
+        + Meteor.settings.public.app.basename}`
+        + '/resources/sounds/userJoin.mp3');
+    }
+
+    if (userJoinPushAlerts) {
+      notify(
+        <FormattedMessage
+          id="app.notification.userJoinPushAlert"
+          description="Notification for a user joins the meeting"
+          values={{
+            0: userFields.name,
+          }}
+        />,
+        'info',
+        'user',
+      );
+    }
+  }
+
   constructor(props) {
     super(props);
 
@@ -77,6 +116,10 @@ class Base extends Component {
   componentDidMount() {
     const { animations } = this.props;
 
+    const {
+      userID: localUserId,
+    } = Auth;
+
     if (animations) HTML.classList.add('animationsEnabled');
     if (!animations) HTML.classList.add('animationsDisabled');
 
@@ -84,6 +127,17 @@ class Base extends Component {
       document.addEventListener(event, Base.handleFullscreenChange);
     });
     Session.set('isFullscreen', false);
+
+    const users = Users.find({
+      meetingId: Auth.meetingID,
+      validated: true,
+      userId: { $ne: localUserId },
+    }, { fields: { name: 1, userId: 1 } });
+
+    users.observeChanges({
+      added: Base.handleUserJoinAlert,
+      changed: Base.handleUserJoinAlert,
+    });
   }
 
   componentDidUpdate(prevProps, prevState) {

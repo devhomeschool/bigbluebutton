@@ -6,6 +6,8 @@ import Auth from '/imports/ui/services/auth';
 import UserListItem from './component';
 import UserListService from '/imports/ui/components/user-list/service';
 import Service from '/imports/ui/components/actions-bar/service';
+import { makeCall } from '/imports/ui/services/api';
+import PresentationAreaService from '/imports/ui/components/presentation/service';
 
 const UserListItemContainer = props => <UserListItem {...props} />;
 const isMe = intId => intId === Auth.userID;
@@ -15,6 +17,12 @@ export default withTracker(({ user }) => {
   const breakoutSequence = (findUserInBreakout || {}).sequence;
   const Meeting = Meetings.findOne({ meetingId: Auth.meetingID },
     { fields: { lockSettingsProps: 1 } });
+
+  const currentSlide = PresentationAreaService.getCurrentSlide('DEFAULT_PRESENTATION_POD');
+
+  const changeWhiteboardMode = (multiUser, userId) => {
+    makeCall('changeWhiteboardAccess', multiUser, currentSlide.id, userId);
+  };
 
   return {
     user,
@@ -38,5 +46,6 @@ export default withTracker(({ user }) => {
     hasPrivateChatBetweenUsers: UserListService.hasPrivateChatBetweenUsers,
     amIModerator: Service.amIModerator(),
     amIPresenter: Service.amIPresenter(),
+    changeWhiteboardMode,
   };
 })(UserListItemContainer);
