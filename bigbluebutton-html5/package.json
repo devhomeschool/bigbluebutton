@@ -76,6 +76,7 @@
     "redis": "~2.8.0",
     "sanitize-html": "^1.27.5",
     "sdp-transform": "2.7.0",
+    "socket.io-client": "^2.4.0",
     "string-hash": "~1.1.3",
     "tippy.js": "^3.4.1",
     "useragent": "^2.3.0",

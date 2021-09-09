@@ -39,6 +39,7 @@ const WEBSOCKET_KEEP_ALIVE_DEBOUNCE = MEDIA.websocketKeepAliveDebounce || 10;
 const TRACE_SIP = MEDIA.traceSip || false;
 const AUDIO_MICROPHONE_CONSTRAINTS = Meteor.settings.public.app.defaultSettings
   .application.microphoneConstraints;
+const SDP_SEMANTICS = MEDIA.sdpSemantics;
 
 const getAudioSessionNumber = () => {
   let currItem = parseInt(sessionStorage.getItem(AUDIO_SESSION_NUM_KEY), 10);
@@ -381,7 +382,7 @@ class SIPSession {
         sessionDescriptionHandlerFactoryOptions: {
           peerConnectionConfiguration: {
             iceServers,
-            sdpSemantics: 'plan-b',
+            sdpSemantics: SDP_SEMANTICS,
           },
         },
         displayName: callerIdName,
@@ -408,7 +409,6 @@ class SIPSession {
           let bridgeError;
 
           if (!this._reconnecting) {
-
             logger.info({
               logCode: 'sip_js_session_ua_disconnected',
               extraInfo: {
@@ -478,7 +478,7 @@ class SIPSession {
 
         const code = getErrorCode(error);
 
-        //Websocket's 1006 is currently mapped to BBB's 1002
+        // Websocket's 1006 is currently mapped to BBB's 1002
         if (code === 1006) {
           this.stopUserAgent();
 
@@ -965,7 +965,7 @@ class SIPSession {
           if (supportedConstraints[constraintName]) {
             matchConstraints[constraintName] = constraintValue;
           }
-        }
+        },
       );
 
       return matchConstraints;
@@ -999,7 +999,7 @@ class SIPSession {
 
       const matchConstraints = this.filterSupportedConstraints(constraints);
 
-      //Chromium bug - see: https://bugs.chromium.org/p/chromium/issues/detail?id=796964&q=applyConstraints&can=2
+      // Chromium bug - see: https://bugs.chromium.org/p/chromium/issues/detail?id=796964&q=applyConstraints&can=2
       if (browser().name === 'chrome') {
         matchConstraints.deviceId = this.inputDeviceId;
 
@@ -1061,7 +1061,7 @@ export default class SIPBridge extends BaseAudioBridge {
     window.clientLogger = logger;
   }
 
-  get inputDeviceId () {
+  get inputDeviceId() {
     return this.media.inputDevice ? this.media.inputDevice.inputDeviceId : null;
   }
 
@@ -1084,7 +1084,7 @@ export default class SIPBridge extends BaseAudioBridge {
           if (this.activeSession.webrtcConnected) {
             // webrtc was able to connect so just try again
             message.silenceNotifications = true;
-            callback({ status: this.baseCallStates.reconnecting, bridge: BRIDGE_NAME, });
+            callback({ status: this.baseCallStates.reconnecting, bridge: BRIDGE_NAME });
             shouldTryReconnect = true;
           } else if (hasFallbackDomain === true && hostname !== IPV4_FALLBACK_DOMAIN) {
             message.silenceNotifications = true;

@@ -16,6 +16,8 @@ const propTypes = {
   className: PropTypes.string,
   isChat: PropTypes.bool,
   height: PropTypes.number.isRequired,
+  isWarning: PropTypes.bool.isRequired,
+  whiteboardAccess: PropTypes.bool.isRequired,
 };
 
 const defaultProps = {
@@ -42,8 +44,9 @@ const UserAvatar = ({
   className,
   isChat,
   height,
+  whiteboardAccess,
+  isWarning,
 }) => (
-
   <div
     aria-hidden="true"
     data-test="userAvatar"
@@ -56,9 +59,12 @@ const UserAvatar = ({
       [styles.noVoice]: noVoice && !listenOnly,
       [styles.isChat]: isChat,
       [styles.talking]: (talking && !muted),
+      [styles.whiteboardAccess]: whiteboardAccess && !presenter,
     }, className)}
     style={{
       height: `${height}px`,
+      backgroundColor: `${isWarning ? '#FF0' : ''}`,
+      color: `${isWarning ? '#FF0' : ''}`,
     }}
   >
     <div className={styles.content}>
