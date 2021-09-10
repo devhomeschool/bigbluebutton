@@ -20,6 +20,11 @@ import { styles } from './styles';
 import UserName from '../user-name/component';
 import UserIcons from '../user-icons/component';
 import VideoProviderContainer from '/imports/ui/components/video-provider/container';
+import {
+  ExclamationIcon,
+  UserRemoveIcon,
+  PencilIcon,
+} from '@heroicons/react/solid';
 
 const messages = defineMessages({
   presenter: {
@@ -194,7 +199,7 @@ class UserDropdown extends PureComponent {
 
     socket.on('user', (data) => {
       if (data.action === 'warning' && user.userId === data.userId) {
-        this.setState(prevState => ({ isWarning: !prevState.isWarning }));
+        this.setState((prevState) => ({ isWarning: !prevState.isWarning }));
       }
     });
 
@@ -210,8 +215,8 @@ class UserDropdown extends PureComponent {
         }
         return res.json();
       })
-      .then(data => console.log(data))
-      .catch(err => console.error(err));
+      .then((data) => console.log(data))
+      .catch((err) => console.error(err));
 
     setTimeout(() => {
       console.log(this.avatar.offsetWidth);
@@ -254,7 +259,7 @@ class UserDropdown extends PureComponent {
       const list = findDOMNode(this.list);
       const children = [].slice.call(list.children);
       children
-        .find(child => child.getAttribute('role') === 'menuitem')
+        .find((child) => child.getAttribute('role') === 'menuitem')
         .focus();
 
       this.setState({
@@ -319,7 +324,7 @@ class UserDropdown extends PureComponent {
       amIModerator,
       meetingIsBreakout,
       user,
-      voiceUser,
+      voiceUser
     );
     const actions = [];
 
@@ -339,14 +344,14 @@ class UserDropdown extends PureComponent {
 
     const { disablePrivateChat } = lockSettingsProps;
 
-    const enablePrivateChat = currentUser.role === ROLE_MODERATOR
-      ? allowedToChatPrivately
-      : allowedToChatPrivately
-      && (
-        !(currentUser.locked && disablePrivateChat)
-        || hasPrivateChatBetweenUsers(currentUser.userId, user.userId)
-        || user.role === ROLE_MODERATOR
-      ) && isMeteorConnected;
+    const enablePrivateChat =
+      currentUser.role === ROLE_MODERATOR
+        ? allowedToChatPrivately
+        : allowedToChatPrivately &&
+          (!(currentUser.locked && disablePrivateChat) ||
+            hasPrivateChatBetweenUsers(currentUser.userId, user.userId) ||
+            user.role === ROLE_MODERATOR) &&
+          isMeteorConnected;
 
     const { allowUserLookup } = Meteor.settings.public.app;
 
@@ -356,36 +361,39 @@ class UserDropdown extends PureComponent {
           this.makeDropdownItem(
             'back',
             intl.formatMessage(messages.backTriggerLabel),
-            () => this.setState(
-              {
-                showNestedOptions: false,
-                isActionsOpen: true,
-              },
-              Session.set('dropdownOpen', true),
-            ),
-            'left_arrow',
-          ),
+            () =>
+              this.setState(
+                {
+                  showNestedOptions: false,
+                  isActionsOpen: true,
+                },
+                Session.set('dropdownOpen', true)
+              ),
+            'left_arrow'
+          )
         );
       }
 
       actions.push(
-        <DropdownListSeparator key={_.uniqueId('list-separator-')} />,
+        <DropdownListSeparator key={_.uniqueId('list-separator-')} />
       );
 
       const statuses = Object.keys(getEmojiList);
-      statuses.map(status => actions.push(
-        this.makeDropdownItem(
-          status,
-          intl.formatMessage({
-            id: `app.actionsBar.emojiMenu.${status}Label`,
-          }),
-          () => {
-            setEmojiStatus(user.userId, status);
-            this.resetMenuState();
-          },
-          getEmojiList[status],
-        ),
-      ));
+      statuses.map((status) =>
+        actions.push(
+          this.makeDropdownItem(
+            status,
+            intl.formatMessage({
+              id: `app.actionsBar.emojiMenu.${status}Label`,
+            }),
+            () => {
+              setEmojiStatus(user.userId, status);
+              this.resetMenuState();
+            },
+            getEmojiList[status]
+          )
+        )
+      );
 
       return actions;
     }
@@ -395,24 +403,26 @@ class UserDropdown extends PureComponent {
         this.makeDropdownItem(
           'setstatus',
           intl.formatMessage(messages.statusTriggerLabel),
-          () => this.setState(
-            {
-              showNestedOptions: true,
-              isActionsOpen: true,
-            },
-            Session.set('dropdownOpen', true),
-          ),
+          () =>
+            this.setState(
+              {
+                showNestedOptions: true,
+                isActionsOpen: true,
+              },
+              Session.set('dropdownOpen', true)
+            ),
           'user',
-          'right_arrow',
-        ),
+          'right_arrow'
+        )
       );
     }
 
-    const showChatOption = CHAT_ENABLED
-      && enablePrivateChat
-      && user.clientType !== 'dial-in-user'
-      && !meetingIsBreakout
-      && isMeteorConnected;
+    const showChatOption =
+      CHAT_ENABLED &&
+      enablePrivateChat &&
+      user.clientType !== 'dial-in-user' &&
+      !meetingIsBreakout &&
+      isMeteorConnected;
 
     if (showChatOption) {
       actions.push(
@@ -424,8 +434,8 @@ class UserDropdown extends PureComponent {
             Session.set('openPanel', 'chat');
             Session.set('idChatOpen', user.userId);
           },
-          'chat',
-        ),
+          'chat'
+        )
       );
     }
 
@@ -435,8 +445,8 @@ class UserDropdown extends PureComponent {
           'clearStatus',
           intl.formatMessage(messages.ClearStatusLabel),
           () => this.onActionsHide(setEmojiStatus(user.userId, 'none')),
-          'clear_status',
-        ),
+          'clear_status'
+        )
       );
     }
 
@@ -446,24 +456,24 @@ class UserDropdown extends PureComponent {
           'mute',
           intl.formatMessage(messages.MuteUserAudioLabel),
           () => this.onActionsHide(toggleVoice(user.userId)),
-          'mute',
-        ),
+          'mute'
+        )
       );
     }
 
     if (
-      allowedToUnmuteAudio
-      && !userLocks.userMic
-      && isMeteorConnected
-      && !meetingIsBreakout
+      allowedToUnmuteAudio &&
+      !userLocks.userMic &&
+      isMeteorConnected &&
+      !meetingIsBreakout
     ) {
       actions.push(
         this.makeDropdownItem(
           'unmute',
           intl.formatMessage(messages.UnmuteUserAudioLabel),
           () => this.onActionsHide(toggleVoice(user.userId)),
-          'unmute',
-        ),
+          'unmute'
+        )
       );
     }
 
@@ -491,8 +501,8 @@ class UserDropdown extends PureComponent {
           'giveIndividualAccess',
           label,
           () => changeWhiteboardMode(!user.whiteboardAccess, user.userId),
-          'pen_tool',
-        ),
+          'pen_tool'
+        )
       );
     }
 
@@ -506,8 +516,8 @@ class UserDropdown extends PureComponent {
           () => {
             this.onActionsHide(assignPresenter(user.userId));
           },
-          'presentation',
-        ),
+          'presentation'
+        )
       );
     }
 
@@ -517,8 +527,8 @@ class UserDropdown extends PureComponent {
           'promote',
           intl.formatMessage(messages.PromoteUserLabel),
           () => this.onActionsHide(changeRole(user.userId, 'MODERATOR')),
-          'promote',
-        ),
+          'promote'
+        )
       );
     }
 
@@ -528,8 +538,8 @@ class UserDropdown extends PureComponent {
           'demote',
           intl.formatMessage(messages.DemoteUserLabel),
           () => this.onActionsHide(changeRole(user.userId, 'VIEWER')),
-          'user',
-        ),
+          'user'
+        )
       );
     }
 
@@ -542,8 +552,8 @@ class UserDropdown extends PureComponent {
             ? intl.formatMessage(messages.UnlockUserLabel, { 0: user.name })
             : intl.formatMessage(messages.LockUserLabel, { 0: user.name }),
           () => this.onActionsHide(toggleUserLock(user.userId, !userLocked)),
-          userLocked ? 'unlock' : 'lock',
-        ),
+          userLocked ? 'unlock' : 'lock'
+        )
       );
     }
 
@@ -553,8 +563,8 @@ class UserDropdown extends PureComponent {
           'directoryLookup',
           intl.formatMessage(messages.DirectoryLookupLabel),
           () => this.onActionsHide(requestUserInformation(user.extId)),
-          'user',
-        ),
+          'user'
+        )
       );
     }
 
@@ -563,17 +573,18 @@ class UserDropdown extends PureComponent {
         this.makeDropdownItem(
           'remove',
           intl.formatMessage(messages.RemoveUserLabel, { 0: user.name }),
-          () => this.onActionsHide(
-            mountModal(
-              <RemoveUserModal
-                intl={intl}
-                user={user}
-                onConfirm={removeUser}
-              />,
+          () =>
+            this.onActionsHide(
+              mountModal(
+                <RemoveUserModal
+                  intl={intl}
+                  user={user}
+                  onConfirm={removeUser}
+                />
+              )
             ),
-          ),
-          'circle_close',
-        ),
+          'circle_close'
+        )
       );
     }
 
@@ -636,12 +647,13 @@ class UserDropdown extends PureComponent {
 
       const isDropdownVisible = UserDropdown.checkIfDropdownIsVisible(
         dropdownContent.offsetTop,
-        dropdownContent.offsetHeight,
+        dropdownContent.offsetHeight
       );
 
       if (!isDropdownVisible) {
         const { offsetTop, offsetHeight } = dropdownTrigger;
-        const offsetPageTop = offsetTop + offsetHeight - scrollContainer.scrollTop;
+        const offsetPageTop =
+          offsetTop + offsetHeight - scrollContainer.scrollTop;
 
         nextState.dropdownOffset = window.innerHeight - offsetPageTop;
         nextState.dropdownDirection = 'bottom';
@@ -684,12 +696,14 @@ class UserDropdown extends PureComponent {
     const { clientType } = user;
     const isVoiceOnly = clientType === 'dial-in-user';
 
-    const findStream = !streams.length ? null
-      : streams.find(stream => stream.userId === user.userId);
+    const findStream = !streams.length
+      ? null
+      : streams.find((stream) => stream.userId === user.userId);
 
-    const iconVoiceOnlyUser = (<Icon iconName="audio_on" />);
+    const iconVoiceOnlyUser = <Icon iconName='audio_on' />;
     const userIcon = isVoiceOnly && iconVoiceOnlyUser;
-    const icons = (userInBreakout && !meetingIsBreakout) ? breakoutSequence : userIcon;
+    const icons =
+      userInBreakout && !meetingIsBreakout ? breakoutSequence : userIcon;
 
     return (
       <UserAvatar
@@ -703,19 +717,18 @@ class UserDropdown extends PureComponent {
         height={!this.avatar ? 140 : this.avatar.offsetWidth * 0.75}
         isWarning={isWarning}
       >
-        {!disableVideo
-        && !audioModalIsOpen && findStream && showVideo
-          ? (
-            <VideoProviderContainer
-              swapLayout={swapLayout}
-              userId={user.userId}
-              findStream={findStream}
-              role={user.role}
-              presenter={user.presenter}
-            />
-          )
-          : user.name.toLowerCase().slice(0, 2) }
-        { icons }
+        {!disableVideo && !audioModalIsOpen && findStream && showVideo ? (
+          <VideoProviderContainer
+            swapLayout={swapLayout}
+            userId={user.userId}
+            findStream={findStream}
+            role={user.role}
+            presenter={user.presenter}
+          />
+        ) : (
+          user.name.toLowerCase().slice(0, 2)
+        )}
+        {icons}
       </UserAvatar>
     );
   }
@@ -773,27 +786,36 @@ class UserDropdown extends PureComponent {
         className={!actions.length ? styles.userListItem : null}
       >
         <div className={styles.userItemContents}>
-          <div className={styles.userAvatar} ref={(node) => { this.avatar = node; }}>
+          <div
+            className={styles.userAvatar}
+            ref={(node) => {
+              this.avatar = node;
+            }}
+          >
             {this.renderUserAvatar()}
           </div>
-          {<UserName
-            {...{
-              user,
-              compact,
-              intl,
-              isThisMeetingLocked,
-              userAriaLabel,
-              isActionsOpen,
-              isMe,
-              normalizeEmojiName,
-            }}
-          />}
-          {<UserIcons
-            {...{
-              user,
-              amIModerator: currentUser.role === ROLE_MODERATOR,
-            }}
-          />}
+          {
+            <UserName
+              {...{
+                user,
+                compact,
+                intl,
+                isThisMeetingLocked,
+                userAriaLabel,
+                isActionsOpen,
+                isMe,
+                normalizeEmojiName,
+              }}
+            />
+          }
+          {
+            <UserIcons
+              {...{
+                user,
+                amIModerator: currentUser.role === ROLE_MODERATOR,
+              }}
+            />
+          }
         </div>
       </div>
     );
@@ -803,7 +825,7 @@ class UserDropdown extends PureComponent {
       amIModerator,
       meetingIsBreakout,
       user,
-      voiceUser,
+      voiceUser
     );
 
     const { allowedToRemove } = actionPermissions;
@@ -816,64 +838,41 @@ class UserDropdown extends PureComponent {
           <div className={styles.buttonContainer}>
             {!isMe(user.userId) && (
               <button
-                type="button"
+                type='button'
                 className={styles.buttonWarning}
                 onClick={this.createWarningSignal}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className={styles.icon}
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                    clipRule="evenodd"
-                  />
-                </svg>
+                <ExclamationIcon className={styles.icon} />
               </button>
             )}
 
             {allowedToRemove && (
               <button
-                type="button"
+                type='button'
                 className={styles.buttonRemove}
-                onClick={() => mountModal(
-                  <RemoveUserModal
-                    intl={intl}
-                    user={user}
-                    onConfirm={removeUser}
-                  />,
-                )
+                onClick={() =>
+                  mountModal(
+                    <RemoveUserModal
+                      intl={intl}
+                      user={user}
+                      onConfirm={removeUser}
+                    />
+                  )
                 }
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className={styles.icon}
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path d="M11 6a3 3 0 11-6 0 3 3 0 016 0zM14 17a6 6 0 00-12 0h12zM13 8a1 1 0 100 2h4a1 1 0 100-2h-4z" />
-                </svg>
+                <UserRemoveIcon className={styles.icon} />
               </button>
             )}
 
             {allowedToRemove && !user.presenter && isMeteorConnected && (
               <button
-                type="button"
+                type='button'
                 className={styles.buttonPromote}
-                onClick={() => changeWhiteboardMode(!user.whiteboardAccess, user.userId)
+                onClick={() =>
+                  changeWhiteboardMode(!user.whiteboardAccess, user.userId)
                 }
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className={styles.icon}
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                </svg>
+                <PencilIcon className={styles.icon} />
               </button>
             )}
           </div>
@@ -887,9 +886,9 @@ class UserDropdown extends PureComponent {
           onHide={this.onActionsHide}
           className={userItemContentsStyle}
           autoFocus={false}
-          aria-haspopup="true"
-          aria-live="assertive"
-          aria-relevant="additions"
+          aria-haspopup='true'
+          aria-live='assertive'
+          aria-relevant='additions'
         >
           <DropdownTrigger>{contents}</DropdownTrigger>
           <DropdownContent
