@@ -77,10 +77,6 @@
   border: 5px solid green;
   border-radius: inherit;
 
-  :global(.animationsEnabled) & {
-    animation: pulse 1s infinite ease-in;
-  }
-
   &::before {
     :global(.animationsDisabled) & {
       content: "";
@@ -94,17 +90,6 @@
       box-shadow: 0 0 0 4px var(--user-color);
       opacity: 0.5;
     }
-  }
-}
-
-@keyframes pulse {
-  0% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(1.5);
   }
 }
 
