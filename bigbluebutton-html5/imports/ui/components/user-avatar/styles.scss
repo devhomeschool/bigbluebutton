@@ -28,6 +28,10 @@
   width: inherit;
   overflow: hidden;
 
+  :global(.animationsEnabled) & {
+    transition: 0.3s ease-in-out;
+  }
+
   &:after,
   &:before {
     content: "";
@@ -60,6 +64,10 @@
       right: auto;
       padding-right: 0.65rem;
       padding-left: 0;
+    }
+
+    :global(.animationsEnabled) & {
+      transition: 0.3s ease-in-out;
     }
   }
 }
