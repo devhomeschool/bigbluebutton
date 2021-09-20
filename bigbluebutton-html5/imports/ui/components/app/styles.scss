@@ -219,6 +219,8 @@
 }
 
 .actionsbar {
+  display: flex;
+  flex-direction: row;
   min-width: 380px;
   padding: 0 var(--bars-padding) var(--bars-padding);
   position: absolute;
