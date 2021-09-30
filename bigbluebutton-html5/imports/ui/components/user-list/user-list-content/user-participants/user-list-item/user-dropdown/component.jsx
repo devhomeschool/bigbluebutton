@@ -715,6 +715,7 @@ class UserDropdown extends PureComponent {
         voice={voiceUser.isVoiceUser}
         noVoice={!voiceUser.isVoiceUser}
         height={!this.avatar ? 140 : this.avatar.offsetWidth * 0.75}
+        whiteboardAccess={user.whiteboardAccess}
         isWarning={isWarning}
       >
         {!disableVideo && !audioModalIsOpen && findStream && showVideo ? (
