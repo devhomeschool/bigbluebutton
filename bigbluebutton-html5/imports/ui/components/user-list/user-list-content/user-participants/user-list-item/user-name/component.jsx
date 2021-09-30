@@ -132,33 +132,39 @@ const UserName = (props) => {
       }
       {
         isMe(user.userId)
-        && (
-          <>
-            <button
-              className={styles.userIcon}
-              type="button"
-              onClick={() => setStatus(!status)}
-              ref={statusButtonRef}
-            >
-              {user.emoji !== 'none' ? <Icon iconName={normalizeEmojiName(user.emoji)} /> : 'Status'}
-            </button>
-            <ul
-              role="menu"
-              style={
-                {
-                  display: `${status ? 'block' : 'none'}`,
-                  left: statusListPos.left,
-                  top: statusListPos.top,
+          ? (
+            <>
+              <button
+                className={styles.userIcon}
+                type="button"
+                onClick={() => setStatus(!status)}
+                ref={statusButtonRef}
+              >
+                {user.emoji !== 'none' ? <Icon iconName={normalizeEmojiName(user.emoji)} /> : 'Status'}
+              </button>
+              <ul
+                role="menu"
+                style={
+                  {
+                    display: `${status ? 'block' : 'none'}`,
+                    left: statusListPos.left,
+                    top: statusListPos.top,
+                  }
                 }
-              }
-              className={styles.statusList}
-              onClick={() => setStatus(!status)}
-              onKeyDown={() => setStatus(!status)}
-            >
-              {statusActions}
-            </ul>
-          </>
-        )
+                className={styles.statusList}
+                onClick={() => setStatus(!status)}
+                onKeyDown={() => setStatus(!status)}
+              >
+                {statusActions}
+              </ul>
+            </>
+          ) : (
+            user.emoji !== 'none' && (
+              <div className={styles.userIcon}>
+                <Icon iconName={normalizeEmojiName(user.emoji)} />
+              </div>
+            )
+          )
       }
     </div>
   );
