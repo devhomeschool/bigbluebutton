@@ -140,6 +140,7 @@
 }
 
 .buttonContainer {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -158,6 +159,17 @@
 
   cursor: pointer;
   transition: all 0.3s ease-in-out;
+}
+
+@mixin presenterBtn {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  width: 30px;
+  border: none;
+  border-radius: 50%;
 }
 
 .buttonWarning {
@@ -187,6 +199,29 @@
     }
   }
 }
+
+.itemIcon {
+  margin: 0 calc(var(--line-height-computed) / 2) 0 0;
+  color: var(--color-text);
+  flex: 0 0;
+
+  [dir="rtl"] & {
+    margin: 0 0 0 calc(var(--line-height-computed) / 2);
+  }
+}
+
+.statusItem {
+  border-radius: 6px;
+  box-sizing: border-box;
+  margin: 0 0 5px;
+  padding: 5px;
+  top: 0;
+}
+
+.statusItem:hover, .statusItem:active {
+  background-color: var(--background-active)
+}
+
 
 .buttonRemove {
   @include defaultBtn();
@@ -244,10 +279,42 @@
   }
 }
 
+.btnPresenter {
+  @include presenterBtn();
+  background-color: #1098ad;
+  top: -15px;
+  right: 0;
+
+  &::after {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: #1098ad;
+    border-radius: 50%;
+    z-index: 1;
+    opacity: 0.7;
+    animation: pulse 2s ease-out infinite;
+  }
+}
+
+@keyframes pulse {
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
 .icon {
   pointer-events: none;
   height: 30px;
   width: 30px;
+  fill: #fff;
+}
+
+.preIcon {
+  height: 20px;
+  width: 20px;
   fill: #fff;
 }
 
