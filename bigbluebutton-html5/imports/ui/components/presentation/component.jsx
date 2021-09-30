@@ -723,5 +723,12 @@ PresentationArea.propTypes = {
 
 PresentationArea.defaultProps = {
   currentSlide: undefined,
-  slidePosition: undefined,
+  slidePosition: {
+    x: 0,
+    y: 0,
+    height: 1080,
+    width: 1920,
+    viewBoxWidth: 1920,
+    viewBoxHeight: 1080,
+  },
 };
