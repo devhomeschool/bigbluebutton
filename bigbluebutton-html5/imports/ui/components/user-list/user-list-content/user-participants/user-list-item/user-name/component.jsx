@@ -120,11 +120,6 @@ const UserName = (props) => {
         <i>
           {(isMe(user.userId)) ? `(${intl.formatMessage(messages.you)})` : ''}
         </i>
-        {user.emoji !== 'none' && (
-          <div className={styles.userIcon}>
-            <Icon iconName={normalizeEmojiName(user.emoji)} />
-          </div>
-        )}
       </span>
       {
         userNameSub.length
