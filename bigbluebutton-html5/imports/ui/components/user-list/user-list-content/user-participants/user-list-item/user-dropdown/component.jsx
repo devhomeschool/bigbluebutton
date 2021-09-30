@@ -19,6 +19,7 @@ import {
   ExclamationIcon,
   UserRemoveIcon,
   PencilIcon,
+  PencilAltIcon
 } from '@heroicons/react/solid';
 import { styles } from './styles';
 import UserName from '../user-name/component';
@@ -818,6 +819,16 @@ class UserDropdown extends PureComponent {
                 }
               >
                 <PencilIcon className={styles.icon} />
+              </button>
+            )}
+
+            {user.presenter && (
+              <button
+                type='button'
+                className={styles.btnPresenter}
+                onClick={() => {}}
+              >
+                <PencilAltIcon className={styles.preIcon} />
               </button>
             )}
           </div>
