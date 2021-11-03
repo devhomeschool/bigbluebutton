@@ -65,6 +65,7 @@ const UserAvatar = ({
       height: `${height}px`,
       backgroundColor: `${isWarning ? '#FF0' : ''}`,
       color: `${isWarning ? '#FF0' : ''}`,
+      border: `${isWarning ? '8px solid transparent' : ''}`,
     }}
   >
     <div className={styles.content}>
