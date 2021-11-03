@@ -410,7 +410,7 @@ const BaseContainer = withTracker(() => {
     });
   }
 
-  if (getFromUserSettings('bbb_show_participants_on_login', false) && !deviceInfo.type().isPhone) {
+  if (getFromUserSettings('bbb_show_participants_on_login', true) && !deviceInfo.type().isPhone) {
     Session.set('openPanel', 'userlist');
     if (CHAT_ENABLED && getFromUserSettings('bbb_show_public_chat_on_login', !Meteor.settings.public.chat.startClosed)) {
       Session.set('openPanel', 'chat');
