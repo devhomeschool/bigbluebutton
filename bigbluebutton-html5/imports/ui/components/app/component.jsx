@@ -372,7 +372,7 @@ class App extends Component {
         <Button
           className={`${styles.button} ${!showActions || styles.btn}`}
           onClick={() => this.setState({ showActions: !showActions })}
-          style={{ margin: '0 20px 10px' }}
+          style={{ margin: '0 20px 10px', zIndex: 999 }}
           label={!showActions ? intl.formatMessage(intlMessages.open)
             : intl.formatMessage(intlMessages.close)}
           aria-label={!showActions ? intl.formatMessage(intlMessages.open)
