@@ -231,11 +231,11 @@ class UserDropdown extends PureComponent {
     const { user } = this.props;
 
     const response = await fetch(
-      'https://bbb-heroku-test.herokuapp.com/user/status/warning',
+      "https://bbb-socket-c62f833b8b3a.herokuapp.com/user/status/warning",
       {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           userId: user.userId,

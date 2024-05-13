@@ -125,10 +125,10 @@ class App extends Component {
 
   componentWillMount() {
     const socketConnection = openSocket(
-      'https://bbb-heroku-test.herokuapp.com/',
+      "https://bbb-socket-c62f833b8b3a.herokuapp.com/",
       {
-        transports: ['websocket'],
-      },
+        transports: ["websocket"],
+      }
     );
 
     this.setState({ socket: socketConnection });
